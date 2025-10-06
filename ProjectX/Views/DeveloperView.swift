@@ -35,6 +35,26 @@ struct DeveloperView: View {
                         }
                         .buttonStyle(.plain)
                     }
+                    
+                    OriginCard {
+                        Button {
+                            globalVM.delayLoadingTrades.toggle()
+                        } label: {
+                            GroupBox {
+                                HStack {
+                                    Text("Delay Loading Trades")
+                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                                        .fontDesign(.rounded)
+                                    Spacer()
+                                    Toggle("", isOn: $globalVM.delayLoadingTrades)
+                                        .scaleEffect(0.6, anchor: .trailing)
+                                }
+                                .frame(height: 12)
+                            }
+                            .backgroundStyle(Color(.xCardBackground))
+                        }
+                        .buttonStyle(.plain)
+                    }
                 }
                 .padding(.horizontal)
                 .padding(.bottom)

@@ -53,23 +53,27 @@ class GlobalViewModel: ObservableObject {
     @AppStorage("showEvaluationAccounts") var showEvaluationAccounts: Bool = true
     @AppStorage("showFundedAccounts") var showFundedAccounts: Bool = true
     @AppStorage("showPracticeAccounts") var showPracticeAccounts: Bool = true
-    @AppStorage("hideEmptyFirms") var hideEmptyFirms: Bool = true
+    @AppStorage("hideEmptyFirms") var hideEmptyFirms: Bool = false
     @AppStorage("hideLockedAccounts") var hideLockedAccounts: Bool = false
     
     // Developer
     @AppStorage("delayAuthentication") var delayAuthentication: Bool = false
+    @AppStorage("delayLoadingTrades") var delayLoadingTrades: Bool = false
     
     @Published var authenticatingStates: [Firm:Bool] = [:]
     @Published var connectedStates: [Firm:Bool] = [:]
     
-    @Published var refreshingAccounts: Bool = false
+    @Published var refreshingData: Bool = false
     @Published var allAccounts: [Account] = []
     
     @Published var loadingTrades: Bool = false
+    @Published var selectedAccount: Account? = nil
     @Published var accountTrades: [Trade] = []
     
     @Published var usernameInput: String = ""
     @Published var keyInput: String = ""
+    
+    @Published var userCtx: HubConnection?
     
     let continuousClock = ContinuousClock()
     
@@ -84,7 +88,7 @@ class GlobalViewModel: ObservableObject {
                     }
                 }
             }
-            print("Initialize: \(initTime.description.split(separator: " ")[0])")
+            print("initTime: \(initTime.description.split(separator: " ")[0])")
         }
     }
     
@@ -255,6 +259,25 @@ class GlobalViewModel: ObservableObject {
         }
     }
     
+    func refreshData() async {
+        if !refreshingData {
+            refreshingData = true
+            await withTaskGroup(of: Void.self) { group in
+                for firm in Firm.allCases {
+                    if isConnected(firm) {
+                        group.addTask {
+                            await self.loadAccounts(firm)
+                        }
+                    }
+                }
+            }
+            refreshingData = false
+            if let selectedAccount {
+                await loadTrades(selectedAccount)
+            }
+        }
+    }
+    
     func unloadAccounts(_ firm: Firm) {
         allAccounts.removeAll(where: { $0.firm == firm })
         // Clear Saved IDs
@@ -344,10 +367,11 @@ class GlobalViewModel: ObservableObject {
     }
     
     func loadTrades(_ account: Account) async {
-        loadingTrades = true
+//        loadingTrades = true
         let dtos = await XClient.get(account.firm).getTrades(account.accountId)
         accountTrades = dtos.map({ Trade.fromDto($0) }).sorted(by: { $0.createdAt.toDateTime() > $1.createdAt.toDateTime() })
-        loadingTrades = false
+//        loadingTrades = false
+            
     }
     
     func loadCredentials(_ firm: Firm)  {
@@ -381,5 +405,50 @@ class GlobalViewModel: ObservableObject {
         let accounts = allAccounts.filter({ $0.firm == firm })
         let leader = accounts.first(where: { $0.isLeader })!
         return account.lockoutReason != nil || (leader.lockoutReason != nil && account.isFollower)
+    }
+    
+    // MARK: SignalR Stuff
+    
+    func initSignals(_ firm: Firm) async {
+        do {
+            var options = HttpConnectionOptions()
+            options.transport = .webSockets
+            options.skipNegotiation = true
+            options.accessTokenFactory = { return await XClient.get(firm).gatewayToken! }
+            options.timeout = 10000
+            options.logLevel = .information
+            
+            userCtx = HubConnectionBuilder()
+                .withUrl(url: XClient.get(firm).authUserHubUrl, options: options)
+                .withAutomaticReconnect(retryDelays: [1, 1, 1, 1, 1])
+                .build()
+            
+            await userCtx?.on("GatewayUserAccount") { (data: String) in
+                print("initSignals: GatewayUserAccount")
+            }
+            await userCtx?.on("GatewayUserPosition") { (data: String) in
+                print("initSignals: GatewayUserPosition")
+            }
+            try await userCtx?.start()
+            await invokeUserSubscriptions()
+            await userCtx?.onReconnecting { _ in
+                print("initSignals: Disconnected")
+            }
+            await userCtx?.onReconnected {
+                print("initSignals: Reconnected")
+                await self.invokeUserSubscriptions()
+            }
+        } catch {
+            print("initSignals: \(error)")
+        }
+    }
+    
+    func invokeUserSubscriptions() async {
+        do {
+            try await userCtx?.invoke(method: "SubscribeAccounts")
+            try await userCtx?.invoke(method: "SubscribePositions", arguments: 12277723)
+        } catch {
+            print("invokeUserSubscriptions: \(error)")
+        }
     }
 }

@@ -19,7 +19,13 @@ struct AccountTile: View {
         Button {
             if tappable {
                 Task {
+                    globalVM.loadingTrades = true
+                    if globalVM.delayLoadingTrades {
+                        try! await Task.sleep(for: .seconds(5))
+                    }
+                    globalVM.selectedAccount = account
                     await globalVM.loadTrades(account)
+                    globalVM.loadingTrades = false
                 }
                 showAccountSheet.toggle()
             }

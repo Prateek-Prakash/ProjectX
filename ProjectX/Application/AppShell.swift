@@ -15,6 +15,8 @@ struct AppShell: View {
     @State var showSettingsCover: Bool = false
     @State var errorHaptic: Bool = false
     
+    let refreshTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -57,6 +59,11 @@ struct AppShell: View {
             .fullScreenCover(isPresented: $showSettingsCover) {
                 SettingsView()
                     .navigationTransition(.zoom(sourceID: "Settings", in: animationNamespace))
+            }
+            .onReceive(refreshTimer) { _ in
+                Task {
+                    await globalVM.refreshData()
+                }
             }
         }
         .safeAreaBar(edge: .bottom, spacing: 0) {
@@ -116,23 +123,13 @@ struct AppShell: View {
                 Button {
                     errorHaptic.toggle()
                     Task {
-                        globalVM.refreshingAccounts = true
-                        await withTaskGroup(of: Void.self) { group in
-                            for firm in Firm.allCases {
-                                if globalVM.isConnected(firm) {
-                                    group.addTask {
-                                        await globalVM.loadAccounts(firm)
-                                    }
-                                }
-                            }
-                        }
-                        globalVM.refreshingAccounts = false
+                        await globalVM.refreshData()
                     }
                 } label: {
                     ZStack {
                         Image(systemName: "livephoto")
                             .imageScale(.large)
-                            .symbolEffect(.bounce, options: globalVM.refreshingAccounts ? .repeating : .nonRepeating, value: globalVM.refreshingAccounts)
+                            .symbolEffect(.bounce, options: globalVM.refreshingData ? .repeating : .nonRepeating, value: globalVM.refreshingData)
                     }
                     .frame(width: 44, height: 44)
                     .glassEffect(.clear.interactive(), in: .rect(cornerRadius: 12))
