@@ -88,7 +88,7 @@ class GlobalViewModel: ObservableObject {
                     }
                 }
             }
-            print("initTime: \(initTime.description.split(separator: " ")[0])")
+            Helpers.debugLog("initTime: \(initTime.description.split(separator: " ")[0])")
         }
     }
     
@@ -262,6 +262,7 @@ class GlobalViewModel: ObservableObject {
     func refreshData() async {
         if !refreshingData {
             refreshingData = true
+            Helpers.debugLog("refreshData: Refreshing Accounts")
             await withTaskGroup(of: Void.self) { group in
                 for firm in Firm.allCases {
                     if isConnected(firm) {
@@ -271,10 +272,11 @@ class GlobalViewModel: ObservableObject {
                     }
                 }
             }
-            refreshingData = false
             if let selectedAccount {
+                Helpers.debugLog("refreshData: Refreshing Trades")
                 await loadTrades(selectedAccount)
             }
+            refreshingData = false
         }
     }
     
@@ -424,22 +426,22 @@ class GlobalViewModel: ObservableObject {
                 .build()
             
             await userCtx?.on("GatewayUserAccount") { (data: String) in
-                print("initSignals: GatewayUserAccount")
+                Helpers.debugLog("initSignals: GatewayUserAccount")
             }
             await userCtx?.on("GatewayUserPosition") { (data: String) in
-                print("initSignals: GatewayUserPosition")
+                Helpers.debugLog("initSignals: GatewayUserPosition")
             }
             try await userCtx?.start()
             await invokeUserSubscriptions()
             await userCtx?.onReconnecting { _ in
-                print("initSignals: Disconnected")
+                Helpers.debugLog("initSignals: Disconnected")
             }
             await userCtx?.onReconnected {
-                print("initSignals: Reconnected")
+                Helpers.debugLog("initSignals: Reconnected")
                 await self.invokeUserSubscriptions()
             }
         } catch {
-            print("initSignals: \(error)")
+            Helpers.debugLog("initSignals: \(error)")
         }
     }
     
@@ -448,7 +450,7 @@ class GlobalViewModel: ObservableObject {
             try await userCtx?.invoke(method: "SubscribeAccounts")
             try await userCtx?.invoke(method: "SubscribePositions", arguments: 12277723)
         } catch {
-            print("invokeUserSubscriptions: \(error)")
+            Helpers.debugLog("invokeUserSubscriptions: \(error)")
         }
     }
 }

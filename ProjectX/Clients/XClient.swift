@@ -105,7 +105,7 @@ class XClient {
             let value = try await AF.request("\(gatewayUrl)/api/Auth/loginKey", method: .post, parameters: params, encoding: JSONEncoding.default).serializingDecodable(GatewayTokenDTO.self).value
             return value.token
         } catch {
-            print("signInGateway: \(error)")
+            Helpers.debugLog("signInGateway: \(error)")
             return nil
         }
     }
@@ -119,7 +119,7 @@ class XClient {
             let value = try await AF.request("\(userUrl)/Login/key", method: .post, parameters: params, encoding: JSONEncoding.default).serializingDecodable(UserTokenDTO.self).value
             return value.token
         } catch {
-            print("signInUser: \(error)")
+            Helpers.debugLog("signInUser: \(error)")
             return nil
         }
     }
@@ -138,7 +138,7 @@ class XClient {
             let value = try await AF.request("\(userUrl)/UserContract/active/nonprofesional", method: .get, headers: headers).serializingDecodable([ContractDTO].self).value
             return value
         } catch {
-            print("getAccounts: \(error)")
+            Helpers.debugLog("getAccounts: \(error)")
             return []
         }
     }
@@ -151,7 +151,7 @@ class XClient {
             let value = try await AF.request("\(userUrl)/TradingAccount", method: .get, headers: headers).serializingDecodable([AccountDTO].self).value
             return value
         } catch {
-            print("getAccounts: \(error)")
+            Helpers.debugLog("getAccounts: \(error)")
             return []
         }
     }
@@ -164,7 +164,7 @@ class XClient {
             let value = try await AF.request("\(userUrl)/Trade/id/\(id)", method: .get, headers: headers).serializingDecodable([TradeDTO].self).value
             return value
         } catch {
-            print("getTrades: \(error)")
+            Helpers.debugLog("getTrades: \(error)")
             return []
         }
     }

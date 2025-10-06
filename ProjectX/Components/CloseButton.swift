@@ -10,9 +10,14 @@ import SwiftUI
 struct CloseButton: View {
     @Environment(\.dismiss) private var dismiss
     
+    @ObservedObject var globalVM = GlobalViewModel.shared
+    
     var body: some View {
         Button {
             dismiss()
+            // TODO: PerformanceView Close Only
+            globalVM.selectedAccount = nil
+            globalVM.accountTrades.removeAll()
         } label: {
             Image(systemName: "xmark")
                 .imageScale(.small)
