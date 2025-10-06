@@ -1,0 +1,385 @@
+//
+//  GlobalViewModel.swift
+//  ProjectX
+//
+//  Created by Prateek Prakash on 8/21/25.
+//
+
+import Combine
+import Foundation
+import SignalRClient
+import SwiftUI
+
+@MainActor
+class GlobalViewModel: ObservableObject {
+    static let shared = GlobalViewModel()
+    
+    // AlphaFuturesX
+    @AppStorage("alphaFuturesUsername") var alphaFuturesUsername: String = ""
+    @AppStorage("alphaFuturesKey") var alphaFuturesKey: String = ""
+    @AppStorage("alphaFuturesFunded") var alphaFuturesFunded: [String] = []
+    @AppStorage("alphaFuturesPractice") var alphaFuturesPractice: [String] = []
+    // FundingFuturesX
+    @AppStorage("fundingFuturesUsername") var fundingFuturesUsername: String = ""
+    @AppStorage("fundingFuturesKey") var fundingFuturesKey: String = ""
+    @AppStorage("fundingFuturesFunded") var fundingFuturesFunded: [String] = []
+    @AppStorage("fundingFuturesPractice") var fundingFuturesPractice: [String] = []
+    // HolaPrimeX
+    @AppStorage("holaPrimeUsername") var holaPrimeUsername: String = ""
+    @AppStorage("holaPrimeKey") var holaPrimeKey: String = ""
+    @AppStorage("holaPrimeFunded") var holaPrimeFunded: [String] = []
+    @AppStorage("holaPrimePractice") var holaPrimePractice: [String] = []
+    // LucidTradingX
+    @AppStorage("lucidTradingUsername") var lucidTradingUsername: String = ""
+    @AppStorage("lucidTradingKey") var lucidTradingKey: String = ""
+    @AppStorage("lucidTradingFunded") var lucidTradingFunded: [String] = []
+    @AppStorage("lucidTradingPractice") var lucidTradingPractice: [String] = []
+    // TopstepX
+    @AppStorage("topstepUsername") var topstepUsername: String = ""
+    @AppStorage("topstepKey") var topstepKey: String = ""
+    @AppStorage("topstepFunded") var topstepFunded: [String] = []
+    @AppStorage("topstepPractice") var topstepPractice: [String] = []
+    // TradeifyX
+    @AppStorage("tradeifyUsername") var tradeifyUsername: String = ""
+    @AppStorage("tradeifyKey") var tradeifyKey: String = ""
+    @AppStorage("tradeifyFunded") var tradeifyFunded: [String] = []
+    @AppStorage("tradeifyPractice") var tradeifyPractice: [String] = []
+    
+    // Notifications
+    @AppStorage("pushNotifications") var pushNotifications: Bool = false
+    @AppStorage("liveActivities") var liveActivities: Bool = false
+    
+    // Customization
+    @AppStorage("showEvaluationAccounts") var showEvaluationAccounts: Bool = true
+    @AppStorage("showFundedAccounts") var showFundedAccounts: Bool = true
+    @AppStorage("showPracticeAccounts") var showPracticeAccounts: Bool = true
+    @AppStorage("hideEmptyFirms") var hideEmptyFirms: Bool = true
+    @AppStorage("hideLockedAccounts") var hideLockedAccounts: Bool = false
+    
+    // Developer
+    @AppStorage("delayAuthentication") var delayAuthentication: Bool = false
+    
+    @Published var authenticatingStates: [Firm:Bool] = [:]
+    @Published var connectedStates: [Firm:Bool] = [:]
+    
+    @Published var refreshingAccounts: Bool = false
+    @Published var allAccounts: [Account] = []
+    
+    @Published var loadingTrades: Bool = false
+    @Published var accountTrades: [Trade] = []
+    
+    @Published var usernameInput: String = ""
+    @Published var keyInput: String = ""
+    
+    let continuousClock = ContinuousClock()
+    
+    init() {
+        Task {
+            let initTime = await continuousClock.measure {
+                await withTaskGroup(of: Void.self) { group in
+                    for firm in Firm.allCases {
+                        group.addTask {
+                            await self.initFirm(firm)
+                        }
+                    }
+                }
+            }
+            print("Initialize: \(initTime.description.split(separator: " ")[0])")
+        }
+    }
+    
+    func initFirm(_ firm: Firm) async {
+        authenticatingStates[firm] = true
+        connectedStates[firm] = false
+        if isLinked(firm) {
+            switch firm {
+            case .alphaFutures:
+                await signIn(firm, alphaFuturesUsername, alphaFuturesKey)
+            case .fundingFutures:
+                await signIn(firm, fundingFuturesUsername, fundingFuturesKey)
+            case .holaPrime:
+                await signIn(firm, holaPrimeUsername, holaPrimeKey)
+            case .lucidTrading:
+                await signIn(firm, lucidTradingUsername, lucidTradingKey)
+            case .topstep:
+                await signIn(firm, topstepUsername, topstepKey)
+            case .tradeify:
+                await signIn(firm, tradeifyUsername, tradeifyKey)
+            }
+        } else {
+            authenticatingStates[firm] = false
+        }
+    }
+    
+    func linkFirm(_ firm: Firm, _ username: String, _ key: String) async {
+        switch firm {
+        case .alphaFutures:
+            if alphaFuturesUsername != username || alphaFuturesKey != key {
+                alphaFuturesUsername = username
+                alphaFuturesKey = key
+                if isLinked(firm) {
+                    await signIn(firm, username, key)
+                } else {
+                    await signOut(firm)
+                }
+            }
+        case .fundingFutures:
+            if fundingFuturesUsername != username || fundingFuturesKey != key {
+                fundingFuturesUsername = username
+                fundingFuturesKey = key
+                if isLinked(firm) {
+                    await signIn(firm, username, key)
+                } else {
+                    await signOut(firm)
+                }
+            }
+        case .holaPrime:
+            if holaPrimeUsername != username || holaPrimeKey != key {
+                holaPrimeUsername = username
+                holaPrimeKey = key
+                if isLinked(firm) {
+                    await signIn(firm, username, key)
+                } else {
+                    await signOut(firm)
+                }
+            }
+        case .lucidTrading:
+            if lucidTradingUsername != username || lucidTradingKey != key {
+                lucidTradingUsername = username
+                lucidTradingKey = key
+                if isLinked(firm) {
+                    await signIn(firm, username, key)
+                } else {
+                    await signOut(firm)
+                }
+            }
+        case .topstep:
+            if topstepUsername != username || topstepKey != key {
+                topstepUsername = username
+                topstepKey = key
+                if isLinked(firm) {
+                    await signIn(firm, username, key)
+                } else {
+                    await signOut(firm)
+                }
+            }
+        case .tradeify:
+            if tradeifyUsername != username || tradeifyKey != key {
+                tradeifyUsername = username
+                tradeifyKey = key
+                if isLinked(firm) {
+                    await signIn(firm, username, key)
+                } else {
+                    await signOut(firm)
+                }
+            }
+        }
+    }
+    
+    func signIn(_ firm: Firm, _ username: String, _ key: String) async {
+        authenticatingStates[firm] = true
+        if delayAuthentication {
+            try! await Task.sleep(for: .seconds(5))
+        }
+        let isConnected = await XClient.get(firm).signIn(username, key)
+        if isConnected {
+            await loadAccounts(firm)
+        }
+        connectedStates[firm] = isConnected
+        authenticatingStates[firm] = false
+    }
+    
+    func signOut(_ firm: Firm) async {
+        unloadAccounts(firm)
+        connectedStates[firm] = false
+        _ = await XClient.get(firm).signOut()
+    }
+    
+    func loadAccounts(_ firm: Firm) async {
+        let dtos = await XClient.get(firm).getAccounts()
+        let accounts: [Account] = dtos.filter({ !$0.ineligible }).map({
+            let name = $0.accountName
+            var type = AccountType.evaluation
+            switch firm {
+            case .alphaFutures:
+                type = alphaFuturesFunded.contains(name) ? .funded : alphaFuturesPractice.contains(name) ? .practice : .evaluation
+            case .fundingFutures:
+                type = fundingFuturesFunded.contains(name) ? .funded : fundingFuturesPractice.contains(name) ? .practice : .evaluation
+            case .holaPrime:
+                type = holaPrimeFunded.contains(name) ? .funded : holaPrimePractice.contains(name) ? .practice : .evaluation
+            case .lucidTrading:
+                type = lucidTradingFunded.contains(name) ? .funded : lucidTradingPractice.contains(name) ? .practice : .evaluation
+            case .topstep:
+                type = topstepFunded.contains(name) ? .funded : topstepPractice.contains(name) ? .practice : .evaluation
+            case .tradeify:
+                type = tradeifyFunded.contains(name) ? .funded : tradeifyPractice.contains(name) ? .practice : .evaluation
+            }
+            return Account.fromDto($0, firm, type)
+        })
+        if allAccounts.isEmpty {
+            allAccounts.append(contentsOf: accounts)
+        } else {
+            for account in accounts {
+                let index = allAccounts.firstIndex(where: { $0.firm == firm && $0.accountId == account.accountId })
+                if let index = index {
+                    allAccounts[index] = account
+                } else {
+                    allAccounts.append(account)
+                }
+            }
+            let ids = accounts.map({ $0.accountId })
+            allAccounts.removeAll(where: { $0.firm == firm && !ids.contains($0.accountId) })
+        }
+        
+        // Clear Old Saved Ids
+        let names = accounts.map({ $0.accountName })
+        switch firm {
+        case .alphaFutures:
+            alphaFuturesFunded.removeAll(where: { !names.contains($0) })
+            alphaFuturesPractice.removeAll(where: { !names.contains($0) })
+        case .fundingFutures:
+            fundingFuturesFunded.removeAll(where: { !names.contains($0) })
+            fundingFuturesPractice.removeAll(where: { !names.contains($0) })
+        case .holaPrime:
+            holaPrimeFunded.removeAll(where: { !names.contains($0) })
+            holaPrimePractice.removeAll(where: { !names.contains($0) })
+        case .lucidTrading:
+            lucidTradingFunded.removeAll(where: { !names.contains($0) })
+            lucidTradingPractice.removeAll(where: { !names.contains($0) })
+        case .topstep:
+            topstepFunded.removeAll(where: { !names.contains($0) })
+            topstepPractice.removeAll(where: { !names.contains($0) })
+        case .tradeify:
+            tradeifyFunded.removeAll(where: { !names.contains($0) })
+            tradeifyPractice.removeAll(where: { !names.contains($0) })
+        }
+    }
+    
+    func unloadAccounts(_ firm: Firm) {
+        allAccounts.removeAll(where: { $0.firm == firm })
+        // Clear Saved IDs
+        switch firm {
+        case .alphaFutures:
+            alphaFuturesFunded.removeAll()
+            alphaFuturesPractice.removeAll()
+        case .fundingFutures:
+            fundingFuturesFunded.removeAll()
+            fundingFuturesPractice.removeAll()
+        case .holaPrime:
+            holaPrimeFunded.removeAll()
+            holaPrimePractice.removeAll()
+        case .lucidTrading:
+            lucidTradingFunded.removeAll()
+            lucidTradingPractice.removeAll()
+        case .topstep:
+            topstepFunded.removeAll()
+            topstepPractice.removeAll()
+        case .tradeify:
+            tradeifyFunded.removeAll()
+            tradeifyPractice.removeAll()
+        }
+    }
+    
+    func isLinked(_ firm: Firm) -> Bool {
+        switch firm {
+        case .alphaFutures:
+            return !alphaFuturesUsername.isEmpty && !alphaFuturesKey.isEmpty
+        case .fundingFutures:
+            return !fundingFuturesUsername.isEmpty && !fundingFuturesKey.isEmpty
+        case .holaPrime:
+            return !holaPrimeUsername.isEmpty && !holaPrimeKey.isEmpty
+        case .lucidTrading:
+            return !lucidTradingUsername.isEmpty && !lucidTradingKey.isEmpty
+        case .topstep:
+            return !topstepUsername.isEmpty && !topstepKey.isEmpty
+        case .tradeify:
+            return !tradeifyUsername.isEmpty && !tradeifyKey.isEmpty
+        }
+    }
+    
+    func isAuthenticating(_ firm: Firm) -> Bool {
+        return authenticatingStates[firm] ?? true
+    }
+    
+    func isConnected(_ firm: Firm) -> Bool {
+        return connectedStates[firm] ?? false
+    }
+    
+    func rotateAccountType(_ account: Account) {
+        let firm = account.firm
+        let name = account.accountName
+        let index = allAccounts.firstIndex(where: { $0.firm == firm && $0.accountName == name })!
+        switch allAccounts[index].accountType {
+        case .evaluation:
+            allAccounts[index].accountType = .funded
+        case .funded:
+            allAccounts[index].accountType = .practice
+        case .practice:
+            allAccounts[index].accountType = .evaluation
+        }
+        persistAccountType(firm, name, allAccounts[index].accountType)
+    }
+    
+    func persistAccountType(_ firm: Firm, _ name: String, _ type: AccountType) {
+        switch firm {
+        case .alphaFutures:
+            type == .funded ? alphaFuturesFunded.append(name) : alphaFuturesFunded.removeAll(where: { $0 == name })
+            type == .practice ? alphaFuturesPractice.append(name) : alphaFuturesPractice.removeAll(where: { $0 == name })
+        case .fundingFutures:
+            type == .funded ? fundingFuturesFunded.append(name) : fundingFuturesFunded.removeAll(where: { $0 == name })
+            type == .practice ? fundingFuturesPractice.append(name) : fundingFuturesPractice.removeAll(where: { $0 == name })
+        case .holaPrime:
+            type == .funded ? holaPrimeFunded.append(name) : holaPrimeFunded.removeAll(where: { $0 == name })
+            type == .practice ? holaPrimePractice.append(name) : holaPrimePractice.removeAll(where: { $0 == name })
+        case .lucidTrading:
+            type == .funded ? lucidTradingFunded.append(name) : lucidTradingFunded.removeAll(where: { $0 == name })
+            type == .practice ? lucidTradingPractice.append(name) : lucidTradingPractice.removeAll(where: { $0 == name })
+        case .topstep:
+            type == .funded ? topstepFunded.append(name) : topstepFunded.removeAll(where: { $0 == name })
+            type == .practice ? topstepPractice.append(name) : topstepPractice.removeAll(where: { $0 == name })
+        case .tradeify:
+            type == .funded ? tradeifyFunded.append(name) : tradeifyFunded.removeAll(where: { $0 == name })
+            type == .practice ? tradeifyPractice.append(name) : tradeifyPractice.removeAll(where: { $0 == name })
+        }
+    }
+    
+    func loadTrades(_ account: Account) async {
+        loadingTrades = true
+        let dtos = await XClient.get(account.firm).getTrades(account.accountId)
+        accountTrades = dtos.map({ Trade.fromDto($0) }).sorted(by: { $0.createdAt.toDateTime() > $1.createdAt.toDateTime() })
+        loadingTrades = false
+    }
+    
+    func loadCredentials(_ firm: Firm)  {
+        switch firm {
+        case .alphaFutures:
+            usernameInput = alphaFuturesUsername
+            keyInput = alphaFuturesKey
+        case .fundingFutures:
+            usernameInput = fundingFuturesUsername
+            keyInput = fundingFuturesKey
+        case .holaPrime:
+            usernameInput = holaPrimeUsername
+            keyInput = holaPrimeKey
+        case .lucidTrading:
+            usernameInput = lucidTradingUsername
+            keyInput = lucidTradingKey
+        case .topstep:
+            usernameInput = topstepUsername
+            keyInput = topstepKey
+        case .tradeify:
+            usernameInput = tradeifyUsername
+            keyInput = tradeifyKey
+        }
+    }
+    
+    func saveCredentials(_ firm: Firm) async {
+        await linkFirm(firm, usernameInput, keyInput)
+    }
+    
+    func isLocked(_ firm: Firm, _ account: Account) -> Bool {
+        let accounts = allAccounts.filter({ $0.firm == firm })
+        let leader = accounts.first(where: { $0.isLeader })!
+        return account.lockoutReason != nil || (leader.lockoutReason != nil && account.isFollower)
+    }
+}

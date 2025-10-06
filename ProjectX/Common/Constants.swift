@@ -1,0 +1,68 @@
+//
+//  Constants.swift
+//  ProjectX
+//
+//  Created by Prateek Prakash on 9/4/25.
+//
+
+import Foundation
+
+let contractMap = [
+    "F.US.HOE": "HO",
+    "F.US.YM": "YM",
+    "F.US.CPE": "HG",
+    "F.US.GMET": "MET",
+    "F.US.M6B": "M6B",
+    "F.US.NQG": "QG",
+    "F.US.TNA": "TN",
+    "F.US.GF": "GF",
+    "F.US.SIE": "SI",
+    "F.US.NQM": "QM",
+    "F.US.FVA": "ZF",
+    "F.US.NGE": "NG",
+    "F.US.PAE": "PA",
+    "F.US.ZQE": "ZQ",
+    "F.US.PLE": "PL",
+    "F.US.MNG": "MNG",
+    "F.US.TYA": "ZN",
+    "F.US.NKD": "NKD",
+    "F.US.ZME": "ZM",
+    "F.US.SF6": "6S",
+    "F.US.SIL": "SIL",
+    "F.US.ZSE": "ZS",
+    "F.US.ZLE": "ZL",
+    "F.US.ZWA": "ZW",
+    "F.US.ZCE": "ZC",
+    "F.US.USA": "ZB",
+    "F.US.ULA": "UB",
+    "F.US.MHG": "MHG",
+    "F.US.MBT": "MBT",
+    "F.US.SR3": "SR3",
+    "F.US.MGC": "MGC",
+    "F.US.EP": "ES",
+    "F.US.DA6": "6A",
+    "F.US.M6A": "M6A",
+    "F.US.BP6": "6B",
+    "F.US.JY6": "6J",
+    "F.US.CA6": "6C",
+    "F.US.NE6": "6N",
+    "F.US.EU6": "6E",
+    "F.US.RBE": "RB",
+    "F.US.M6E": "M6E",
+    "F.US.MCLE": "MCL",
+    "F.US.ENQ": "NQ",
+    "F.US.MES": "MES",
+    "F.US.RTY": "RTY",
+    "F.US.CLE": "CL",
+    "F.US.GCE": "GC",
+    "F.US.M2K": "M2K",
+    "F.US.EEU": "E7",
+    "F.US.MX6": "6M",
+    "F.US.TUA": "ZT",
+    "F.US.GLE": "LE",
+    "F.US.HE": "HE",
+    "F.US.EMD": "EMD",
+    "F.US.GMCD": "MCD",
+    "F.US.MNQ": "MNQ",
+    "F.US.MYM": "MYM"
+]
