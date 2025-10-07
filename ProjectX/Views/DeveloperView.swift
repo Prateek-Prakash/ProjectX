@@ -18,6 +18,26 @@ struct DeveloperView: View {
                 VStack(spacing: 12) {
                     OriginCard {
                         Button {
+                            globalVM.automaticRefresh.toggle()
+                        } label: {
+                            GroupBox {
+                                HStack {
+                                    Text("Automatic Refresh")
+                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                                        .fontDesign(.rounded)
+                                    Spacer()
+                                    Toggle("", isOn: $globalVM.automaticRefresh)
+                                        .scaleEffect(0.6, anchor: .trailing)
+                                }
+                                .frame(height: 12)
+                            }
+                            .backgroundStyle(Color(.xCardBackground))
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    
+                    OriginCard {
+                        Button {
                             globalVM.delayAuthentication.toggle()
                         } label: {
                             GroupBox {

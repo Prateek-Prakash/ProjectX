@@ -57,6 +57,7 @@ class GlobalViewModel: ObservableObject {
     @AppStorage("hideLockedAccounts") var hideLockedAccounts: Bool = false
     
     // Developer
+    @AppStorage("automaticRefresh") var automaticRefresh: Bool = false
     @AppStorage("delayAuthentication") var delayAuthentication: Bool = false
     @AppStorage("delayLoadingTrades") var delayLoadingTrades: Bool = false
     
