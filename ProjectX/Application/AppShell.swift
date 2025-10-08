@@ -129,8 +129,10 @@ struct AppShell: View {
                 
                 Button {
                     errorHaptic.toggle()
-                    Task {
-                        await globalVM.refreshData()
+                    if globalVM.isInitialized {
+                        Task {
+                            await globalVM.refreshData()
+                        }
                     }
                 } label: {
                     ZStack {
