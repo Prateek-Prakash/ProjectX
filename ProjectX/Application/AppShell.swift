@@ -62,7 +62,7 @@ struct AppShell: View {
                     .navigationTransition(.zoom(sourceID: "Settings", in: animationNamespace))
             }
             .onReceive(refreshTimer) { _ in
-                if globalVM.automaticRefresh {
+                if globalVM.isInitialized && globalVM.automaticRefresh {
                     Task {
                         await globalVM.refreshData()
                     }

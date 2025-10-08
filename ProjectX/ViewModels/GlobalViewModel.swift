@@ -76,6 +76,7 @@ class GlobalViewModel: ObservableObject {
     
     @Published var userCtx: HubConnection?
     
+    @Published var isInitialized = false
     let continuousClock = ContinuousClock()
     
     init() {
@@ -90,6 +91,7 @@ class GlobalViewModel: ObservableObject {
                 }
             }
             Helpers.debugLog("initTime: \(initTime.description.split(separator: " ")[0])")
+            self.isInitialized = true
         }
     }
     
