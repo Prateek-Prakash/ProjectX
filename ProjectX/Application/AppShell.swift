@@ -13,6 +13,7 @@ struct AppShell: View {
     
     @Namespace var animationNamespace
     @State var showSettingsCover: Bool = false
+    @State var successHaptic: Bool = false
     @State var errorHaptic: Bool = false
     
     let refreshTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
@@ -85,6 +86,7 @@ struct AppShell: View {
                         .matchedTransitionSource(id: "Settings", in: animationNamespace)
                         
                         Button {
+                            successHaptic.toggle()
                             globalVM.showEvaluationAccounts.toggle()
                         } label: {
                             ZStack {
@@ -96,6 +98,7 @@ struct AppShell: View {
                         .buttonStyle(.plain)
                         
                         Button {
+                            successHaptic.toggle()
                             globalVM.showFundedAccounts.toggle()
                         } label: {
                             ZStack {
@@ -107,6 +110,7 @@ struct AppShell: View {
                         .buttonStyle(.plain)
                         
                         Button {
+                            successHaptic.toggle()
                             globalVM.showPracticeAccounts.toggle()
                         } label: {
                             ZStack {
@@ -119,6 +123,7 @@ struct AppShell: View {
                     }
                 }
                 .glassEffect(.clear.interactive(), in: .rect(cornerRadius: 12))
+                .sensoryFeedback(.success, trigger: successHaptic)
                 
                 Spacer()
                 
