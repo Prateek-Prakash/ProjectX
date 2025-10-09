@@ -17,33 +17,33 @@ class GlobalViewModel: ObservableObject {
     // AlphaFuturesX
     @AppStorage("alphaFuturesUsername") var alphaFuturesUsername: String = ""
     @AppStorage("alphaFuturesKey") var alphaFuturesKey: String = ""
-    @AppStorage("alphaFuturesFunded") var alphaFuturesFunded: [String] = []
-    @AppStorage("alphaFuturesPractice") var alphaFuturesPractice: [String] = []
+    @AppStorage("alphaFuturesFunded") var alphaFuturesFunded: [Int] = []
+    @AppStorage("alphaFuturesPractice") var alphaFuturesPractice: [Int] = []
     // FundingFuturesX
     @AppStorage("fundingFuturesUsername") var fundingFuturesUsername: String = ""
     @AppStorage("fundingFuturesKey") var fundingFuturesKey: String = ""
-    @AppStorage("fundingFuturesFunded") var fundingFuturesFunded: [String] = []
-    @AppStorage("fundingFuturesPractice") var fundingFuturesPractice: [String] = []
+    @AppStorage("fundingFuturesFunded") var fundingFuturesFunded: [Int] = []
+    @AppStorage("fundingFuturesPractice") var fundingFuturesPractice: [Int] = []
     // HolaPrimeX
     @AppStorage("holaPrimeUsername") var holaPrimeUsername: String = ""
     @AppStorage("holaPrimeKey") var holaPrimeKey: String = ""
-    @AppStorage("holaPrimeFunded") var holaPrimeFunded: [String] = []
-    @AppStorage("holaPrimePractice") var holaPrimePractice: [String] = []
+    @AppStorage("holaPrimeFunded") var holaPrimeFunded: [Int] = []
+    @AppStorage("holaPrimePractice") var holaPrimePractice: [Int] = []
     // LucidTradingX
     @AppStorage("lucidTradingUsername") var lucidTradingUsername: String = ""
     @AppStorage("lucidTradingKey") var lucidTradingKey: String = ""
-    @AppStorage("lucidTradingFunded") var lucidTradingFunded: [String] = []
-    @AppStorage("lucidTradingPractice") var lucidTradingPractice: [String] = []
+    @AppStorage("lucidTradingFunded") var lucidTradingFunded: [Int] = []
+    @AppStorage("lucidTradingPractice") var lucidTradingPractice: [Int] = []
     // TopstepX
     @AppStorage("topstepUsername") var topstepUsername: String = ""
     @AppStorage("topstepKey") var topstepKey: String = ""
-    @AppStorage("topstepFunded") var topstepFunded: [String] = []
-    @AppStorage("topstepPractice") var topstepPractice: [String] = []
+    @AppStorage("topstepFunded") var topstepFunded: [Int] = []
+    @AppStorage("topstepPractice") var topstepPractice: [Int] = []
     // TradeifyX
     @AppStorage("tradeifyUsername") var tradeifyUsername: String = ""
     @AppStorage("tradeifyKey") var tradeifyKey: String = ""
-    @AppStorage("tradeifyFunded") var tradeifyFunded: [String] = []
-    @AppStorage("tradeifyPractice") var tradeifyPractice: [String] = []
+    @AppStorage("tradeifyFunded") var tradeifyFunded: [Int] = []
+    @AppStorage("tradeifyPractice") var tradeifyPractice: [Int] = []
     
     // Notifications
     @AppStorage("pushNotifications") var pushNotifications: Bool = false
@@ -205,21 +205,21 @@ class GlobalViewModel: ObservableObject {
     func loadAccounts(_ firm: Firm) async {
         let dtos = await XClient.get(firm).getAccounts()
         let accounts: [Account] = dtos.filter({ !$0.ineligible }).map({
-            let name = $0.accountName
+            let id = $0.accountId
             var type = AccountType.evaluation
             switch firm {
             case .alphaFutures:
-                type = alphaFuturesFunded.contains(name) ? .funded : alphaFuturesPractice.contains(name) ? .practice : .evaluation
+                type = alphaFuturesFunded.contains(id) ? .funded : alphaFuturesPractice.contains(id) ? .practice : .evaluation
             case .fundingFutures:
-                type = fundingFuturesFunded.contains(name) ? .funded : fundingFuturesPractice.contains(name) ? .practice : .evaluation
+                type = fundingFuturesFunded.contains(id) ? .funded : fundingFuturesPractice.contains(id) ? .practice : .evaluation
             case .holaPrime:
-                type = holaPrimeFunded.contains(name) ? .funded : holaPrimePractice.contains(name) ? .practice : .evaluation
+                type = holaPrimeFunded.contains(id) ? .funded : holaPrimePractice.contains(id) ? .practice : .evaluation
             case .lucidTrading:
-                type = lucidTradingFunded.contains(name) ? .funded : lucidTradingPractice.contains(name) ? .practice : .evaluation
+                type = lucidTradingFunded.contains(id) ? .funded : lucidTradingPractice.contains(id) ? .practice : .evaluation
             case .topstep:
-                type = topstepFunded.contains(name) ? .funded : topstepPractice.contains(name) ? .practice : .evaluation
+                type = topstepFunded.contains(id) ? .funded : topstepPractice.contains(id) ? .practice : .evaluation
             case .tradeify:
-                type = tradeifyFunded.contains(name) ? .funded : tradeifyPractice.contains(name) ? .practice : .evaluation
+                type = tradeifyFunded.contains(id) ? .funded : tradeifyPractice.contains(id) ? .practice : .evaluation
             }
             return Account.fromDto($0, firm, type)
         })
@@ -239,26 +239,26 @@ class GlobalViewModel: ObservableObject {
         }
         
         // Clear Old Saved Ids
-        let names = accounts.map({ $0.accountName })
+        let ids = accounts.map({ $0.accountId })
         switch firm {
         case .alphaFutures:
-            alphaFuturesFunded.removeAll(where: { !names.contains($0) })
-            alphaFuturesPractice.removeAll(where: { !names.contains($0) })
+            alphaFuturesFunded.removeAll(where: { !ids.contains($0) })
+            alphaFuturesPractice.removeAll(where: { !ids.contains($0) })
         case .fundingFutures:
-            fundingFuturesFunded.removeAll(where: { !names.contains($0) })
-            fundingFuturesPractice.removeAll(where: { !names.contains($0) })
+            fundingFuturesFunded.removeAll(where: { !ids.contains($0) })
+            fundingFuturesPractice.removeAll(where: { !ids.contains($0) })
         case .holaPrime:
-            holaPrimeFunded.removeAll(where: { !names.contains($0) })
-            holaPrimePractice.removeAll(where: { !names.contains($0) })
+            holaPrimeFunded.removeAll(where: { !ids.contains($0) })
+            holaPrimePractice.removeAll(where: { !ids.contains($0) })
         case .lucidTrading:
-            lucidTradingFunded.removeAll(where: { !names.contains($0) })
-            lucidTradingPractice.removeAll(where: { !names.contains($0) })
+            lucidTradingFunded.removeAll(where: { !ids.contains($0) })
+            lucidTradingPractice.removeAll(where: { !ids.contains($0) })
         case .topstep:
-            topstepFunded.removeAll(where: { !names.contains($0) })
-            topstepPractice.removeAll(where: { !names.contains($0) })
+            topstepFunded.removeAll(where: { !ids.contains($0) })
+            topstepPractice.removeAll(where: { !ids.contains($0) })
         case .tradeify:
-            tradeifyFunded.removeAll(where: { !names.contains($0) })
-            tradeifyPractice.removeAll(where: { !names.contains($0) })
+            tradeifyFunded.removeAll(where: { !ids.contains($0) })
+            tradeifyPractice.removeAll(where: { !ids.contains($0) })
         }
     }
     
@@ -335,8 +335,8 @@ class GlobalViewModel: ObservableObject {
     
     func rotateAccountType(_ account: Account) {
         let firm = account.firm
-        let name = account.accountName
-        let index = allAccounts.firstIndex(where: { $0.firm == firm && $0.accountName == name })!
+        let id = account.accountId
+        let index = allAccounts.firstIndex(where: { $0.firm == firm && $0.accountId == id })!
         switch allAccounts[index].accountType {
         case .evaluation:
             allAccounts[index].accountType = .funded
@@ -345,37 +345,35 @@ class GlobalViewModel: ObservableObject {
         case .practice:
             allAccounts[index].accountType = .evaluation
         }
-        persistAccountType(firm, name, allAccounts[index].accountType)
+        persistAccountType(firm, id, allAccounts[index].accountType)
     }
     
-    func persistAccountType(_ firm: Firm, _ name: String, _ type: AccountType) {
+    func persistAccountType(_ firm: Firm, _ id: Int, _ type: AccountType) {
         switch firm {
         case .alphaFutures:
-            type == .funded ? alphaFuturesFunded.append(name) : alphaFuturesFunded.removeAll(where: { $0 == name })
-            type == .practice ? alphaFuturesPractice.append(name) : alphaFuturesPractice.removeAll(where: { $0 == name })
+            type == .funded ? alphaFuturesFunded.append(id) : alphaFuturesFunded.removeAll(where: { $0 == id })
+            type == .practice ? alphaFuturesPractice.append(id) : alphaFuturesPractice.removeAll(where: { $0 == id })
         case .fundingFutures:
-            type == .funded ? fundingFuturesFunded.append(name) : fundingFuturesFunded.removeAll(where: { $0 == name })
-            type == .practice ? fundingFuturesPractice.append(name) : fundingFuturesPractice.removeAll(where: { $0 == name })
+            type == .funded ? fundingFuturesFunded.append(id) : fundingFuturesFunded.removeAll(where: { $0 == id })
+            type == .practice ? fundingFuturesPractice.append(id) : fundingFuturesPractice.removeAll(where: { $0 == id })
         case .holaPrime:
-            type == .funded ? holaPrimeFunded.append(name) : holaPrimeFunded.removeAll(where: { $0 == name })
-            type == .practice ? holaPrimePractice.append(name) : holaPrimePractice.removeAll(where: { $0 == name })
+            type == .funded ? holaPrimeFunded.append(id) : holaPrimeFunded.removeAll(where: { $0 == id })
+            type == .practice ? holaPrimePractice.append(id) : holaPrimePractice.removeAll(where: { $0 == id })
         case .lucidTrading:
-            type == .funded ? lucidTradingFunded.append(name) : lucidTradingFunded.removeAll(where: { $0 == name })
-            type == .practice ? lucidTradingPractice.append(name) : lucidTradingPractice.removeAll(where: { $0 == name })
+            type == .funded ? lucidTradingFunded.append(id) : lucidTradingFunded.removeAll(where: { $0 == id })
+            type == .practice ? lucidTradingPractice.append(id) : lucidTradingPractice.removeAll(where: { $0 == id })
         case .topstep:
-            type == .funded ? topstepFunded.append(name) : topstepFunded.removeAll(where: { $0 == name })
-            type == .practice ? topstepPractice.append(name) : topstepPractice.removeAll(where: { $0 == name })
+            type == .funded ? topstepFunded.append(id) : topstepFunded.removeAll(where: { $0 == id })
+            type == .practice ? topstepPractice.append(id) : topstepPractice.removeAll(where: { $0 == id })
         case .tradeify:
-            type == .funded ? tradeifyFunded.append(name) : tradeifyFunded.removeAll(where: { $0 == name })
-            type == .practice ? tradeifyPractice.append(name) : tradeifyPractice.removeAll(where: { $0 == name })
+            type == .funded ? tradeifyFunded.append(id) : tradeifyFunded.removeAll(where: { $0 == id })
+            type == .practice ? tradeifyPractice.append(id) : tradeifyPractice.removeAll(where: { $0 == id })
         }
     }
     
     func loadTrades(_ account: Account) async {
-//        loadingTrades = true
         let dtos = await XClient.get(account.firm).getTrades(account.accountId)
         accountTrades = dtos.map({ Trade.fromDto($0) }).sorted(by: { $0.createdAt.toDateTime() > $1.createdAt.toDateTime() })
-//        loadingTrades = false
             
     }
     
