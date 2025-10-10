@@ -55,6 +55,7 @@ class GlobalViewModel: ObservableObject {
     @AppStorage("showPracticeAccounts") var showPracticeAccounts: Bool = true
     @AppStorage("hideEmptyFirms") var hideEmptyFirms: Bool = false
     @AppStorage("hideLockedAccounts") var hideLockedAccounts: Bool = false
+    @AppStorage("subtractStartingBalance") var subtractStartingBalance: Bool = false
     
     // Developer
     @AppStorage("automaticRefresh") var automaticRefresh: Bool = false

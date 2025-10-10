@@ -132,6 +132,26 @@ struct CustomizationView: View {
                         }
                         .buttonStyle(.plain)
                     }
+                    
+                    OriginCard {
+                        Button {
+                            globalVM.subtractStartingBalance.toggle()
+                        } label: {
+                            GroupBox {
+                                HStack {
+                                    Text("Subtract Starting Balance")
+                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                                        .fontDesign(.rounded)
+                                    Spacer()
+                                    Toggle("", isOn: $globalVM.subtractStartingBalance)
+                                        .scaleEffect(0.6, anchor: .trailing)
+                                }
+                                .frame(height: 12)
+                            }
+                            .backgroundStyle(Color(.xCardBackground))
+                        }
+                        .buttonStyle(.plain)
+                    }
                 }
                 .padding(.horizontal)
                 .padding(.bottom)

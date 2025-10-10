@@ -11,11 +11,13 @@ import SwiftUI
 struct Account: Identifiable, Equatable {
     var id: Int { accountId }
     var firm: Firm
+    var userId: Int
     var accountId: Int
     var accountName: String
     var ineligible: Bool
     var isLeader: Bool
     var isFollower: Bool
+    var startingBalance: Double
     var balance: Double
     var realizedDayPnl: Double
     var openPnl: Double
@@ -33,11 +35,13 @@ struct Account: Identifiable, Equatable {
     static func fromDto(_ dto: AccountDTO, _ firm: Firm, _ type: AccountType) -> Account {
         return Account(
             firm: firm,
+            userId: dto.userId,
             accountId: dto.accountId,
             accountName: dto.accountName,
             ineligible: dto.ineligible,
             isLeader: dto.isLeader,
             isFollower: dto.isFollower,
+            startingBalance: dto.startingBalance,
             balance: dto.balance,
             realizedDayPnl: dto.realizedDayPnl,
             openPnl: dto.openPnl,

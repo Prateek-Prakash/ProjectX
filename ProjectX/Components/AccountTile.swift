@@ -39,7 +39,7 @@ struct AccountTile: View {
                     .padding(.trailing, 14)
                 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(account.balance.asCurrency())
+                    Text((globalVM.subtractStartingBalance ? account.balance - account.startingBalance : account.balance).asCurrency())
                         .font(.system(size: 12, weight: .medium, design: .rounded))
                     Text(account.accountName)
                         .font(.system(size: 8, weight: .thin, design: .monospaced))
