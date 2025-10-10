@@ -9,8 +9,6 @@ import Combine
 import SwiftUI
 
 struct AppShell: View {
-    // ORDER MATTERS
-    @ObservedObject var storageVM = StorageViewModel.shared
     @ObservedObject var globalVM = GlobalViewModel.shared
     
     @Namespace var animationNamespace
