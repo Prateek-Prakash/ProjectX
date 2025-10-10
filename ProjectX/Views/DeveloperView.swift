@@ -12,6 +12,8 @@ struct DeveloperView: View {
     
     @ObservedObject var globalVM = GlobalViewModel.shared
     
+    @State var successHaptic: Bool = false
+    
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -74,6 +76,30 @@ struct DeveloperView: View {
                             .backgroundStyle(Color(.xCardBackground))
                         }
                         .buttonStyle(.plain)
+                    }
+                    
+                    OriginCard {
+                        Button {
+                            successHaptic.toggle()
+                            globalVM.clearOldIds()
+                        } label: {
+                            GroupBox {
+                                HStack {
+                                    Text("Clear Old IDs")
+                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                                        .fontDesign(.rounded)
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .foregroundStyle(.secondary)
+                                        .fontDesign(.rounded)
+                                        .imageScale(.small)
+                                }
+                                .frame(height: 12)
+                            }
+                            .backgroundStyle(Color(.xCardBackground))
+                        }
+                        .buttonStyle(.plain)
+                        .sensoryFeedback(.success, trigger: successHaptic)
                     }
                 }
                 .padding(.horizontal)

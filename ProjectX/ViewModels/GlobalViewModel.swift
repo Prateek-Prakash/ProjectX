@@ -238,28 +238,32 @@ class GlobalViewModel: ObservableObject {
             let ids = accounts.map({ $0.accountId })
             allAccounts.removeAll(where: { $0.firm == firm && !ids.contains($0.accountId) })
         }
-        
-        // Clear Old Saved Ids
-        let ids = accounts.map({ $0.accountId })
-        switch firm {
-        case .alphaFutures:
-            alphaFuturesFunded.removeAll(where: { !ids.contains($0) })
-            alphaFuturesPractice.removeAll(where: { !ids.contains($0) })
-        case .fundingFutures:
-            fundingFuturesFunded.removeAll(where: { !ids.contains($0) })
-            fundingFuturesPractice.removeAll(where: { !ids.contains($0) })
-        case .holaPrime:
-            holaPrimeFunded.removeAll(where: { !ids.contains($0) })
-            holaPrimePractice.removeAll(where: { !ids.contains($0) })
-        case .lucidTrading:
-            lucidTradingFunded.removeAll(where: { !ids.contains($0) })
-            lucidTradingPractice.removeAll(where: { !ids.contains($0) })
-        case .topstep:
-            topstepFunded.removeAll(where: { !ids.contains($0) })
-            topstepPractice.removeAll(where: { !ids.contains($0) })
-        case .tradeify:
-            tradeifyFunded.removeAll(where: { !ids.contains($0) })
-            tradeifyPractice.removeAll(where: { !ids.contains($0) })
+    }
+    
+    func clearOldIds() {
+        for firm in Firm.allCases {
+            let accounts = allAccounts.filter({ $0.firm == firm })
+            let ids = accounts.map({ $0.accountId })
+            switch firm {
+            case .alphaFutures:
+                alphaFuturesFunded.removeAll(where: { !ids.contains($0) })
+                alphaFuturesPractice.removeAll(where: { !ids.contains($0) })
+            case .fundingFutures:
+                fundingFuturesFunded.removeAll(where: { !ids.contains($0) })
+                fundingFuturesPractice.removeAll(where: { !ids.contains($0) })
+            case .holaPrime:
+                holaPrimeFunded.removeAll(where: { !ids.contains($0) })
+                holaPrimePractice.removeAll(where: { !ids.contains($0) })
+            case .lucidTrading:
+                lucidTradingFunded.removeAll(where: { !ids.contains($0) })
+                lucidTradingPractice.removeAll(where: { !ids.contains($0) })
+            case .topstep:
+                topstepFunded.removeAll(where: { !ids.contains($0) })
+                topstepPractice.removeAll(where: { !ids.contains($0) })
+            case .tradeify:
+                tradeifyFunded.removeAll(where: { !ids.contains($0) })
+                tradeifyPractice.removeAll(where: { !ids.contains($0) })
+            }
         }
     }
     
