@@ -407,8 +407,8 @@ class GlobalViewModel: ObservableObject {
     
     func isLocked(_ firm: Firm, _ account: Account) -> Bool {
         let accounts = allAccounts.filter({ $0.firm == firm })
-        let leader = accounts.first(where: { $0.isLeader })!
-        return account.lockoutReason != nil || (leader.lockoutReason != nil && account.isFollower)
+        let leader = accounts.first(where: { $0.isLeader })
+        return account.lockoutReason != nil || (leader != nil && leader!.lockoutReason != nil && account.isFollower)
     }
     
     // MARK: SignalR Stuff
