@@ -92,6 +92,7 @@ struct AboutView: View {
                                     }
                                     .frame(height: 12)
                                 }
+                                
                                 Divider()
                                     .frame(height: 1)
                                     .overlay(Color(.xOutline))

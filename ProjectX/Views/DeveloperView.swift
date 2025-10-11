@@ -39,43 +39,61 @@ struct DeveloperView: View {
                     }
                     
                     OriginCard {
-                        Button {
-                            globalVM.delayAuthentication.toggle()
-                        } label: {
-                            GroupBox {
-                                HStack {
-                                    Text("Delay Authentication")
-                                        .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        .fontDesign(.rounded)
-                                    Spacer()
-                                    Toggle("", isOn: $globalVM.delayAuthentication)
-                                        .scaleEffect(0.6, anchor: .trailing)
+                        VStack(spacing: 0) {
+                            OriginHeader {
+                                Text("DEBUGGING")
+                                    .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                    .tracking(2)
+                                    .foregroundStyle(Color(.xHeaderText))
+                            }
+                            
+                            Divider()
+                                .frame(height: 1)
+                                .overlay(Color(.xOutline))
+                            
+                            VStack(spacing: 0) {
+                                Button {
+                                    globalVM.delayAuthentication.toggle()
+                                } label: {
+                                    GroupBox {
+                                        HStack {
+                                            Text("Delay Authentication")
+                                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                .fontDesign(.rounded)
+                                            Spacer()
+                                            Toggle("", isOn: $globalVM.delayAuthentication)
+                                                .scaleEffect(0.6, anchor: .trailing)
+                                        }
+                                        .frame(height: 12)
+                                    }
+                                    .backgroundStyle(Color(.xCardBackground))
                                 }
-                                .frame(height: 12)
+                                .buttonStyle(.plain)
+                                
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                                
+                                Button {
+                                    globalVM.delayLoadingTrades.toggle()
+                                } label: {
+                                    GroupBox {
+                                        HStack {
+                                            Text("Delay Loading Trades")
+                                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                .fontDesign(.rounded)
+                                            Spacer()
+                                            Toggle("", isOn: $globalVM.delayLoadingTrades)
+                                                .scaleEffect(0.6, anchor: .trailing)
+                                        }
+                                        .frame(height: 12)
+                                    }
+                                    .backgroundStyle(Color(.xCardBackground))
+                                }
+                                .buttonStyle(.plain)
                             }
                             .backgroundStyle(Color(.xCardBackground))
                         }
-                        .buttonStyle(.plain)
-                    }
-                    
-                    OriginCard {
-                        Button {
-                            globalVM.delayLoadingTrades.toggle()
-                        } label: {
-                            GroupBox {
-                                HStack {
-                                    Text("Delay Loading Trades")
-                                        .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        .fontDesign(.rounded)
-                                    Spacer()
-                                    Toggle("", isOn: $globalVM.delayLoadingTrades)
-                                        .scaleEffect(0.6, anchor: .trailing)
-                                }
-                                .frame(height: 12)
-                            }
-                            .backgroundStyle(Color(.xCardBackground))
-                        }
-                        .buttonStyle(.plain)
                     }
                     
                     OriginCard {
