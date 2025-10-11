@@ -19,6 +19,11 @@ class GlobalViewModel: ObservableObject {
     @AppStorage("alphaFuturesKey") var alphaFuturesKey: String = ""
     @AppStorage("alphaFuturesFunded") var alphaFuturesFunded: [Int] = []
     @AppStorage("alphaFuturesPractice") var alphaFuturesPractice: [Int] = []
+    // AquaFuturesX
+    @AppStorage("aquaFuturesUsername") var aquaFuturesUsername: String = ""
+    @AppStorage("aquaFuturesKey") var aquaFuturesKey: String = ""
+    @AppStorage("aquaFuturesFunded") var aquaFuturesFunded: [Int] = []
+    @AppStorage("aquaFuturesPractice") var aquaFuturesPractice: [Int] = []
     // FundingFuturesX
     @AppStorage("fundingFuturesUsername") var fundingFuturesUsername: String = ""
     @AppStorage("fundingFuturesKey") var fundingFuturesKey: String = ""
@@ -103,6 +108,8 @@ class GlobalViewModel: ObservableObject {
             switch firm {
             case .alphaFutures:
                 await signIn(firm, alphaFuturesUsername, alphaFuturesKey)
+            case .aquaFutures:
+                await signIn(firm, aquaFuturesUsername, aquaFuturesKey)
             case .fundingFutures:
                 await signIn(firm, fundingFuturesUsername, fundingFuturesKey)
             case .holaPrime:
@@ -125,6 +132,16 @@ class GlobalViewModel: ObservableObject {
             if alphaFuturesUsername != username || alphaFuturesKey != key {
                 alphaFuturesUsername = username
                 alphaFuturesKey = key
+                if isLinked(firm) {
+                    await signIn(firm, username, key)
+                } else {
+                    await signOut(firm)
+                }
+            }
+        case .aquaFutures:
+            if aquaFuturesUsername != username || aquaFuturesKey != key {
+                aquaFuturesUsername = username
+                aquaFuturesKey = key
                 if isLinked(firm) {
                     await signIn(firm, username, key)
                 } else {
@@ -211,6 +228,8 @@ class GlobalViewModel: ObservableObject {
             switch firm {
             case .alphaFutures:
                 type = alphaFuturesFunded.contains(id) ? .funded : alphaFuturesPractice.contains(id) ? .practice : .evaluation
+            case .aquaFutures:
+                type = aquaFuturesFunded.contains(id) ? .funded : aquaFuturesPractice.contains(id) ? .practice : .evaluation
             case .fundingFutures:
                 type = fundingFuturesFunded.contains(id) ? .funded : fundingFuturesPractice.contains(id) ? .practice : .evaluation
             case .holaPrime:
@@ -248,6 +267,9 @@ class GlobalViewModel: ObservableObject {
             case .alphaFutures:
                 alphaFuturesFunded.removeAll(where: { !ids.contains($0) })
                 alphaFuturesPractice.removeAll(where: { !ids.contains($0) })
+            case .aquaFutures:
+                aquaFuturesFunded.removeAll(where: { !ids.contains($0) })
+                aquaFuturesPractice.removeAll(where: { !ids.contains($0) })
             case .fundingFutures:
                 fundingFuturesFunded.removeAll(where: { !ids.contains($0) })
                 fundingFuturesPractice.removeAll(where: { !ids.contains($0) })
@@ -295,6 +317,9 @@ class GlobalViewModel: ObservableObject {
         case .alphaFutures:
             alphaFuturesFunded.removeAll()
             alphaFuturesPractice.removeAll()
+        case .aquaFutures:
+            aquaFuturesFunded.removeAll()
+            aquaFuturesPractice.removeAll()
         case .fundingFutures:
             fundingFuturesFunded.removeAll()
             fundingFuturesPractice.removeAll()
@@ -317,6 +342,8 @@ class GlobalViewModel: ObservableObject {
         switch firm {
         case .alphaFutures:
             return !alphaFuturesUsername.isEmpty && !alphaFuturesKey.isEmpty
+        case .aquaFutures:
+            return !aquaFuturesUsername.isEmpty && !aquaFuturesKey.isEmpty
         case .fundingFutures:
             return !fundingFuturesUsername.isEmpty && !fundingFuturesKey.isEmpty
         case .holaPrime:
@@ -358,6 +385,9 @@ class GlobalViewModel: ObservableObject {
         case .alphaFutures:
             type == .funded ? alphaFuturesFunded.append(id) : alphaFuturesFunded.removeAll(where: { $0 == id })
             type == .practice ? alphaFuturesPractice.append(id) : alphaFuturesPractice.removeAll(where: { $0 == id })
+        case .aquaFutures:
+            type == .funded ? aquaFuturesFunded.append(id) : aquaFuturesFunded.removeAll(where: { $0 == id })
+            type == .practice ? aquaFuturesPractice.append(id) : aquaFuturesPractice.removeAll(where: { $0 == id })
         case .fundingFutures:
             type == .funded ? fundingFuturesFunded.append(id) : fundingFuturesFunded.removeAll(where: { $0 == id })
             type == .practice ? fundingFuturesPractice.append(id) : fundingFuturesPractice.removeAll(where: { $0 == id })
@@ -387,6 +417,9 @@ class GlobalViewModel: ObservableObject {
         case .alphaFutures:
             usernameInput = alphaFuturesUsername
             keyInput = alphaFuturesKey
+        case .aquaFutures:
+            usernameInput = aquaFuturesUsername
+            keyInput = aquaFuturesKey
         case .fundingFutures:
             usernameInput = fundingFuturesUsername
             keyInput = fundingFuturesKey

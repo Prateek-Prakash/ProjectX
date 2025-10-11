@@ -11,6 +11,7 @@ import SwiftUI
 enum Firm: String, CaseIterable, Identifiable {
     var id: String { self.rawValue }
     case alphaFutures = "Alpha Futures"
+    case aquaFutures = "Aqua Futures"
     case fundingFutures = "Funding Futures"
     case holaPrime = "Hola Prime"
     case lucidTrading = "Lucid Trading"
@@ -29,6 +30,8 @@ enum Firm: String, CaseIterable, Identifiable {
         switch self {
         case .alphaFutures:
             return 200
+        case .aquaFutures:
+            return 100
         case .fundingFutures:
             return 100
         case .holaPrime:
