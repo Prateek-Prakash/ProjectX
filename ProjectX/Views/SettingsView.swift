@@ -30,16 +30,16 @@ struct SettingsView: View {
             }
             .toolbarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    CloseButton()
+                }
+                .sharedBackgroundVisibility(.hidden)
+                
                 ToolbarItem(placement: .title) {
                     Text("SETTINGS")
                         .font(.system(size: 10, weight: .semibold, design: .monospaced))
                         .tracking(2)
                 }
-                
-                ToolbarItem(placement: .topBarTrailing) {
-                    CloseButton()
-                }
-                .sharedBackgroundVisibility(.hidden)
             }
         }
         .interactiveDismissDisabled()

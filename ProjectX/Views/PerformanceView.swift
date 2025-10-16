@@ -129,16 +129,16 @@ struct PerformanceView: View {
             } // ZStack
             .toolbarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    CloseButton()
+                }
+                .sharedBackgroundVisibility(.hidden)
+                
                 ToolbarItem(placement: .title) {
                     Text("PERFORMANCE")
                         .font(.system(size: 10, weight: .semibold, design: .monospaced))
                         .tracking(2)
                 }
-                
-                ToolbarItem(placement: .topBarTrailing) {
-                    CloseButton()
-                }
-                .sharedBackgroundVisibility(.hidden)
             }
         }
         .interactiveDismissDisabled()
