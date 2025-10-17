@@ -33,10 +33,10 @@ struct TradeTile: View {
             VStack {
                 Text(trade.entryPrice.asCurrency())
                     .font(.system(size: 8, weight: .semibold, design: .monospaced))
-                Text(trade.createdAt.asDate())
+                Text(trade.createdAt.asFractionalDate())
                     .font(.system(size: 8, design: .monospaced))
                     .foregroundStyle(.secondary)
-                Text(trade.createdAt.asTime())
+                Text(trade.createdAt.asFractionalTime())
                     .font(.system(size: 8, design: .monospaced))
                     .foregroundStyle(.secondary)
             }
@@ -45,10 +45,10 @@ struct TradeTile: View {
             VStack {
                 Text(trade.exitPrice.asCurrency())
                     .font(.system(size: 8, weight: .semibold, design: .monospaced))
-                Text(trade.exitedAt.asDate())
+                Text(trade.exitedAt.asFractionalDate())
                     .font(.system(size: 8, design: .monospaced))
                     .foregroundStyle(.secondary)
-                Text(trade.exitedAt.asTime())
+                Text(trade.exitedAt.asFractionalTime())
                     .font(.system(size: 8, design: .monospaced))
                     .foregroundStyle(.secondary)
             }

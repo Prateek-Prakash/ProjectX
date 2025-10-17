@@ -164,6 +164,22 @@ class XClient {
         }
     }
     
+    func getDailyStats(_ id: Int) async -> [DailyStatsDTO] {
+        do {
+            let headers: HTTPHeaders = [
+                "Authorization": "Bearer \(userToken!)"
+            ]
+            let params: [String: Int] = [
+                "tradingAccountId": id
+            ]
+            let value = try await AF.request("\(userUrl)/Statistics/lifetimestats", method: .post, parameters: params, encoding: JSONEncoding.default, headers: headers).serializingDecodable([DailyStatsDTO].self).value
+            return value
+        } catch {
+            Helpers.debugLog("getDailyStats: \(error)")
+            return []
+        }
+    }
+    
     func getTrades(_ id: Int) async -> [TradeDTO] {
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(userToken!)"

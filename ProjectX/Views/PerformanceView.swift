@@ -80,6 +80,51 @@ struct PerformanceView: View {
                             OriginCard {
                                 VStack(spacing: 0) {
                                     NavigationLink {
+                                        DailyStatsHistoryView()
+                                    } label: {
+                                        OriginHeader {
+                                            Text("LATEST DAILY STATS")
+                                                .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                                .tracking(2)
+                                                .foregroundStyle(Color(.xHeaderText))
+                                            Image(systemName: "chevron.right")
+                                                .foregroundStyle(Color(.xHeaderText))
+                                                .font(.system(size: 6, weight: .semibold, design: .rounded))
+                                        }
+                                    }
+                                    .buttonStyle(.plain)
+                                    
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    LazyVStack(spacing: 0) {
+                                        if !globalVM.accountDailyStats.isEmpty {
+                                            ForEach(Array(globalVM.accountDailyStats.prefix(5))) { stats in
+                                                DailyStatsTile(stats: stats)
+                                                if globalVM.accountDailyStats.last != stats {
+                                                    Divider()
+                                                        .frame(height: 1)
+                                                        .overlay(Color(.xOutline))
+                                                }
+                                            }
+                                        } else {
+                                            ContentUnavailableView {
+                                                Label("NO DAILY STATS", systemImage: "exclamationmark.triangle")
+                                                    .imageScale(.small)
+                                                    .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                                    .tracking(2)
+                                                    .foregroundStyle(.secondary)
+                                            }
+                                            .padding()
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            OriginCard {
+                                VStack(spacing: 0) {
+                                    NavigationLink {
                                         TradeHistoryView()
                                     } label: {
                                         OriginHeader {

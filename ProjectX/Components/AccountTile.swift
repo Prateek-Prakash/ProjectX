@@ -24,6 +24,7 @@ struct AccountTile: View {
                         try! await Task.sleep(for: .seconds(5))
                     }
                     globalVM.selectedAccount = account
+                    await globalVM.loadDailyStats(account)
                     await globalVM.loadTrades(account)
                     globalVM.loadingTrades = false
                 }

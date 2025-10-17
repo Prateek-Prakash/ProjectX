@@ -8,7 +8,7 @@
 import Foundation
 
 extension String {
-    func toDateTime() -> Date {
+    func toFractionalDateTime() -> Date {
         let formatter = ISO8601DateFormatter()
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
         formatter.formatOptions = [
@@ -16,6 +16,31 @@ extension String {
             .withFullTime,
             .withDashSeparatorInDate,
             .withFractionalSeconds
+        ]
+        return formatter.date(from: self)!
+    }
+    
+    func asFractionalDate() -> String {
+        let date = self.toFractionalDateTime()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM-dd-yyyy"
+        return formatter.string(from: date)
+    }
+    
+    func asFractionalTime() -> String {
+        let date = self.toFractionalDateTime()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "hh:mm:ss a"
+        return formatter.string(from: date)
+    }
+    
+    func toDateTime() -> Date {
+        let formatter = ISO8601DateFormatter()
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.formatOptions = [
+            .withFullDate,
+            .withFullTime,
+            .withDashSeparatorInDate
         ]
         return formatter.date(from: self)!
     }

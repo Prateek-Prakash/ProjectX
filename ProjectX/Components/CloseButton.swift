@@ -17,6 +17,7 @@ struct CloseButton: View {
             dismiss()
             // TODO: PerformanceView Close Only
             globalVM.selectedAccount = nil
+            globalVM.accountDailyStats.removeAll()
             globalVM.accountTrades.removeAll()
         } label: {
             Image(systemName: "xmark")

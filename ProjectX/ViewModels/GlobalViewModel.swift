@@ -75,6 +75,7 @@ class GlobalViewModel: ObservableObject {
     
     @Published var loadingTrades: Bool = false
     @Published var selectedAccount: Account? = nil
+    @Published var accountDailyStats: [DailyStats] = []
     @Published var accountTrades: [Trade] = []
     
     @Published var usernameInput: String = ""
@@ -303,6 +304,8 @@ class GlobalViewModel: ObservableObject {
                 }
             }
             if let selectedAccount {
+                Helpers.debugLog("refreshData: Refreshing Daily Stats")
+                await loadDailyStats(selectedAccount)
                 Helpers.debugLog("refreshData: Refreshing Trades")
                 await loadTrades(selectedAccount)
             }
@@ -406,10 +409,14 @@ class GlobalViewModel: ObservableObject {
         }
     }
     
+    func loadDailyStats(_ account: Account) async {
+        let dtos = await XClient.get(account.firm).getDailyStats(account.accountId)
+        accountDailyStats = dtos.map({ DailyStats.fromDto($0) }).sorted(by: { $0.tradeDate.toDateTime() > $1.tradeDate.toDateTime() })
+    }
+    
     func loadTrades(_ account: Account) async {
         let dtos = await XClient.get(account.firm).getTrades(account.accountId)
-        accountTrades = dtos.map({ Trade.fromDto($0) }).sorted(by: { $0.createdAt.toDateTime() > $1.createdAt.toDateTime() })
-            
+        accountTrades = dtos.map({ Trade.fromDto($0) }).sorted(by: { $0.createdAt.toFractionalDateTime() > $1.createdAt.toFractionalDateTime() })
     }
     
     func loadCredentials(_ firm: Firm)  {
