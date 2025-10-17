@@ -15,12 +15,21 @@ struct DailyStatsTile: View {
             HStack {
                 VStack(alignment: .leading) {
                     Text(stats.tradeDate.asDate())
-                        .font(.system(size: 10, design: .monospaced))
+                        .font(.system(size: 8, weight: .semibold, design: .monospaced))
                     Text(stats.tradeDate.asTime())
                         .font(.system(size: 8, design: .monospaced))
                         .foregroundStyle(.secondary)
                 }
                 Spacer()
+            }
+            .frame(maxWidth: .infinity)
+            
+            VStack(alignment: .center) {
+                Text(String(stats.totalTrades))
+                    .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                Text("TRADES")
+                    .font(.system(size: 6, design: .monospaced))
+                    .foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity)
             
