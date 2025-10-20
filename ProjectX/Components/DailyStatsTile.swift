@@ -46,4 +46,3 @@ struct DailyStatsTile: View {
         .padding(.all, 14)
     }
 }
-
