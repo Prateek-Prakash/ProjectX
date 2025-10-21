@@ -11,7 +11,6 @@ import SwiftUI
 struct AppShell: View {
     @ObservedObject var globalVM = GlobalViewModel.shared
     
-    @Namespace var animationNamespace
     @State var showSettingsCover: Bool = false
     @State var successHaptic: Bool = false
     @State var errorHaptic: Bool = false
@@ -43,23 +42,50 @@ struct AppShell: View {
                     }
                     .padding(.horizontal)
                     .padding(.bottom)
-                    .padding(.bottom)
-                    .padding(.bottom)
-                    .padding(.bottom)
                 }
             }
             .scrollIndicators(.never)
             .toolbarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        errorHaptic.toggle()
+                        if globalVM.isInitialized {
+                            Task {
+                                await globalVM.refreshData()
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "livephoto")
+                            .symbolEffect(.bounce, options: globalVM.refreshingData ? .repeating : .nonRepeating, value: globalVM.refreshingData)
+                            .imageScale(.small)
+                            .padding()
+                    }
+                    .buttonStyle(.plain)
+                    .sensoryFeedback(.error, trigger: errorHaptic)
+                }
+                .sharedBackgroundVisibility(.hidden)
+                
                 ToolbarItem(placement: .title) {
                     Text("DASHBOARD")
                         .font(.system(size: 10, weight: .semibold, design: .monospaced))
                         .tracking(2)
                 }
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showSettingsCover.toggle()
+                    } label: {
+                        Image(systemName: "gearshape.fill")
+                            .imageScale(.small)
+                            .padding()
+                    }
+                    .buttonStyle(.plain)
+                }
+                .sharedBackgroundVisibility(.hidden)
             }
             .fullScreenCover(isPresented: $showSettingsCover) {
                 SettingsView()
-                    .navigationTransition(.zoom(sourceID: "Settings", in: animationNamespace))
             }
             .onReceive(refreshTimer) { _ in
                 if globalVM.isInitialized && globalVM.automaticRefresh {
@@ -68,86 +94,6 @@ struct AppShell: View {
                     }
                 }
             }
-        }
-        .safeAreaBar(edge: .bottom, spacing: 0) {
-            HStack {
-                GlassEffectContainer {
-                    HStack {
-                        Button {
-                            showSettingsCover.toggle()
-                        } label: {
-                            ZStack {
-                                Image(systemName: "gearshape.fill")
-                                    .imageScale(.large)
-                            }
-                            .frame(width: 44, height: 44)
-                        }
-                        .buttonStyle(.plain)
-                        .matchedTransitionSource(id: "Settings", in: animationNamespace)
-                        
-                        Button {
-                            successHaptic.toggle()
-                            globalVM.showEvaluationAccounts.toggle()
-                        } label: {
-                            ZStack {
-                                Image(systemName: "graduationcap.circle\(globalVM.showEvaluationAccounts ? ".fill" : "")")
-                                    .imageScale(.large)
-                            }
-                            .frame(width: 44, height: 44)
-                        }
-                        .buttonStyle(.plain)
-                        
-                        Button {
-                            successHaptic.toggle()
-                            globalVM.showFundedAccounts.toggle()
-                        } label: {
-                            ZStack {
-                                Image(systemName: "creditcard.circle\(globalVM.showFundedAccounts ? ".fill" : "")")
-                                    .imageScale(.large)
-                            }
-                            .frame(width: 44, height: 44)
-                        }
-                        .buttonStyle(.plain)
-                        
-                        Button {
-                            successHaptic.toggle()
-                            globalVM.showPracticeAccounts.toggle()
-                        } label: {
-                            ZStack {
-                                Image(systemName: "lightbulb.circle\(globalVM.showPracticeAccounts ? ".fill" : "")")
-                                    .imageScale(.large)
-                            }
-                            .frame(width: 44, height: 44)
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-                .glassEffect(.clear.interactive(), in: .rect(cornerRadius: 12))
-                .sensoryFeedback(.success, trigger: successHaptic)
-                
-                Spacer()
-                
-                Button {
-                    errorHaptic.toggle()
-                    if globalVM.isInitialized {
-                        Task {
-                            await globalVM.refreshData()
-                        }
-                    }
-                } label: {
-                    ZStack {
-                        Image(systemName: "livephoto")
-                            .imageScale(.large)
-                            .symbolEffect(.bounce, options: globalVM.refreshingData ? .repeating : .nonRepeating, value: globalVM.refreshingData)
-                    }
-                    .frame(width: 44, height: 44)
-                    .glassEffect(.clear.interactive(), in: .rect(cornerRadius: 12))
-                }
-                .buttonStyle(.plain)
-                .sensoryFeedback(.error, trigger: errorHaptic)
-            }
-            .padding(.horizontal)
-            .padding(.horizontal)
         }
     }
 }
