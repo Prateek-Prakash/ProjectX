@@ -36,7 +36,6 @@ struct CustomizationView: View {
                                     HStack {
                                         Text("Evaluation Accounts")
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
-                                            .fontDesign(.rounded)
                                         Spacer()
                                         Toggle("", isOn: $globalVM.showEvaluationAccounts)
                                             .scaleEffect(0.6, anchor: .trailing)
@@ -58,7 +57,6 @@ struct CustomizationView: View {
                                     HStack {
                                         Text("Funded Accounts")
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
-                                            .fontDesign(.rounded)
                                         Spacer()
                                         Toggle("", isOn: $globalVM.showFundedAccounts)
                                             .scaleEffect(0.6, anchor: .trailing)
@@ -80,7 +78,6 @@ struct CustomizationView: View {
                                     HStack {
                                         Text("Practice Accounts")
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
-                                            .fontDesign(.rounded)
                                         Spacer()
                                         Toggle("", isOn: $globalVM.showPracticeAccounts)
                                             .scaleEffect(0.6, anchor: .trailing)
@@ -101,7 +98,6 @@ struct CustomizationView: View {
                                 HStack {
                                     Text("Hide Empty Firms")
                                         .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        .fontDesign(.rounded)
                                     Spacer()
                                     Toggle("", isOn: $globalVM.hideEmptyFirms)
                                         .scaleEffect(0.6, anchor: .trailing)
@@ -121,7 +117,6 @@ struct CustomizationView: View {
                                 HStack {
                                     Text("Hide Locked Accounts")
                                         .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        .fontDesign(.rounded)
                                     Spacer()
                                     Toggle("", isOn: $globalVM.hideLockedAccounts)
                                         .scaleEffect(0.6, anchor: .trailing)
@@ -141,7 +136,6 @@ struct CustomizationView: View {
                                 HStack {
                                     Text("Subtract Starting Balance")
                                         .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        .fontDesign(.rounded)
                                     Spacer()
                                     Toggle("", isOn: $globalVM.subtractStartingBalance)
                                         .scaleEffect(0.6, anchor: .trailing)

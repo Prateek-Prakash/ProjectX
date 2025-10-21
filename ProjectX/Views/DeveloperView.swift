@@ -26,7 +26,6 @@ struct DeveloperView: View {
                                 HStack {
                                     Text("Automatic Refresh")
                                         .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        .fontDesign(.rounded)
                                     Spacer()
                                     Toggle("", isOn: $globalVM.automaticRefresh)
                                         .scaleEffect(0.6, anchor: .trailing)
@@ -59,7 +58,6 @@ struct DeveloperView: View {
                                         HStack {
                                             Text("Delay Authentication")
                                                 .font(.system(size: 12, weight: .medium, design: .rounded))
-                                                .fontDesign(.rounded)
                                             Spacer()
                                             Toggle("", isOn: $globalVM.delayAuthentication)
                                                 .scaleEffect(0.6, anchor: .trailing)
@@ -81,7 +79,6 @@ struct DeveloperView: View {
                                         HStack {
                                             Text("Delay Loading Trades")
                                                 .font(.system(size: 12, weight: .medium, design: .rounded))
-                                                .fontDesign(.rounded)
                                             Spacer()
                                             Toggle("", isOn: $globalVM.delayLoadingTrades)
                                                 .scaleEffect(0.6, anchor: .trailing)
@@ -105,10 +102,10 @@ struct DeveloperView: View {
                                 HStack {
                                     Text("Clear Old IDs")
                                         .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        .fontDesign(.rounded)
+                                        .foregroundStyle(.red)
                                     Spacer()
                                     Image(systemName: "chevron.right")
-                                        .foregroundStyle(.secondary)
+                                        .foregroundStyle(.red.secondary)
                                         .fontDesign(.rounded)
                                         .imageScale(.small)
                                 }
