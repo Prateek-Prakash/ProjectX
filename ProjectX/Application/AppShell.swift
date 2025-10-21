@@ -23,7 +23,7 @@ struct AppShell: View {
                 Color(.xBackground)
                     .edgesIgnoringSafeArea(.all)
                 ScrollView {
-                    VStack(spacing: 12) {
+                    VStack {
                         ForEach(Firm.allCases) { firm in
                             if globalVM.isLinked(firm) && globalVM.isConnected(firm) {
                                 let accounts = globalVM.allAccounts.filter({

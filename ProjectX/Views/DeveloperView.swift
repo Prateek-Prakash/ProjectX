@@ -16,109 +16,113 @@ struct DeveloperView: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 12) {
-                    OriginCard {
-                        Button {
-                            globalVM.automaticRefresh.toggle()
-                        } label: {
-                            GroupBox {
-                                HStack {
-                                    Text("Automatic Refresh")
-                                        .font(.system(size: 12, weight: .medium, design: .rounded))
-                                    Spacer()
-                                    Toggle("", isOn: $globalVM.automaticRefresh)
-                                        .scaleEffect(0.6, anchor: .trailing)
-                                }
-                                .frame(height: 12)
-                            }
-                            .backgroundStyle(Color(.xCardBackground))
-                        }
-                        .buttonStyle(.plain)
-                    }
-                    
-                    OriginCard {
-                        VStack(spacing: 0) {
-                            OriginHeader {
-                                Text("DEBUGGING")
-                                    .font(.system(size: 8, weight: .semibold, design: .monospaced))
-                                    .tracking(2)
-                                    .foregroundStyle(Color(.xHeaderText))
-                            }
-                            
-                            Divider()
-                                .frame(height: 1)
-                                .overlay(Color(.xOutline))
-                            
-                            VStack(spacing: 0) {
-                                Button {
-                                    globalVM.delayAuthentication.toggle()
-                                } label: {
-                                    GroupBox {
-                                        HStack {
-                                            Text("Delay Authentication")
-                                                .font(.system(size: 12, weight: .medium, design: .rounded))
-                                            Spacer()
-                                            Toggle("", isOn: $globalVM.delayAuthentication)
-                                                .scaleEffect(0.6, anchor: .trailing)
-                                        }
-                                        .frame(height: 12)
+            ZStack {
+                Color(.xBackground)
+                    .edgesIgnoringSafeArea(.all)
+                ScrollView {
+                    VStack {
+                        OriginCard {
+                            Button {
+                                globalVM.automaticRefresh.toggle()
+                            } label: {
+                                GroupBox {
+                                    HStack {
+                                        Text("Automatic Refresh")
+                                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                                        Spacer()
+                                        Toggle("", isOn: $globalVM.automaticRefresh)
+                                            .scaleEffect(0.6, anchor: .trailing)
                                     }
-                                    .backgroundStyle(Color(.xCardBackground))
+                                    .frame(height: 12)
                                 }
-                                .buttonStyle(.plain)
+                                .backgroundStyle(Color(.xCardBackground))
+                            }
+                            .buttonStyle(.plain)
+                        }
+                        
+                        OriginCard {
+                            VStack(spacing: 0) {
+                                OriginHeader {
+                                    Text("DEBUGGING")
+                                        .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                        .tracking(2)
+                                        .foregroundStyle(Color(.xHeaderText))
+                                }
                                 
                                 Divider()
                                     .frame(height: 1)
                                     .overlay(Color(.xOutline))
                                 
-                                Button {
-                                    globalVM.delayLoadingTrades.toggle()
-                                } label: {
-                                    GroupBox {
-                                        HStack {
-                                            Text("Delay Loading Trades")
-                                                .font(.system(size: 12, weight: .medium, design: .rounded))
-                                            Spacer()
-                                            Toggle("", isOn: $globalVM.delayLoadingTrades)
-                                                .scaleEffect(0.6, anchor: .trailing)
+                                VStack(spacing: 0) {
+                                    Button {
+                                        globalVM.delayAuthentication.toggle()
+                                    } label: {
+                                        GroupBox {
+                                            HStack {
+                                                Text("Delay Authentication")
+                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                Spacer()
+                                                Toggle("", isOn: $globalVM.delayAuthentication)
+                                                    .scaleEffect(0.6, anchor: .trailing)
+                                            }
+                                            .frame(height: 12)
                                         }
-                                        .frame(height: 12)
+                                        .backgroundStyle(Color(.xCardBackground))
                                     }
-                                    .backgroundStyle(Color(.xCardBackground))
+                                    .buttonStyle(.plain)
+                                    
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    Button {
+                                        globalVM.delayLoadingTrades.toggle()
+                                    } label: {
+                                        GroupBox {
+                                            HStack {
+                                                Text("Delay Loading Trades")
+                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                Spacer()
+                                                Toggle("", isOn: $globalVM.delayLoadingTrades)
+                                                    .scaleEffect(0.6, anchor: .trailing)
+                                            }
+                                            .frame(height: 12)
+                                        }
+                                        .backgroundStyle(Color(.xCardBackground))
+                                    }
+                                    .buttonStyle(.plain)
                                 }
-                                .buttonStyle(.plain)
+                                .backgroundStyle(Color(.xCardBackground))
                             }
-                            .backgroundStyle(Color(.xCardBackground))
+                        }
+                        
+                        OriginCard {
+                            Button {
+                                successHaptic.toggle()
+                                globalVM.clearOldIds()
+                            } label: {
+                                GroupBox {
+                                    HStack {
+                                        Text("Clear Old IDs")
+                                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            .foregroundStyle(.red)
+                                        Spacer()
+                                        Image(systemName: "chevron.right")
+                                            .foregroundStyle(.red.secondary)
+                                            .fontDesign(.rounded)
+                                            .imageScale(.small)
+                                    }
+                                    .frame(height: 12)
+                                }
+                                .backgroundStyle(Color(.xCardBackground))
+                            }
+                            .buttonStyle(.plain)
+                            .sensoryFeedback(.success, trigger: successHaptic)
                         }
                     }
-                    
-                    OriginCard {
-                        Button {
-                            successHaptic.toggle()
-                            globalVM.clearOldIds()
-                        } label: {
-                            GroupBox {
-                                HStack {
-                                    Text("Clear Old IDs")
-                                        .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        .foregroundStyle(.red)
-                                    Spacer()
-                                    Image(systemName: "chevron.right")
-                                        .foregroundStyle(.red.secondary)
-                                        .fontDesign(.rounded)
-                                        .imageScale(.small)
-                                }
-                                .frame(height: 12)
-                            }
-                            .backgroundStyle(Color(.xCardBackground))
-                        }
-                        .buttonStyle(.plain)
-                        .sensoryFeedback(.success, trigger: successHaptic)
-                    }
+                    .padding(.horizontal)
+                    .padding(.bottom)
                 }
-                .padding(.horizontal)
-                .padding(.bottom)
             }
             .toolbarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)

@@ -14,30 +14,95 @@ struct CustomizationView: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 12) {
-                    OriginCard {
-                        VStack(spacing: 0) {
-                            OriginHeader {
-                                Text("ACCOUNT TYPES")
-                                    .font(.system(size: 8, weight: .semibold, design: .monospaced))
-                                    .tracking(2)
-                                    .foregroundStyle(Color(.xHeaderText))
+            ZStack {
+                Color(.xBackground)
+                    .edgesIgnoringSafeArea(.all)
+                ScrollView {
+                    VStack {
+                        OriginCard {
+                            VStack(spacing: 0) {
+                                OriginHeader {
+                                    Text("ACCOUNT TYPES")
+                                        .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                        .tracking(2)
+                                        .foregroundStyle(Color(.xHeaderText))
+                                }
+                                
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                                
+                                Button {
+                                    globalVM.showEvaluationAccounts.toggle()
+                                } label: {
+                                    GroupBox {
+                                        HStack {
+                                            Text("Evaluation Accounts")
+                                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            Spacer()
+                                            Toggle("", isOn: $globalVM.showEvaluationAccounts)
+                                                .scaleEffect(0.6, anchor: .trailing)
+                                        }
+                                        .frame(height: 12)
+                                    }
+                                    .backgroundStyle(Color(.xCardBackground))
+                                }
+                                .buttonStyle(.plain)
+                                
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                                
+                                Button {
+                                    globalVM.showFundedAccounts.toggle()
+                                } label: {
+                                    GroupBox {
+                                        HStack {
+                                            Text("Funded Accounts")
+                                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            Spacer()
+                                            Toggle("", isOn: $globalVM.showFundedAccounts)
+                                                .scaleEffect(0.6, anchor: .trailing)
+                                        }
+                                        .frame(height: 12)
+                                    }
+                                    .backgroundStyle(Color(.xCardBackground))
+                                }
+                                .buttonStyle(.plain)
+                                
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                                
+                                Button {
+                                    globalVM.showPracticeAccounts.toggle()
+                                } label: {
+                                    GroupBox {
+                                        HStack {
+                                            Text("Practice Accounts")
+                                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            Spacer()
+                                            Toggle("", isOn: $globalVM.showPracticeAccounts)
+                                                .scaleEffect(0.6, anchor: .trailing)
+                                        }
+                                        .frame(height: 12)
+                                    }
+                                    .backgroundStyle(Color(.xCardBackground))
+                                }
+                                .buttonStyle(.plain)
                             }
-                            
-                            Divider()
-                                .frame(height: 1)
-                                .overlay(Color(.xOutline))
-                            
+                        }
+                        
+                        OriginCard {
                             Button {
-                                globalVM.showEvaluationAccounts.toggle()
+                                globalVM.hideEmptyFirms.toggle()
                             } label: {
                                 GroupBox {
                                     HStack {
-                                        Text("Evaluation Accounts")
+                                        Text("Hide Empty Firms")
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
                                         Spacer()
-                                        Toggle("", isOn: $globalVM.showEvaluationAccounts)
+                                        Toggle("", isOn: $globalVM.hideEmptyFirms)
                                             .scaleEffect(0.6, anchor: .trailing)
                                     }
                                     .frame(height: 12)
@@ -45,41 +110,18 @@ struct CustomizationView: View {
                                 .backgroundStyle(Color(.xCardBackground))
                             }
                             .buttonStyle(.plain)
-                            
-                            Divider()
-                                .frame(height: 1)
-                                .overlay(Color(.xOutline))
-                            
+                        }
+                        
+                        OriginCard {
                             Button {
-                                globalVM.showFundedAccounts.toggle()
+                                globalVM.hideLockedAccounts.toggle()
                             } label: {
                                 GroupBox {
                                     HStack {
-                                        Text("Funded Accounts")
+                                        Text("Hide Locked Accounts")
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
                                         Spacer()
-                                        Toggle("", isOn: $globalVM.showFundedAccounts)
-                                            .scaleEffect(0.6, anchor: .trailing)
-                                    }
-                                    .frame(height: 12)
-                                }
-                                .backgroundStyle(Color(.xCardBackground))
-                            }
-                            .buttonStyle(.plain)
-                            
-                            Divider()
-                                .frame(height: 1)
-                                .overlay(Color(.xOutline))
-                            
-                            Button {
-                                globalVM.showPracticeAccounts.toggle()
-                            } label: {
-                                GroupBox {
-                                    HStack {
-                                        Text("Practice Accounts")
-                                            .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        Spacer()
-                                        Toggle("", isOn: $globalVM.showPracticeAccounts)
+                                        Toggle("", isOn: $globalVM.hideLockedAccounts)
                                             .scaleEffect(0.6, anchor: .trailing)
                                     }
                                     .frame(height: 12)
@@ -88,67 +130,29 @@ struct CustomizationView: View {
                             }
                             .buttonStyle(.plain)
                         }
-                    }
-                    
-                    OriginCard {
-                        Button {
-                            globalVM.hideEmptyFirms.toggle()
-                        } label: {
-                            GroupBox {
-                                HStack {
-                                    Text("Hide Empty Firms")
-                                        .font(.system(size: 12, weight: .medium, design: .rounded))
-                                    Spacer()
-                                    Toggle("", isOn: $globalVM.hideEmptyFirms)
-                                        .scaleEffect(0.6, anchor: .trailing)
+                        
+                        OriginCard {
+                            Button {
+                                globalVM.subtractStartingBalance.toggle()
+                            } label: {
+                                GroupBox {
+                                    HStack {
+                                        Text("Subtract Starting Balance")
+                                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                                        Spacer()
+                                        Toggle("", isOn: $globalVM.subtractStartingBalance)
+                                            .scaleEffect(0.6, anchor: .trailing)
+                                    }
+                                    .frame(height: 12)
                                 }
-                                .frame(height: 12)
+                                .backgroundStyle(Color(.xCardBackground))
                             }
-                            .backgroundStyle(Color(.xCardBackground))
+                            .buttonStyle(.plain)
                         }
-                        .buttonStyle(.plain)
                     }
-                    
-                    OriginCard {
-                        Button {
-                            globalVM.hideLockedAccounts.toggle()
-                        } label: {
-                            GroupBox {
-                                HStack {
-                                    Text("Hide Locked Accounts")
-                                        .font(.system(size: 12, weight: .medium, design: .rounded))
-                                    Spacer()
-                                    Toggle("", isOn: $globalVM.hideLockedAccounts)
-                                        .scaleEffect(0.6, anchor: .trailing)
-                                }
-                                .frame(height: 12)
-                            }
-                            .backgroundStyle(Color(.xCardBackground))
-                        }
-                        .buttonStyle(.plain)
-                    }
-                    
-                    OriginCard {
-                        Button {
-                            globalVM.subtractStartingBalance.toggle()
-                        } label: {
-                            GroupBox {
-                                HStack {
-                                    Text("Subtract Starting Balance")
-                                        .font(.system(size: 12, weight: .medium, design: .rounded))
-                                    Spacer()
-                                    Toggle("", isOn: $globalVM.subtractStartingBalance)
-                                        .scaleEffect(0.6, anchor: .trailing)
-                                }
-                                .frame(height: 12)
-                            }
-                            .backgroundStyle(Color(.xCardBackground))
-                        }
-                        .buttonStyle(.plain)
-                    }
+                    .padding(.horizontal)
+                    .padding(.bottom)
                 }
-                .padding(.horizontal)
-                .padding(.bottom)
             }
             .toolbarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)

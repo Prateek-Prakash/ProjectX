@@ -19,182 +19,186 @@ struct AboutView: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 12) {
-                    OriginCard {
-                        VStack(spacing: 0) {
-                            OriginHeader {
-                                Text("APP INFO")
-                                    .font(.system(size: 8, weight: .semibold, design: .monospaced))
-                                    .tracking(2)
-                                    .foregroundStyle(Color(.xHeaderText))
-                            }
-                            
-                            Divider()
-                                .frame(height: 1)
-                                .overlay(Color(.xOutline))
-                            
+            ZStack {
+                Color(.xBackground)
+                    .edgesIgnoringSafeArea(.all)
+                ScrollView {
+                    VStack {
+                        OriginCard {
                             VStack(spacing: 0) {
-                                GroupBox {
-                                    HStack {
-                                        Text("Name")
-                                            .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        Spacer()
-                                        Text("ProjectX")
-                                            .font(.system(size: 12, design: .rounded))
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    .frame(height: 12)
+                                OriginHeader {
+                                    Text("APP INFO")
+                                        .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                        .tracking(2)
+                                        .foregroundStyle(Color(.xHeaderText))
                                 }
                                 
                                 Divider()
                                     .frame(height: 1)
                                     .overlay(Color(.xOutline))
                                 
-                                GroupBox {
-                                    HStack {
-                                        Text("Version")
-                                            .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        Spacer()
-                                        Text("1.0.0")
-                                            .font(.system(size: 12, design: .rounded))
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    .frame(height: 12)
-                                }
-                            }
-                            .backgroundStyle(Color(.xCardBackground))
-                        }
-                    }
-                    
-                    OriginCard {
-                        VStack(spacing: 0) {
-                            OriginHeader {
-                                Text("DEVICE INFO")
-                                    .font(.system(size: 8, weight: .semibold, design: .monospaced))
-                                    .tracking(2)
-                                    .foregroundStyle(Color(.xHeaderText))
-                            }
-                            
-                            Divider()
-                                .frame(height: 1)
-                                .overlay(Color(.xOutline))
-                            
-                            VStack(spacing: 0) {
-                                GroupBox {
-                                    HStack {
-                                        Text("Model")
-                                            .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        Spacer()
-                                        Text(UIDevice.current.model)
-                                            .font(.system(size: 12, design: .rounded))
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    .frame(height: 12)
-                                }
-                                
-                                Divider()
-                                    .frame(height: 1)
-                                    .overlay(Color(.xOutline))
-                                
-                                GroupBox {
-                                    HStack {
-                                        Text("System Name")
-                                            .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        Spacer()
-                                        Text(UIDevice.current.systemName)
-                                            .font(.system(size: 12, design: .rounded))
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    .frame(height: 12)
-                                }
-                                
-                                Divider()
-                                    .frame(height: 1)
-                                    .overlay(Color(.xOutline))
-                                
-                                GroupBox {
-                                    HStack {
-                                        Text("System Version")
-                                            .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        Spacer()
-                                        Text(UIDevice.current.systemVersion)
-                                            .font(.system(size: 12, design: .rounded))
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    .frame(height: 12)
-                                }
-                                
-                                Divider()
-                                    .frame(height: 1)
-                                    .overlay(Color(.xOutline))
-                                
-                                GroupBox {
-                                    HStack {
-                                        Text("User Interface")
-                                            .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        Spacer()
-                                        Text(UIDevice.current.userInterfaceIdiom.toString())
-                                            .font(.system(size: 12, design: .rounded))
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    .frame(height: 12)
-                                }
-                            }
-                            .backgroundStyle(Color(.xCardBackground))
-                        }
-                    }
-                    
-                    OriginCard {
-                        VStack(spacing: 0) {
-                            OriginHeader {
-                                Text("DEPENDENCIES")
-                                    .font(.system(size: 8, weight: .semibold, design: .monospaced))
-                                    .tracking(2)
-                                    .foregroundStyle(Color(.xHeaderText))
-                            }
-                            
-                            Divider()
-                                .frame(height: 1)
-                                .overlay(Color(.xOutline))
-                            
-                            VStack(spacing: 0) {
-                                ForEach(dependencies) { dependency in
-                                    Button {
-                                        selected = dependency
-                                    } label: {
-                                        GroupBox {
-                                            HStack {
-                                                Text(dependency.name)
-                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
-                                                Spacer()
-                                                Text(dependency.version)
-                                                    .font(.system(size: 12, design: .rounded))
-                                                    .foregroundStyle(.secondary)
-                                                Image(systemName: "chevron.right")
-                                                    .foregroundStyle(.secondary)
-                                                    .fontDesign(.rounded)
-                                                    .imageScale(.small)
-                                            }
-                                            .frame(height: 12)
+                                VStack(spacing: 0) {
+                                    GroupBox {
+                                        HStack {
+                                            Text("Name")
+                                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            Spacer()
+                                            Text("ProjectX")
+                                                .font(.system(size: 12, design: .rounded))
+                                                .foregroundStyle(.secondary)
                                         }
-                                        .backgroundStyle(Color(.xCardBackground))
+                                        .frame(height: 12)
                                     }
-                                    .buttonStyle(.plain)
                                     
-                                    if dependencies.last != dependency {
-                                        Divider()
-                                            .frame(height: 1)
-                                            .overlay(Color(.xOutline))
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    GroupBox {
+                                        HStack {
+                                            Text("Version")
+                                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            Spacer()
+                                            Text("1.0.0")
+                                                .font(.system(size: 12, design: .rounded))
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        .frame(height: 12)
                                     }
                                 }
+                                .backgroundStyle(Color(.xCardBackground))
                             }
-                            .backgroundStyle(Color(.xCardBackground))
+                        }
+                        
+                        OriginCard {
+                            VStack(spacing: 0) {
+                                OriginHeader {
+                                    Text("DEVICE INFO")
+                                        .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                        .tracking(2)
+                                        .foregroundStyle(Color(.xHeaderText))
+                                }
+                                
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                                
+                                VStack(spacing: 0) {
+                                    GroupBox {
+                                        HStack {
+                                            Text("Model")
+                                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            Spacer()
+                                            Text(UIDevice.current.model)
+                                                .font(.system(size: 12, design: .rounded))
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        .frame(height: 12)
+                                    }
+                                    
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    GroupBox {
+                                        HStack {
+                                            Text("System Name")
+                                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            Spacer()
+                                            Text(UIDevice.current.systemName)
+                                                .font(.system(size: 12, design: .rounded))
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        .frame(height: 12)
+                                    }
+                                    
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    GroupBox {
+                                        HStack {
+                                            Text("System Version")
+                                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            Spacer()
+                                            Text(UIDevice.current.systemVersion)
+                                                .font(.system(size: 12, design: .rounded))
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        .frame(height: 12)
+                                    }
+                                    
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    GroupBox {
+                                        HStack {
+                                            Text("User Interface")
+                                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            Spacer()
+                                            Text(UIDevice.current.userInterfaceIdiom.toString())
+                                                .font(.system(size: 12, design: .rounded))
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        .frame(height: 12)
+                                    }
+                                }
+                                .backgroundStyle(Color(.xCardBackground))
+                            }
+                        }
+                        
+                        OriginCard {
+                            VStack(spacing: 0) {
+                                OriginHeader {
+                                    Text("DEPENDENCIES")
+                                        .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                        .tracking(2)
+                                        .foregroundStyle(Color(.xHeaderText))
+                                }
+                                
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                                
+                                VStack(spacing: 0) {
+                                    ForEach(dependencies) { dependency in
+                                        Button {
+                                            selected = dependency
+                                        } label: {
+                                            GroupBox {
+                                                HStack {
+                                                    Text(dependency.name)
+                                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                    Spacer()
+                                                    Text(dependency.version)
+                                                        .font(.system(size: 12, design: .rounded))
+                                                        .foregroundStyle(.secondary)
+                                                    Image(systemName: "chevron.right")
+                                                        .foregroundStyle(.secondary)
+                                                        .fontDesign(.rounded)
+                                                        .imageScale(.small)
+                                                }
+                                                .frame(height: 12)
+                                            }
+                                            .backgroundStyle(Color(.xCardBackground))
+                                        }
+                                        .buttonStyle(.plain)
+                                        
+                                        if dependencies.last != dependency {
+                                            Divider()
+                                                .frame(height: 1)
+                                                .overlay(Color(.xOutline))
+                                        }
+                                    }
+                                }
+                                .backgroundStyle(Color(.xCardBackground))
+                            }
                         }
                     }
+                    .padding(.horizontal)
+                    .padding(.bottom)
                 }
-                .padding(.horizontal)
-                .padding(.bottom)
             }
             .toolbarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)

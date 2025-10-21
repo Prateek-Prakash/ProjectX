@@ -14,12 +14,16 @@ struct AutomationView: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 12) {
-                    
+            ZStack {
+                Color(.xBackground)
+                    .edgesIgnoringSafeArea(.all)
+                ScrollView {
+                    VStack {
+                        
+                    }
+                    .padding(.horizontal)
+                    .padding(.bottom)
                 }
-                .padding(.horizontal)
-                .padding(.bottom)
             }
             .toolbarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)

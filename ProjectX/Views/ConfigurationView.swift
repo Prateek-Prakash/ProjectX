@@ -14,14 +14,18 @@ struct ConfigurationView: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 12) {
-                    ForEach(Firm.allCases) { firm in
-                        FirmSettingsCard(firm: firm)
+            ZStack {
+                Color(.xBackground)
+                    .edgesIgnoringSafeArea(.all)
+                ScrollView {
+                    VStack {
+                        ForEach(Firm.allCases) { firm in
+                            FirmSettingsCard(firm: firm)
+                        }
                     }
+                    .padding(.horizontal)
+                    .padding(.bottom)
                 }
-                .padding(.horizontal)
-                .padding(.bottom)
             }
             .toolbarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)

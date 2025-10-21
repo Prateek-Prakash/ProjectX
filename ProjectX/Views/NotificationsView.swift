@@ -14,50 +14,54 @@ struct NotificationsView: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 12) {
-                    OriginCard {
-                        Button {
-                            globalVM.pushNotifications.toggle()
-                        } label: {
-                            GroupBox {
-                                HStack {
-                                    Text("Push Notifications")
-                                        .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        .fontDesign(.rounded)
-                                    Spacer()
-                                    Toggle("", isOn: $globalVM.pushNotifications)
-                                        .scaleEffect(0.6, anchor: .trailing)
+            ZStack {
+                Color(.xBackground)
+                    .edgesIgnoringSafeArea(.all)
+                ScrollView {
+                    VStack {
+                        OriginCard {
+                            Button {
+                                globalVM.pushNotifications.toggle()
+                            } label: {
+                                GroupBox {
+                                    HStack {
+                                        Text("Push Notifications")
+                                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            .fontDesign(.rounded)
+                                        Spacer()
+                                        Toggle("", isOn: $globalVM.pushNotifications)
+                                            .scaleEffect(0.6, anchor: .trailing)
+                                    }
+                                    .frame(height: 12)
                                 }
-                                .frame(height: 12)
+                                .backgroundStyle(Color(.xCardBackground))
                             }
-                            .backgroundStyle(Color(.xCardBackground))
+                            .buttonStyle(.plain)
                         }
-                        .buttonStyle(.plain)
-                    }
-                    
-                    OriginCard {
-                        Button {
-                            globalVM.liveActivities.toggle()
-                        } label: {
-                            GroupBox {
-                                HStack {
-                                    Text("Live Activities")
-                                        .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        .fontDesign(.rounded)
-                                    Spacer()
-                                    Toggle("", isOn: $globalVM.liveActivities)
-                                        .scaleEffect(0.6, anchor: .trailing)
+                        
+                        OriginCard {
+                            Button {
+                                globalVM.liveActivities.toggle()
+                            } label: {
+                                GroupBox {
+                                    HStack {
+                                        Text("Live Activities")
+                                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            .fontDesign(.rounded)
+                                        Spacer()
+                                        Toggle("", isOn: $globalVM.liveActivities)
+                                            .scaleEffect(0.6, anchor: .trailing)
+                                    }
+                                    .frame(height: 12)
                                 }
-                                .frame(height: 12)
+                                .backgroundStyle(Color(.xCardBackground))
                             }
-                            .backgroundStyle(Color(.xCardBackground))
+                            .buttonStyle(.plain)
                         }
-                        .buttonStyle(.plain)
                     }
+                    .padding(.horizontal)
+                    .padding(.bottom)
                 }
-                .padding(.horizontal)
-                .padding(.bottom)
             }
             .toolbarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)

@@ -21,7 +21,7 @@ struct PerformanceView: View {
                     ProgressView()
                 } else {
                     ScrollView {
-                        VStack(spacing: 12) {
+                        VStack {
                             OriginCard {
                                 VStack(spacing: 0) {
                                     OriginHeader {
