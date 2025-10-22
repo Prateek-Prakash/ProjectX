@@ -44,6 +44,7 @@ struct BackupsView: View {
                                     }
                                     Spacer()
                                     Image(systemName: "square.and.arrow.up")
+                                        .foregroundStyle(.secondary)
                                 }
                                 .contentShape(.rect)
                             }
