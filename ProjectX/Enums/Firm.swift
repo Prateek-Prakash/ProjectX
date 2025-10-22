@@ -54,7 +54,7 @@ enum Firm: String, CaseIterable, Identifiable {
         case .fundingFutures:
             return .semi
         case .holaPrime:
-            return .unknown
+            return .zero
         case .lucidTrading:
             return .full
         case .topstep:
