@@ -81,10 +81,10 @@ struct FirmSettingsCard: View {
                                                 Text(account.accountName)
                                                     .font(.system(size: 10, design: .monospaced))
                                                 Spacer()
-                                                Image(systemName: "l.square.fill")
-                                                    .foregroundStyle(account.isLeader ? Color.primary : .gray.mix(with: .black, by: 0.3))
-                                                Image(systemName: "f.square")
-                                                    .foregroundStyle(account.isFollower ? Color.primary : .gray.mix(with: .black, by: 0.3))
+                                                Image(systemName: account.isLeader ? "l.square.fill" : "l.square")
+                                                    .foregroundStyle(account.isLeader ? .primary : .secondary)
+                                                Image(systemName: account.isFollower ? "f.square.fill" : "f.square")
+                                                    .foregroundStyle(account.isFollower ? .primary : .secondary)
                                             }
                                             .frame(height: 12)
                                         }
