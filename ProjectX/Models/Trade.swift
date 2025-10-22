@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Trade: Identifiable, Equatable {
+struct Trade: Identifiable, Equatable, Codable {
     var id: Int
     var symbolId: String
     var contractId: String?

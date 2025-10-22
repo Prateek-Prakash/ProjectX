@@ -170,6 +170,7 @@ struct PerformanceView: View {
                         .padding(.horizontal)
                         .padding(.bottom)
                     } // ScrollView
+                    .scrollIndicators(.hidden)
                 } // If-Else
             } // ZStack
             .toolbarTitleDisplayMode(.inline)
