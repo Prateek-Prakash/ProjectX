@@ -14,7 +14,7 @@ struct BackupsView: View {
     @ObservedObject var globalVM = GlobalViewModel.shared
     
     @Environment(\.modelContext) var modelContext
-    @Query(sort: \RawBackup.name) var rawBackups: [RawBackup]
+    @Query(sort: [SortDescriptor(\RawBackup.firm), SortDescriptor(\RawBackup.name)]) var rawBackups: [RawBackup]
     
     @State var errorHaptic: Bool = false
     @State var successHaptic: Bool = false
