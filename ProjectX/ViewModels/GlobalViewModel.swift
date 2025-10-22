@@ -83,8 +83,6 @@ class GlobalViewModel: ObservableObject {
     
     @Published var userCtx: HubConnection?
     
-    @Published var backupFiles: [String] = []
-    
     @Published var isInitialized = false
     let continuousClock = ContinuousClock()
     

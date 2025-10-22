@@ -13,7 +13,6 @@ struct AppShell: View {
     
     @State var showSettingsCover: Bool = false
     @State var successHaptic: Bool = false
-    @State var errorHaptic: Bool = false
     
     let refreshTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
@@ -48,21 +47,10 @@ struct AppShell: View {
             .toolbarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        errorHaptic.toggle()
-                        if globalVM.isInitialized {
-                            Task {
-                                await globalVM.refreshData()
-                            }
-                        }
-                    } label: {
-                        Image(systemName: "livephoto")
-                            .symbolEffect(.bounce, options: globalVM.refreshingData ? .repeating : .nonRepeating, value: globalVM.refreshingData)
-                            .imageScale(.small)
-                            .padding()
-                    }
-                    .buttonStyle(.plain)
-                    .sensoryFeedback(.error, trigger: errorHaptic)
+                    Image(systemName: "livephoto")
+                        .symbolEffect(.bounce, options: globalVM.refreshingData ? .repeating : .nonRepeating, value: globalVM.refreshingData)
+                        .imageScale(.small)
+                        .padding()
                 }
                 .sharedBackgroundVisibility(.hidden)
                 

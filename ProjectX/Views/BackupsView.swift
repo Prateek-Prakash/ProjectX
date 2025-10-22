@@ -5,6 +5,7 @@
 //  Created by Prateek Prakash on 10/21/25.
 //
 
+import SwiftData
 import SwiftUI
 
 struct BackupsView: View {
@@ -12,12 +13,15 @@ struct BackupsView: View {
     
     @ObservedObject var globalVM = GlobalViewModel.shared
     
+    @Environment(\.modelContext) var modelContext
+    @Query(sort: \RawBackup.id) var rawLogs: [RawBackup]
+    
     var body: some View {
         NavigationStack {
             ZStack {
                 Color(.xBackground)
                     .edgesIgnoringSafeArea(.all)
-                if !globalVM.backupFiles.isEmpty {
+                if !rawLogs.isEmpty {
                     ScrollView {
                         VStack {
                             
