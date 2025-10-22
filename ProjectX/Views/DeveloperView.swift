@@ -97,6 +97,27 @@ struct DeveloperView: View {
                         }
                         
                         OriginCard {
+                            NavigationLink {
+                                BackupsView()
+                            } label: {
+                                GroupBox {
+                                    HStack {
+                                        Text("Backups")
+                                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                                        Spacer()
+                                        Image(systemName: "chevron.right")
+                                            .foregroundStyle(.secondary)
+                                            .fontDesign(.rounded)
+                                            .imageScale(.small)
+                                    }
+                                    .frame(height: 12)
+                                }
+                                .backgroundStyle(Color(.xCardBackground))
+                            }
+                            .buttonStyle(.plain)
+                        }
+                        
+                        OriginCard {
                             Button {
                                 successHaptic.toggle()
                                 globalVM.clearOldIds()
