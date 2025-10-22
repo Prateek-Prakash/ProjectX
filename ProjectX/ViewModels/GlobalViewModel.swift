@@ -293,7 +293,7 @@ class GlobalViewModel: ObservableObject {
     func refreshData() async {
         if !refreshingData {
             refreshingData = true
-            Helpers.debugLog("refreshData: Refreshing Accounts")
+            Helpers.debugLog("refreshData")
             await withTaskGroup(of: Void.self) { group in
                 for firm in Firm.allCases {
                     if isConnected(firm) {
@@ -302,12 +302,6 @@ class GlobalViewModel: ObservableObject {
                         }
                     }
                 }
-            }
-            if let selectedAccount {
-                Helpers.debugLog("refreshData: Refreshing Daily Stats")
-                await loadDailyStats(selectedAccount)
-                Helpers.debugLog("refreshData: Refreshing Trades")
-                await loadTrades(selectedAccount)
             }
             refreshingData = false
         }
@@ -410,11 +404,13 @@ class GlobalViewModel: ObservableObject {
     }
     
     func loadDailyStats(_ account: Account) async {
+        Helpers.debugLog("loadDailyStats")
         let dtos = await XClient.get(account.firm).getDailyStats(account.accountId)
         accountDailyStats = dtos.map({ DailyStats.fromDto($0) }).sorted(by: { $0.tradeDate.toDateTime() > $1.tradeDate.toDateTime() })
     }
     
     func loadTrades(_ account: Account) async {
+        Helpers.debugLog("loadTrades")
         let dtos = await XClient.get(account.firm).getTrades(account.accountId)
         accountTrades = dtos.map({ Trade.fromDto($0) }).sorted(by: { $0.createdAt.toFractionalDateTime() > $1.createdAt.toFractionalDateTime() })
     }

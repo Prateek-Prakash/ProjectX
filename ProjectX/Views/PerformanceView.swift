@@ -185,6 +185,21 @@ struct PerformanceView: View {
                         .font(.system(size: 10, weight: .semibold, design: .monospaced))
                         .tracking(2)
                 }
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        Task {
+                            await globalVM.loadDailyStats(account)
+                            await globalVM.loadTrades(account)
+                        }
+                    } label: {
+                        Image(systemName: "arrow.clockwise")
+                            .imageScale(.small)
+                            .padding()
+                    }
+                    .buttonStyle(.plain)
+                }
+                .sharedBackgroundVisibility(.hidden)
             }
         }
         .interactiveDismissDisabled()
