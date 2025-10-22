@@ -19,11 +19,49 @@ struct AutomationView: View {
                     .edgesIgnoringSafeArea(.all)
                 ScrollView {
                     VStack {
-                        
+                        OriginCard {
+                            VStack(spacing: 0) {
+                                OriginHeader {
+                                    Text("POLICIES")
+                                        .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                        .tracking(2)
+                                        .foregroundStyle(Color(.xHeaderText))
+                                }
+                                
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                                
+                                VStack(spacing: 0) {
+                                    ForEach(Firm.allCases) { firm in
+                                        GroupBox {
+                                            HStack {
+                                                Text(firm.rawValue)
+                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                Spacer()
+                                                Image(systemName: firm.automationType.icon)
+                                                    .foregroundStyle(firm.automationType.color)
+                                                    .fontDesign(.rounded)
+                                                    .imageScale(.medium)
+                                            }
+                                            .frame(height: 12)
+                                        }
+                                        .backgroundStyle(Color(.xCardBackground))
+                                        
+                                        if Firm.allCases.last != firm {
+                                            Divider()
+                                                .frame(height: 1)
+                                                .overlay(Color(.xOutline))
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                     .padding(.horizontal)
                     .padding(.bottom)
                 }
+                .scrollIndicators(.hidden)
             }
             .toolbarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)

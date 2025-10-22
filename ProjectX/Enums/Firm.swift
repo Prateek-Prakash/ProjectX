@@ -44,4 +44,23 @@ enum Firm: String, CaseIterable, Identifiable {
             return 150
         }
     }
+    
+    var automationType: AutomationType {
+        switch self {
+        case .alphaFutures:
+            return .zero
+        case .aquaFutures:
+            return .unknown
+        case .fundingFutures:
+            return .semi
+        case .holaPrime:
+            return .unknown
+        case .lucidTrading:
+            return .full
+        case .topstep:
+            return .semi
+        case .tradeify:
+            return .full
+        }
+    }
 }
