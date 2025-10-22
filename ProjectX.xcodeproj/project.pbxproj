@@ -21,9 +21,22 @@
 		6E56412D2E5668C30053E338 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		6E9CE4982EA8816500DD0530 /* Exceptions for "ProjectX" folder in "ProjectX" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 6E563F852E5661680053E338 /* ProjectX */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		6E563F882E5661680053E338 /* ProjectX */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				6E9CE4982EA8816500DD0530 /* Exceptions for "ProjectX" folder in "ProjectX" target */,
+			);
 			path = ProjectX;
 			sourceTree = "<group>";
 		};
@@ -282,6 +295,7 @@
 				DEVELOPMENT_TEAM = NZ3JV53WDD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ProjectX/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -319,6 +333,7 @@
 				DEVELOPMENT_TEAM = NZ3JV53WDD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ProjectX/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

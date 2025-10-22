@@ -12,6 +12,8 @@ struct TradeHistoryView: View {
     
     @ObservedObject var globalVM = GlobalViewModel.shared
     
+    @State var successHaptic: Bool = false
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -61,6 +63,7 @@ struct TradeHistoryView: View {
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
+                        successHaptic.toggle()
                         let data = try! JSONEncoder().encode(globalVM.accountTrades)
                         let json = String(data: data, encoding: .utf8)!
                         UIPasteboard.general.string = json
@@ -70,6 +73,7 @@ struct TradeHistoryView: View {
                             .padding()
                     }
                     .buttonStyle(.plain)
+                    .sensoryFeedback(.success, trigger: successHaptic)
                 }
                 .sharedBackgroundVisibility(.hidden)
             }
