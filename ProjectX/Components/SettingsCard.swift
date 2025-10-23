@@ -30,7 +30,7 @@ struct SettingsCard: View {
                 .padding(.leading, 8)
                 Spacer()
                 Image(systemName: "chevron.right")
-                    .foregroundStyle(Color(.xOutline))
+                    .foregroundStyle(.secondary)
                     .fontDesign(.rounded)
             }
             .padding(.all, 14)

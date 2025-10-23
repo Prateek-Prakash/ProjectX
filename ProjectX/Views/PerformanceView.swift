@@ -168,6 +168,89 @@ struct PerformanceView: View {
                                     }
                                 }
                             }
+                            
+                            OriginCard {
+                                VStack(spacing: 0) {
+                                    OriginHeader {
+                                        Text("ANALYSIS")
+                                            .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                            .tracking(2)
+                                            .foregroundStyle(Color(.xHeaderText))
+                                    }
+                                    
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    VStack(spacing: 0) {
+                                        NavigationLink {
+                                            TradeTimeView()
+                                        }  label: {
+                                            GroupBox {
+                                                HStack {
+                                                    Text("Trade Time")
+                                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                    Spacer()
+                                                    Image(systemName: "chevron.right")
+                                                        .foregroundStyle(.secondary)
+                                                        .fontDesign(.rounded)
+                                                        .imageScale(.small)
+                                                }
+                                                .frame(height: 12)
+                                            }
+                                            .backgroundStyle(Color(.xCardBackground))
+                                        }
+                                        .buttonStyle(.plain)
+                                        
+                                        Divider()
+                                            .frame(height: 1)
+                                            .overlay(Color(.xOutline))
+                                        
+                                        NavigationLink {
+                                            TradeDurationView()
+                                        }  label: {
+                                            GroupBox {
+                                                HStack {
+                                                    Text("Trade Duration")
+                                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                    Spacer()
+                                                    Image(systemName: "chevron.right")
+                                                        .foregroundStyle(.secondary)
+                                                        .fontDesign(.rounded)
+                                                        .imageScale(.small)
+                                                }
+                                                .frame(height: 12)
+                                            }
+                                            .backgroundStyle(Color(.xCardBackground))
+                                        }
+                                        .buttonStyle(.plain)
+                                    }
+                                    .backgroundStyle(Color(.xCardBackground))
+                                    
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    NavigationLink {
+                                        WinRateView()
+                                    }  label: {
+                                        GroupBox {
+                                            HStack {
+                                                Text("Win Rate")
+                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                Spacer()
+                                                Image(systemName: "chevron.right")
+                                                    .foregroundStyle(.secondary)
+                                                    .fontDesign(.rounded)
+                                                    .imageScale(.small)
+                                            }
+                                            .frame(height: 12)
+                                        }
+                                        .backgroundStyle(Color(.xCardBackground))
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                            }
                         } // VStack
                         .padding(.horizontal)
                         .padding(.bottom)
