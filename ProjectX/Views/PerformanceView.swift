@@ -10,6 +10,8 @@ import SwiftUI
 struct PerformanceView: View {
     @ObservedObject var globalVM = GlobalViewModel.shared
     
+    @State var successHaptic: Bool = false
+    
     let account: Account
     
     var body: some View {
@@ -189,6 +191,7 @@ struct PerformanceView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         Task {
+                            successHaptic.toggle()
                             await globalVM.loadDailyStats(account)
                             await globalVM.loadTrades(account)
                         }
@@ -198,6 +201,7 @@ struct PerformanceView: View {
                             .padding()
                     }
                     .buttonStyle(.plain)
+                    .sensoryFeedback(.success, trigger: successHaptic)
                 }
                 .sharedBackgroundVisibility(.hidden)
             }
