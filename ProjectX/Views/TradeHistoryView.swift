@@ -12,8 +12,6 @@ struct TradeHistoryView: View {
     
     @ObservedObject var globalVM = GlobalViewModel.shared
     
-    @State var successHaptic: Bool = false
-    
     var body: some View {
         NavigationStack {
             ZStack {
