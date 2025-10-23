@@ -60,22 +60,6 @@ struct TradeHistoryView: View {
                         .font(.system(size: 10, weight: .semibold, design: .monospaced))
                         .tracking(2)
                 }
-                
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        successHaptic.toggle()
-                        let data = try! JSONEncoder().encode(globalVM.accountTrades)
-                        let json = String(data: data, encoding: .utf8)!
-                        UIPasteboard.general.string = json
-                    } label: {
-                        Image(systemName: "square.and.arrow.up")
-                            .imageScale(.small)
-                            .padding()
-                    }
-                    .buttonStyle(.plain)
-                    .sensoryFeedback(.success, trigger: successHaptic)
-                }
-                .sharedBackgroundVisibility(.hidden)
             }
         }
     }
