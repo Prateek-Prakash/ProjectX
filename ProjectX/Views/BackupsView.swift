@@ -31,7 +31,11 @@ struct BackupsView: View {
                                 successHaptic.toggle()
                                 UIPasteboard.general.string = backup.json
                             } label: {
-                                HStack {
+                                HStack(spacing: 16) {
+                                    Image(backup.firm.replacingOccurrences(of: " ", with: "-"))
+                                        .resizable()
+                                        .frame(width: 20, height: 20)
+                                        .clipShape(.circle)
                                     VStack(alignment: .leading) {
                                         Text(backup.firm)
                                             .font(.system(size: 8, weight: .light, design: .rounded))
@@ -43,8 +47,6 @@ struct BackupsView: View {
                                             .foregroundStyle(.secondary)
                                     }
                                     Spacer()
-                                    Image(systemName: "square.and.arrow.up")
-                                        .foregroundStyle(.secondary)
                                 }
                                 .contentShape(.rect)
                             }
