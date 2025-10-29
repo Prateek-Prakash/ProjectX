@@ -22,6 +22,7 @@ struct Account: Identifiable, Equatable {
     var realizedDayPnl: Double
     var openPnl: Double
     var dailyLoss: Double
+    var maximumLoss: Double
     var lockoutReason: String?
     var lockoutExpiration: String?
     var winRate: Double
@@ -46,6 +47,7 @@ struct Account: Identifiable, Equatable {
             realizedDayPnl: dto.realizedDayPnl,
             openPnl: dto.openPnl,
             dailyLoss: dto.dailyLoss,
+            maximumLoss: dto.maximumLoss,
             lockoutReason: dto.lockoutReason,
             lockoutExpiration: dto.lockoutExpiration,
             winRate: dto.winRate,

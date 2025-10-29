@@ -52,6 +52,14 @@ struct BackupsView: View {
                             }
                             .buttonStyle(.plain)
                             .sensoryFeedback(.success, trigger: successHaptic)
+                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                Button(role: .destructive) {
+                                    modelContext.delete(backup)
+                                    try? modelContext.save()
+                                } label: {
+                                    Image(systemName: "minus.circle")
+                                }
+                            }
                         }
                         .listRowBackground(Color.xBackground)
                     }
