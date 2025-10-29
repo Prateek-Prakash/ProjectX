@@ -23,7 +23,7 @@ struct WinRateView: View {
                 .padding(.horizontal)
                 .padding(.bottom)
             }
-            .scrollIndicators(.hidden)
+            .scrollIndicators(.never)
         }
         .toolbarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)

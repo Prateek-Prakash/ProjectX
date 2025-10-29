@@ -27,6 +27,7 @@ struct ConfigurationView: View {
                     .padding(.bottom)
                 }
             }
+            .scrollIndicators(.never)
             .toolbarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {

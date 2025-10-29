@@ -41,7 +41,7 @@ struct BackupsView: View {
                                             .font(.system(size: 8, weight: .light, design: .rounded))
                                             .foregroundStyle(Color.xHeaderText)
                                         Text(backup.name)
-                                            .font(.system(size: 10, weight: .bold, design: .rounded))
+                                            .font(.system(size: 10, weight: .bold, design: .monospaced))
                                         Text(backup.timestamp)
                                             .font(.system(size: 8, weight: .medium, design: .monospaced))
                                             .foregroundStyle(.secondary)
@@ -64,7 +64,6 @@ struct BackupsView: View {
                         .listRowBackground(Color.xBackground)
                     }
                     .listStyle(.plain)
-                    .scrollIndicators(.hidden)
                 } else {
                     ContentUnavailableView {
                         Label("NO BACKUPS", systemImage: "exclamationmark.triangle")
@@ -76,6 +75,7 @@ struct BackupsView: View {
                     .padding()
                 }
             }
+            .scrollIndicators(.never)
             .toolbarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {
