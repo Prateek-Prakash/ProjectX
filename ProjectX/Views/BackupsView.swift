@@ -27,31 +27,31 @@ struct BackupsView: View {
                 if !rawBackups.isEmpty {
                     List {
                         ForEach(rawBackups) { backup in
-                            Button {
-                                successHaptic.toggle()
-                                UIPasteboard.general.string = backup.json
-                            } label: {
-                                HStack(spacing: 16) {
-                                    Image(backup.firm.replacingOccurrences(of: " ", with: "-"))
-                                        .resizable()
-                                        .frame(width: 20, height: 20)
-                                        .clipShape(.circle)
-                                    VStack(alignment: .leading) {
-                                        Text(backup.firm)
-                                            .font(.system(size: 8, weight: .light, design: .rounded))
-                                            .foregroundStyle(Color.xHeaderText)
-                                        Text(backup.name)
-                                            .font(.system(size: 10, weight: .bold, design: .monospaced))
-                                        Text(backup.timestamp)
-                                            .font(.system(size: 8, weight: .medium, design: .monospaced))
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    Spacer()
+                            HStack(spacing: 16) {
+                                Image(backup.firm.replacingOccurrences(of: " ", with: "-"))
+                                    .resizable()
+                                    .frame(width: 20, height: 20)
+                                    .clipShape(.circle)
+                                VStack(alignment: .leading) {
+                                    Text(backup.firm)
+                                        .font(.system(size: 8, weight: .light, design: .rounded))
+                                        .foregroundStyle(Color.xHeaderText)
+                                    Text(backup.name)
+                                        .font(.system(size: 10, weight: .bold, design: .monospaced))
+                                    Text(backup.timestamp)
+                                        .font(.system(size: 8, weight: .medium, design: .monospaced))
+                                        .foregroundStyle(.secondary)
                                 }
-                                .contentShape(.rect)
+                                Spacer()
+                                Button {
+                                    successHaptic.toggle()
+                                    UIPasteboard.general.string = backup.json
+                                } label: {
+                                    Image(systemName: "document.on.document")
+                                        .imageScale(.small)
+                                }
+                                .sensoryFeedback(.success, trigger: successHaptic)
                             }
-                            .buttonStyle(.plain)
-                            .sensoryFeedback(.success, trigger: successHaptic)
                             .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                                 Button(role: .destructive) {
                                     modelContext.delete(backup)
