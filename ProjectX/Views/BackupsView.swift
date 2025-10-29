@@ -48,6 +48,8 @@ struct BackupsView: View {
                                     UIPasteboard.general.string = backup.json
                                 } label: {
                                     Image(systemName: "document.on.document")
+                                        .foregroundStyle(.secondary)
+                                        .fontDesign(.rounded)
                                         .imageScale(.small)
                                 }
                                 .sensoryFeedback(.success, trigger: successHaptic)
