@@ -19,7 +19,7 @@ enum AutomationType {
         case .full:
             return "checkmark.circle.fill"
         case .semi:
-            return "slash.circle.fill"
+            return "minus.circle.fill"
         case .zero:
             return "xmark.circle.fill"
         case .unknown:
