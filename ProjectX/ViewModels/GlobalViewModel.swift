@@ -29,11 +29,6 @@ class GlobalViewModel: ObservableObject {
     @AppStorage("fundingFuturesKey") var fundingFuturesKey: String = ""
     @AppStorage("fundingFuturesFunded") var fundingFuturesFunded: [Int] = []
     @AppStorage("fundingFuturesPractice") var fundingFuturesPractice: [Int] = []
-    // HolaPrimeX
-    @AppStorage("holaPrimeUsername") var holaPrimeUsername: String = ""
-    @AppStorage("holaPrimeKey") var holaPrimeKey: String = ""
-    @AppStorage("holaPrimeFunded") var holaPrimeFunded: [Int] = []
-    @AppStorage("holaPrimePractice") var holaPrimePractice: [Int] = []
     // LucidTradingX
     @AppStorage("lucidTradingUsername") var lucidTradingUsername: String = ""
     @AppStorage("lucidTradingKey") var lucidTradingKey: String = ""
@@ -113,8 +108,6 @@ class GlobalViewModel: ObservableObject {
                 await signIn(firm, aquaFuturesUsername, aquaFuturesKey)
             case .fundingFutures:
                 await signIn(firm, fundingFuturesUsername, fundingFuturesKey)
-            case .holaPrime:
-                await signIn(firm, holaPrimeUsername, holaPrimeKey)
             case .lucidTrading:
                 await signIn(firm, lucidTradingUsername, lucidTradingKey)
             case .topstep:
@@ -153,16 +146,6 @@ class GlobalViewModel: ObservableObject {
             if fundingFuturesUsername != username || fundingFuturesKey != key {
                 fundingFuturesUsername = username
                 fundingFuturesKey = key
-                if isLinked(firm) {
-                    await signIn(firm, username, key)
-                } else {
-                    await signOut(firm)
-                }
-            }
-        case .holaPrime:
-            if holaPrimeUsername != username || holaPrimeKey != key {
-                holaPrimeUsername = username
-                holaPrimeKey = key
                 if isLinked(firm) {
                     await signIn(firm, username, key)
                 } else {
@@ -233,8 +216,6 @@ class GlobalViewModel: ObservableObject {
                 type = aquaFuturesFunded.contains(id) ? .funded : aquaFuturesPractice.contains(id) ? .practice : .evaluation
             case .fundingFutures:
                 type = fundingFuturesFunded.contains(id) ? .funded : fundingFuturesPractice.contains(id) ? .practice : .evaluation
-            case .holaPrime:
-                type = holaPrimeFunded.contains(id) ? .funded : holaPrimePractice.contains(id) ? .practice : .evaluation
             case .lucidTrading:
                 type = lucidTradingFunded.contains(id) ? .funded : lucidTradingPractice.contains(id) ? .practice : .evaluation
             case .topstep:
@@ -274,9 +255,6 @@ class GlobalViewModel: ObservableObject {
             case .fundingFutures:
                 fundingFuturesFunded.removeAll(where: { !ids.contains($0) })
                 fundingFuturesPractice.removeAll(where: { !ids.contains($0) })
-            case .holaPrime:
-                holaPrimeFunded.removeAll(where: { !ids.contains($0) })
-                holaPrimePractice.removeAll(where: { !ids.contains($0) })
             case .lucidTrading:
                 lucidTradingFunded.removeAll(where: { !ids.contains($0) })
                 lucidTradingPractice.removeAll(where: { !ids.contains($0) })
@@ -320,9 +298,6 @@ class GlobalViewModel: ObservableObject {
         case .fundingFutures:
             fundingFuturesFunded.removeAll()
             fundingFuturesPractice.removeAll()
-        case .holaPrime:
-            holaPrimeFunded.removeAll()
-            holaPrimePractice.removeAll()
         case .lucidTrading:
             lucidTradingFunded.removeAll()
             lucidTradingPractice.removeAll()
@@ -343,8 +318,6 @@ class GlobalViewModel: ObservableObject {
             return !aquaFuturesUsername.isEmpty && !aquaFuturesKey.isEmpty
         case .fundingFutures:
             return !fundingFuturesUsername.isEmpty && !fundingFuturesKey.isEmpty
-        case .holaPrime:
-            return !holaPrimeUsername.isEmpty && !holaPrimeKey.isEmpty
         case .lucidTrading:
             return !lucidTradingUsername.isEmpty && !lucidTradingKey.isEmpty
         case .topstep:
@@ -388,9 +361,6 @@ class GlobalViewModel: ObservableObject {
         case .fundingFutures:
             type == .funded ? fundingFuturesFunded.append(id) : fundingFuturesFunded.removeAll(where: { $0 == id })
             type == .practice ? fundingFuturesPractice.append(id) : fundingFuturesPractice.removeAll(where: { $0 == id })
-        case .holaPrime:
-            type == .funded ? holaPrimeFunded.append(id) : holaPrimeFunded.removeAll(where: { $0 == id })
-            type == .practice ? holaPrimePractice.append(id) : holaPrimePractice.removeAll(where: { $0 == id })
         case .lucidTrading:
             type == .funded ? lucidTradingFunded.append(id) : lucidTradingFunded.removeAll(where: { $0 == id })
             type == .practice ? lucidTradingPractice.append(id) : lucidTradingPractice.removeAll(where: { $0 == id })
@@ -426,9 +396,6 @@ class GlobalViewModel: ObservableObject {
         case .fundingFutures:
             usernameInput = fundingFuturesUsername
             keyInput = fundingFuturesKey
-        case .holaPrime:
-            usernameInput = holaPrimeUsername
-            keyInput = holaPrimeKey
         case .lucidTrading:
             usernameInput = lucidTradingUsername
             keyInput = lucidTradingKey

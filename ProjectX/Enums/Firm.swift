@@ -13,7 +13,6 @@ enum Firm: String, CaseIterable, Identifiable {
     case alphaFutures = "Alpha Futures"
     case aquaFutures = "Aqua Futures"
     case fundingFutures = "Funding Futures"
-    case holaPrime = "Hola Prime"
     case lucidTrading = "Lucid Trading"
     case topstep = "Topstep"
     case tradeify = "Tradeify"
@@ -34,8 +33,6 @@ enum Firm: String, CaseIterable, Identifiable {
             return 100
         case .fundingFutures:
             return 100
-        case .holaPrime:
-            return 200
         case .lucidTrading:
             return 100
         case .topstep:
@@ -53,8 +50,6 @@ enum Firm: String, CaseIterable, Identifiable {
             return .unknown
         case .fundingFutures:
             return .unknown
-        case .holaPrime:
-            return .zero
         case .lucidTrading:
             return .full
         case .topstep:
