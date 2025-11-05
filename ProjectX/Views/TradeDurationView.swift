@@ -23,7 +23,6 @@ struct TradeDurationView: View {
                 .padding(.horizontal)
                 .padding(.bottom)
             }
-            .scrollIndicators(.never)
         }
         .toolbarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)

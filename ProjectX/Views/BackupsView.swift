@@ -77,7 +77,6 @@ struct BackupsView: View {
                     .padding()
                 }
             }
-            .scrollIndicators(.never)
             .toolbarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {

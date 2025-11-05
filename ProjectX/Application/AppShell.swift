@@ -46,8 +46,8 @@ struct AppShell: View {
                     .padding(.horizontal)
                     .padding(.bottom)
                 }
-                .scrollIndicators(.never)
             }
+            .scrollIndicators(.never)
             .toolbarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {

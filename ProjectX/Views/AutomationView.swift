@@ -62,7 +62,6 @@ struct AutomationView: View {
                     .padding(.bottom)
                 }
             }
-            .scrollIndicators(.never)
             .toolbarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {
