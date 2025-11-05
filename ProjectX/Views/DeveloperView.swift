@@ -41,6 +41,25 @@ struct DeveloperView: View {
                         }
                         
                         OriginCard {
+                            Button {
+                                globalVM.automaticBackup.toggle()
+                            } label: {
+                                GroupBox {
+                                    HStack {
+                                        Text("Automatic Backup")
+                                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                                        Spacer()
+                                        Toggle("", isOn: $globalVM.automaticBackup)
+                                            .scaleEffect(0.6, anchor: .trailing)
+                                    }
+                                    .frame(height: 12)
+                                }
+                                .backgroundStyle(Color(.xCardBackground))
+                            }
+                            .buttonStyle(.plain)
+                        }
+                        
+                        OriginCard {
                             VStack(spacing: 0) {
                                 OriginHeader {
                                     Text("DEBUGGING")

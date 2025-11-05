@@ -53,12 +53,13 @@ class GlobalViewModel: ObservableObject {
     @AppStorage("showEvaluationAccounts") var showEvaluationAccounts: Bool = true
     @AppStorage("showFundedAccounts") var showFundedAccounts: Bool = true
     @AppStorage("showPracticeAccounts") var showPracticeAccounts: Bool = true
-    @AppStorage("hideEmptyFirms") var hideEmptyFirms: Bool = false
+    @AppStorage("hideEmptyFirms") var hideEmptyFirms: Bool = true
     @AppStorage("hideLockedAccounts") var hideLockedAccounts: Bool = false
-    @AppStorage("subtractStartingBalance") var subtractStartingBalance: Bool = false
+    @AppStorage("subtractStartingBalance") var subtractStartingBalance: Bool = true
     
     // Developer
-    @AppStorage("automaticRefresh") var automaticRefresh: Bool = false
+    @AppStorage("automaticRefresh") var automaticRefresh: Bool = true
+    @AppStorage("automaticBackup") var automaticBackup: Bool = false
     @AppStorage("delayAuthentication") var delayAuthentication: Bool = false
     @AppStorage("delayLoadingTrades") var delayLoadingTrades: Bool = false
     
