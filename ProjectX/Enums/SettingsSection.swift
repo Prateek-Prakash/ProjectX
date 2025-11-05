@@ -15,6 +15,7 @@ enum SettingsSection: String, CaseIterable, Identifiable {
     case notifications = "Notifications"
     case customization = "Customization"
     case developer = "Developer"
+    case backups = "Backups"
     case about = "About"
     case donate = "Donate"
     
@@ -30,6 +31,8 @@ enum SettingsSection: String, CaseIterable, Identifiable {
             return "paintpalette"
         case .developer:
             return "ant"
+        case .backups:
+            return "clock.arrow.trianglehead.2.counterclockwise.rotate.90"
         case .about:
             return "questionmark.circle"
         case .donate:
@@ -49,6 +52,8 @@ enum SettingsSection: String, CaseIterable, Identifiable {
             return .orange
         case .developer:
             return .green
+        case .backups:
+            return .purple
         case .about:
             return .gray
         case .donate:
@@ -72,6 +77,8 @@ enum SettingsSection: String, CaseIterable, Identifiable {
             return "Tweak User Experience"
         case .developer:
             return "Explore Developer Tools"
+        case .backups:
+            return "Browse Account Backups"
         case .about:
             return "View App Information"
         case .donate:

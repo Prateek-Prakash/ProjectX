@@ -57,6 +57,8 @@ struct SettingsView: View {
             CustomizationView()
         case SettingsSection.developer:
             DeveloperView()
+        case SettingsSection.backups:
+            BackupsView()
         case SettingsSection.about:
             AboutView()
         case SettingsSection.donate:

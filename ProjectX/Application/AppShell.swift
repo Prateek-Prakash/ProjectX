@@ -6,10 +6,14 @@
 //
 
 import Combine
+import SwiftData
 import SwiftUI
 
 struct AppShell: View {
     @ObservedObject var globalVM = GlobalViewModel.shared
+    
+    @Environment(\.modelContext) var modelContext
+    @Query(sort: [SortDescriptor(\RawBackup.firm), SortDescriptor(\RawBackup.name)]) var rawBackups: [RawBackup]
     
     @State var showSettingsCover: Bool = false
     @State var successHaptic: Bool = false
@@ -76,13 +80,45 @@ struct AppShell: View {
                 SettingsView()
             }
             .onReceive(refreshTimer) { _ in
-                if globalVM.isInitialized && globalVM.automaticRefresh {
-                    Task {
-                        await globalVM.refreshData()
+                if globalVM.isInitialized {
+                    if globalVM.automaticRefresh {
+                        Task {
+                            await globalVM.refreshData()
+                        }
+                    }
+                    if globalVM.automaticBackup {
+                        Task {
+                            await backupAccounts()
+                        }
                     }
                 }
             }
         }
+    }
+    
+    func backupAccounts() async {
+        for account in globalVM.allAccounts {
+            let existing = rawBackups.first(where: { $0.firm == account.firm.headerName && $0.name == account.accountName })
+            
+            let trades = await XClient.get(account.firm).getTrades(account.accountId)
+            if !trades.isEmpty {
+                let data = try! JSONEncoder().encode(trades)
+                let json = String(data: data, encoding: .utf8)!
+                
+                if existing != nil {
+                    existing?.update(json)
+                } else {
+                    let backup = RawBackup(
+                        firm: account.firm.headerName,
+                        name: account.accountName,
+                        json: json,
+                        timestamp: Date.now.ISO8601Format()
+                    )
+                    modelContext.insert(backup)
+                }
+            }
+        }
+        try? modelContext.save()
     }
 }
 
