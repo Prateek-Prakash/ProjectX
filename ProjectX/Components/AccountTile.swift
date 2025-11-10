@@ -40,7 +40,7 @@ struct AccountTile: View {
                     .padding(.trailing, 14)
                 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text((globalVM.subtractStartingBalance ? ((account.balance - account.startingBalance + account.realizedDayPnl + account.openPnl)) : (account.balance + account.realizedDayPnl + account.openPnl)).asCurrency())
+                    Text((globalVM.subtractStartingBalance ? ((account.startOfDayBalance - account.startingBalance + account.realizedDayPnl + account.openPnl)) : (account.startOfDayBalance + account.realizedDayPnl + account.openPnl)).asCurrency())
                         .font(.system(size: 12, weight: .medium, design: .rounded))
                     Text(account.accountName)
                         .font(.system(size: 8, weight: .thin, design: .monospaced))

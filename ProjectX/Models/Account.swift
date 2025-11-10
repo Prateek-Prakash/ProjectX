@@ -18,6 +18,7 @@ struct Account: Identifiable, Equatable {
     var isLeader: Bool
     var isFollower: Bool
     var startingBalance: Double
+    var startOfDayBalance: Double
     var balance: Double
     var realizedDayPnl: Double
     var openPnl: Double
@@ -43,6 +44,7 @@ struct Account: Identifiable, Equatable {
             isLeader: dto.isLeader,
             isFollower: dto.isFollower,
             startingBalance: dto.startingBalance,
+            startOfDayBalance: dto.startOfDayBalance,
             balance: dto.balance,
             realizedDayPnl: dto.realizedDayPnl,
             openPnl: dto.openPnl,
