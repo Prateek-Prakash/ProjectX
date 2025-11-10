@@ -45,11 +45,11 @@ enum Firm: String, CaseIterable, Identifiable {
     var automationType: AutomationType {
         switch self {
         case .alphaFutures:
-            return .zero
+            return .semi
         case .aquaFutures:
-            return .unknown
+            return .semi
         case .fundingFutures:
-            return .unknown
+            return .semi
         case .lucidTrading:
             return .full
         case .topstep:
