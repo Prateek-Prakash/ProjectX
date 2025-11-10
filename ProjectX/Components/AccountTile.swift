@@ -40,7 +40,7 @@ struct AccountTile: View {
                     .padding(.trailing, 14)
                 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text((globalVM.subtractStartingBalance ? account.balance - account.startingBalance : account.balance).asCurrency())
+                    Text((globalVM.subtractStartingBalance ? ((account.balance - account.startingBalance + account.realizedDayPnl + account.openPnl)) : (account.balance + account.realizedDayPnl + account.openPnl)).asCurrency())
                         .font(.system(size: 12, weight: .medium, design: .rounded))
                     Text(account.accountName)
                         .font(.system(size: 8, weight: .thin, design: .monospaced))
@@ -49,9 +49,9 @@ struct AccountTile: View {
                 
                 Spacer()
                 
-                Text(abs(account.realizedDayPnl).asCurrency())
+                Text(abs(account.realizedDayPnl + account.openPnl).asCurrency())
                     .font(.system(size: 14, weight: .medium, design: .rounded))
-                    .foregroundStyle(account.realizedDayPnl > 0 ? .green.mix(with: .white, by: 0.2) : account.realizedDayPnl < 0 ? .red.mix(with: .white, by: 0.2) : .gray.mix(with: .white, by: 0.2))
+                    .foregroundStyle(account.realizedDayPnl + account.openPnl > 0 ? .green.mix(with: .white, by: 0.2) : account.realizedDayPnl + account.openPnl < 0 ? .red.mix(with: .white, by: 0.2) : .gray.mix(with: .white, by: 0.2))
                 
                 Image(systemName: "circle.fill")
                     .font(.system(size: 4))
