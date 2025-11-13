@@ -54,7 +54,6 @@ struct AppShell: View {
                     Image(systemName: "livephoto")
                         .symbolEffect(.bounce, options: globalVM.refreshingData ? .repeating : .nonRepeating, value: globalVM.refreshingData)
                         .imageScale(.small)
-                        .padding()
                 }
                 .sharedBackgroundVisibility(.hidden)
                 
@@ -70,7 +69,6 @@ struct AppShell: View {
                     } label: {
                         Image(systemName: "gearshape.fill")
                             .imageScale(.small)
-                            .padding()
                     }
                     .buttonStyle(.plain)
                 }

@@ -16,7 +16,6 @@ struct BackButton: View {
         } label: {
             Image(systemName: "arrow.left")
                 .imageScale(.small)
-                .padding()
         }
         .buttonStyle(.plain)
     }

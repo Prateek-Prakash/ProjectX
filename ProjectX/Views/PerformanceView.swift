@@ -280,7 +280,6 @@ struct PerformanceView: View {
                     } label: {
                         Image(systemName: "arrow.clockwise")
                             .imageScale(.small)
-                            .padding()
                     }
                     .buttonStyle(.plain)
                     .sensoryFeedback(.success, trigger: successHaptic)
