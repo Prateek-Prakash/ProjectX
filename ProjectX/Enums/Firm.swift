@@ -58,7 +58,7 @@ enum Firm: String, CaseIterable, Identifiable {
         case .theFuturesDesk:
             return .full
         case .topstep:
-            return .semi
+            return .full
         case .tradeify:
             return .full
         }
