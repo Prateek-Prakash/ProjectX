@@ -19,6 +19,8 @@ class XClient {
             return self.fundingFutures
         case .lucidTrading:
             return self.lucidTrading
+        case .theFuturesDesk:
+            return self.theFuturesDesk
         case .topstep:
             return self.topstep
         case .tradeify:
@@ -30,6 +32,7 @@ class XClient {
     static let aquaFutures = XClient(.aquaFutures)
     static let fundingFutures = XClient(.fundingFutures)
     static let lucidTrading = XClient(.lucidTrading)
+    static let theFuturesDesk = XClient(.theFuturesDesk)
     static let topstep = XClient(.topstep)
     static let tradeify = XClient(.tradeify)
     
@@ -65,6 +68,11 @@ class XClient {
             self.userUrl = "https://userapi.lucidtrading.projectx.com"
             self.userHubUrl = "https://rtc.lucidtrading.projectx.com/hubs/user"
             self.marketHubUrl = "https://rtc.lucidtrading.projectx.com/hubs/market"
+        case .theFuturesDesk:
+            self.gatewayUrl = "https://api.thefuturesdesk.projectx.com"
+            self.userUrl = "https://userapi.thefuturesdesk.projectx.com"
+            self.userHubUrl = "https://rtc.thefuturesdesk.projectx.com/hubs/user"
+            self.marketHubUrl = "https://rtc.thefuturesdesk.projectx.com/hubs/market"
         case .topstep:
             self.gatewayUrl = "https://api.topstepx.com"
             self.userUrl = "https://userapi.topstepx.com"

@@ -34,6 +34,11 @@ class GlobalViewModel: ObservableObject {
     @AppStorage("lucidTradingKey") var lucidTradingKey: String = ""
     @AppStorage("lucidTradingFunded") var lucidTradingFunded: [Int] = []
     @AppStorage("lucidTradingPractice") var lucidTradingPractice: [Int] = []
+    // TheFuturesDeskX
+    @AppStorage("theFuturesDeskUsername") var theFuturesDeskUsername: String = ""
+    @AppStorage("theFuturesDeskKey") var theFuturesDeskKey: String = ""
+    @AppStorage("theFuturesDeskFunded") var theFuturesDeskFunded: [Int] = []
+    @AppStorage("theFuturesDeskPractice") var theFuturesDeskPractice: [Int] = []
     // TopstepX
     @AppStorage("topstepUsername") var topstepUsername: String = ""
     @AppStorage("topstepKey") var topstepKey: String = ""
@@ -111,6 +116,8 @@ class GlobalViewModel: ObservableObject {
                 await signIn(firm, fundingFuturesUsername, fundingFuturesKey)
             case .lucidTrading:
                 await signIn(firm, lucidTradingUsername, lucidTradingKey)
+            case .theFuturesDesk:
+                await signIn(firm, theFuturesDeskUsername, theFuturesDeskKey)
             case .topstep:
                 await signIn(firm, topstepUsername, topstepKey)
             case .tradeify:
@@ -157,6 +164,16 @@ class GlobalViewModel: ObservableObject {
             if lucidTradingUsername != username || lucidTradingKey != key {
                 lucidTradingUsername = username
                 lucidTradingKey = key
+                if isLinked(firm) {
+                    await signIn(firm, username, key)
+                } else {
+                    await signOut(firm)
+                }
+            }
+        case .theFuturesDesk:
+            if theFuturesDeskUsername != username || theFuturesDeskKey != key {
+                theFuturesDeskUsername = username
+                theFuturesDeskKey = key
                 if isLinked(firm) {
                     await signIn(firm, username, key)
                 } else {
@@ -219,6 +236,8 @@ class GlobalViewModel: ObservableObject {
                 type = fundingFuturesFunded.contains(id) ? .funded : fundingFuturesPractice.contains(id) ? .practice : .evaluation
             case .lucidTrading:
                 type = lucidTradingFunded.contains(id) ? .funded : lucidTradingPractice.contains(id) ? .practice : .evaluation
+            case .theFuturesDesk:
+                type = theFuturesDeskFunded.contains(id) ? .funded : theFuturesDeskPractice.contains(id) ? .practice : .evaluation
             case .topstep:
                 type = topstepFunded.contains(id) ? .funded : topstepPractice.contains(id) ? .practice : .evaluation
             case .tradeify:
@@ -259,6 +278,9 @@ class GlobalViewModel: ObservableObject {
             case .lucidTrading:
                 lucidTradingFunded.removeAll(where: { !ids.contains($0) })
                 lucidTradingPractice.removeAll(where: { !ids.contains($0) })
+            case .theFuturesDesk:
+                theFuturesDeskFunded.removeAll(where: { !ids.contains($0) })
+                theFuturesDeskPractice.removeAll(where: { !ids.contains($0) })
             case .topstep:
                 topstepFunded.removeAll(where: { !ids.contains($0) })
                 topstepPractice.removeAll(where: { !ids.contains($0) })
@@ -302,6 +324,9 @@ class GlobalViewModel: ObservableObject {
         case .lucidTrading:
             lucidTradingFunded.removeAll()
             lucidTradingPractice.removeAll()
+        case .theFuturesDesk:
+            theFuturesDeskFunded.removeAll()
+            theFuturesDeskPractice.removeAll()
         case .topstep:
             topstepFunded.removeAll()
             topstepPractice.removeAll()
@@ -321,6 +346,8 @@ class GlobalViewModel: ObservableObject {
             return !fundingFuturesUsername.isEmpty && !fundingFuturesKey.isEmpty
         case .lucidTrading:
             return !lucidTradingUsername.isEmpty && !lucidTradingKey.isEmpty
+        case .theFuturesDesk:
+            return !theFuturesDeskUsername.isEmpty && !theFuturesDeskKey.isEmpty
         case .topstep:
             return !topstepUsername.isEmpty && !topstepKey.isEmpty
         case .tradeify:
@@ -365,6 +392,9 @@ class GlobalViewModel: ObservableObject {
         case .lucidTrading:
             type == .funded ? lucidTradingFunded.append(id) : lucidTradingFunded.removeAll(where: { $0 == id })
             type == .practice ? lucidTradingPractice.append(id) : lucidTradingPractice.removeAll(where: { $0 == id })
+        case .theFuturesDesk:
+            type == .funded ? theFuturesDeskFunded.append(id) : theFuturesDeskFunded.removeAll(where: { $0 == id })
+            type == .practice ? theFuturesDeskPractice.append(id) : theFuturesDeskPractice.removeAll(where: { $0 == id })
         case .topstep:
             type == .funded ? topstepFunded.append(id) : topstepFunded.removeAll(where: { $0 == id })
             type == .practice ? topstepPractice.append(id) : topstepPractice.removeAll(where: { $0 == id })
@@ -400,6 +430,9 @@ class GlobalViewModel: ObservableObject {
         case .lucidTrading:
             usernameInput = lucidTradingUsername
             keyInput = lucidTradingKey
+        case .theFuturesDesk:
+            usernameInput = theFuturesDeskUsername
+            keyInput = theFuturesDeskKey
         case .topstep:
             usernameInput = topstepUsername
             keyInput = topstepKey
