@@ -24,6 +24,11 @@ class GlobalViewModel: ObservableObject {
     @AppStorage("aquaFuturesKey") var aquaFuturesKey: String = ""
     @AppStorage("aquaFuturesFunded") var aquaFuturesFunded: [Int] = []
     @AppStorage("aquaFuturesPractice") var aquaFuturesPractice: [Int] = []
+    // BlueGuardianFuturesX
+    @AppStorage("blueGuardianFuturesUsername") var blueGuardianFuturesUsername: String = ""
+    @AppStorage("blueGuardianFuturesKey") var blueGuardianFuturesKey: String = ""
+    @AppStorage("blueGuardianFuturesFunded") var blueGuardianFuturesFunded: [Int] = []
+    @AppStorage("blueGuardianFuturesPractice") var blueGuardianFuturesPractice: [Int] = []
     // FundingFuturesX
     @AppStorage("fundingFuturesUsername") var fundingFuturesUsername: String = ""
     @AppStorage("fundingFuturesKey") var fundingFuturesKey: String = ""
@@ -112,6 +117,8 @@ class GlobalViewModel: ObservableObject {
                 await signIn(firm, alphaFuturesUsername, alphaFuturesKey)
             case .aquaFutures:
                 await signIn(firm, aquaFuturesUsername, aquaFuturesKey)
+            case .blueGuardianFutures:
+                await signIn(firm, blueGuardianFuturesUsername, blueGuardianFuturesKey)
             case .fundingFutures:
                 await signIn(firm, fundingFuturesUsername, fundingFuturesKey)
             case .lucidTrading:
@@ -144,6 +151,16 @@ class GlobalViewModel: ObservableObject {
             if aquaFuturesUsername != username || aquaFuturesKey != key {
                 aquaFuturesUsername = username
                 aquaFuturesKey = key
+                if isLinked(firm) {
+                    await signIn(firm, username, key)
+                } else {
+                    await signOut(firm)
+                }
+            }
+        case .blueGuardianFutures:
+            if blueGuardianFuturesUsername != username || blueGuardianFuturesKey != key {
+                blueGuardianFuturesUsername = username
+                blueGuardianFuturesKey = key
                 if isLinked(firm) {
                     await signIn(firm, username, key)
                 } else {
@@ -232,6 +249,8 @@ class GlobalViewModel: ObservableObject {
                 type = alphaFuturesFunded.contains(id) ? .funded : alphaFuturesPractice.contains(id) ? .practice : .evaluation
             case .aquaFutures:
                 type = aquaFuturesFunded.contains(id) ? .funded : aquaFuturesPractice.contains(id) ? .practice : .evaluation
+            case .blueGuardianFutures:
+                type = blueGuardianFuturesFunded.contains(id) ? .funded : blueGuardianFuturesPractice.contains(id) ? .practice : .evaluation
             case .fundingFutures:
                 type = fundingFuturesFunded.contains(id) ? .funded : fundingFuturesPractice.contains(id) ? .practice : .evaluation
             case .lucidTrading:
@@ -272,6 +291,9 @@ class GlobalViewModel: ObservableObject {
             case .aquaFutures:
                 aquaFuturesFunded.removeAll(where: { !ids.contains($0) })
                 aquaFuturesPractice.removeAll(where: { !ids.contains($0) })
+            case .blueGuardianFutures:
+                blueGuardianFuturesFunded.removeAll(where: { !ids.contains($0) })
+                blueGuardianFuturesPractice.removeAll(where: { !ids.contains($0) })
             case .fundingFutures:
                 fundingFuturesFunded.removeAll(where: { !ids.contains($0) })
                 fundingFuturesPractice.removeAll(where: { !ids.contains($0) })
@@ -318,6 +340,9 @@ class GlobalViewModel: ObservableObject {
         case .aquaFutures:
             aquaFuturesFunded.removeAll()
             aquaFuturesPractice.removeAll()
+        case .blueGuardianFutures:
+            blueGuardianFuturesFunded.removeAll()
+            blueGuardianFuturesPractice.removeAll()
         case .fundingFutures:
             fundingFuturesFunded.removeAll()
             fundingFuturesPractice.removeAll()
@@ -342,6 +367,8 @@ class GlobalViewModel: ObservableObject {
             return !alphaFuturesUsername.isEmpty && !alphaFuturesKey.isEmpty
         case .aquaFutures:
             return !aquaFuturesUsername.isEmpty && !aquaFuturesKey.isEmpty
+        case .blueGuardianFutures:
+            return !blueGuardianFuturesUsername.isEmpty && !blueGuardianFuturesKey.isEmpty
         case .fundingFutures:
             return !fundingFuturesUsername.isEmpty && !fundingFuturesKey.isEmpty
         case .lucidTrading:
@@ -386,6 +413,9 @@ class GlobalViewModel: ObservableObject {
         case .aquaFutures:
             type == .funded ? aquaFuturesFunded.append(id) : aquaFuturesFunded.removeAll(where: { $0 == id })
             type == .practice ? aquaFuturesPractice.append(id) : aquaFuturesPractice.removeAll(where: { $0 == id })
+        case .blueGuardianFutures:
+            type == .funded ? blueGuardianFuturesFunded.append(id) : blueGuardianFuturesFunded.removeAll(where: { $0 == id })
+            type == .practice ? blueGuardianFuturesPractice.append(id) : blueGuardianFuturesPractice.removeAll(where: { $0 == id })
         case .fundingFutures:
             type == .funded ? fundingFuturesFunded.append(id) : fundingFuturesFunded.removeAll(where: { $0 == id })
             type == .practice ? fundingFuturesPractice.append(id) : fundingFuturesPractice.removeAll(where: { $0 == id })
@@ -424,6 +454,9 @@ class GlobalViewModel: ObservableObject {
         case .aquaFutures:
             usernameInput = aquaFuturesUsername
             keyInput = aquaFuturesKey
+        case .blueGuardianFutures:
+            usernameInput = blueGuardianFuturesUsername
+            keyInput = blueGuardianFuturesKey
         case .fundingFutures:
             usernameInput = fundingFuturesUsername
             keyInput = fundingFuturesKey

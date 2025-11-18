@@ -15,6 +15,8 @@ class XClient {
             return self.alphaFutures
         case .aquaFutures:
             return self.aquaFutures
+        case .blueGuardianFutures:
+            return self.blueGuardianFutures
         case .fundingFutures:
             return self.fundingFutures
         case .lucidTrading:
@@ -30,6 +32,7 @@ class XClient {
     
     static let alphaFutures = XClient(.alphaFutures)
     static let aquaFutures = XClient(.aquaFutures)
+    static let blueGuardianFutures = XClient(.blueGuardianFutures)
     static let fundingFutures = XClient(.fundingFutures)
     static let lucidTrading = XClient(.lucidTrading)
     static let theFuturesDesk = XClient(.theFuturesDesk)
@@ -58,6 +61,11 @@ class XClient {
             self.userUrl = "https://userapi.aquafutures.projectx.com"
             self.userHubUrl = "https://rtc.aquafutures.projectx.com/hubs/user"
             self.marketHubUrl = "https://rtc.aquafutures.projectx.com/hubs/market"
+        case .blueGuardianFutures:
+            self.gatewayUrl = "https://api.blueguardianfutures.projectx.com"
+            self.userUrl = "https://userapi.blueguardianfutures.projectx.com"
+            self.userHubUrl = "https://rtc.blueguardianfutures.projectx.com/hubs/user"
+            self.marketHubUrl = "https://rtc.blueguardianfutures.projectx.com/hubs/market"
         case .fundingFutures:
             self.gatewayUrl = "https://api.fundingfutures.projectx.com"
             self.userUrl = "https://userapi.fundingfutures.projectx.com"
