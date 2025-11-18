@@ -59,10 +59,10 @@ struct TradeTile: View {
                 VStack(alignment: .trailing) {
                     Text(abs(trade.pnL).asCurrency())
                         .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                        .foregroundStyle(trade.pnL > 0 ? .green.mix(with: .white, by: 0.2) : trade.pnL < 0 ? .red.mix(with: .white, by: 0.2) : .gray.mix(with: .white, by: 0.2))
+                        .foregroundStyle(trade.pnL > 0 ? .green : trade.pnL < 0 ? .red : .gray)
                     Text(trade.fees.asCurrency())
                         .font(.system(size: 8, design: .monospaced))
-                        .foregroundStyle(.red.mix(with: .white, by: 0.2))
+                        .foregroundStyle(.red)
                 }
             }
             .frame(maxWidth: .infinity)

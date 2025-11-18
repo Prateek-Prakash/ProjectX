@@ -38,7 +38,7 @@ struct DailyStatsTile: View {
                 VStack(alignment: .trailing) {
                     Text(abs(stats.totalPnL - stats.totalFees).asCurrency())
                         .font(.system(size: 12, weight: .semibold, design: .monospaced))
-                        .foregroundStyle((stats.totalPnL - stats.totalFees) > 0 ? .green.mix(with: .white, by: 0.2) : (stats.totalPnL - stats.totalFees) < 0 ? .red.mix(with: .white, by: 0.2) : .gray.mix(with: .white, by: 0.2))
+                        .foregroundStyle((stats.totalPnL - stats.totalFees) > 0 ? .green : (stats.totalPnL - stats.totalFees) < 0 ? .red : .gray)
                 }
             }
             .frame(maxWidth: .infinity)

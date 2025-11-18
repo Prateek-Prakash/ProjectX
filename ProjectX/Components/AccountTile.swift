@@ -50,7 +50,7 @@ struct AccountTile: View {
                 
                 Text(abs(account.realizedDayPnl).asCurrency())
                     .font(.system(size: 14, weight: .medium, design: .rounded))
-                    .foregroundStyle(account.realizedDayPnl > 0 ? .green.mix(with: .white, by: 0.2) : account.realizedDayPnl < 0 ? .red.mix(with: .white, by: 0.2) : .gray.mix(with: .white, by: 0.2))
+                    .foregroundStyle(account.realizedDayPnl > 0 ? .green : account.realizedDayPnl < 0 ? .red : .gray)
                 
                 Image(systemName: "circle.fill")
                     .font(.system(size: 4))
