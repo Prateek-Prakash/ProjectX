@@ -32,7 +32,7 @@ struct Account: Identifiable, Equatable {
     var accountType: AccountType = .evaluation
     
     var winningColor: Color {
-        return self.realizedDayPnl >= self.firm.winningDay ? .green : .gray
+        return !canTrade ? .red : self.realizedDayPnl >= self.firm.winningDay ? .green : .gray
     }
     
     static func fromDto(_ dto: AccountDTO, _ firm: Firm, _ type: AccountType, _ tradable: Bool) -> Account {
