@@ -15,6 +15,7 @@ struct Account: Identifiable, Equatable {
     var accountId: Int
     var accountName: String
     var ineligible: Bool
+    var canTrade: Bool
     var isLeader: Bool
     var isFollower: Bool
     var startingBalance: Double
@@ -34,13 +35,14 @@ struct Account: Identifiable, Equatable {
         return self.realizedDayPnl >= self.firm.winningDay ? .green : .gray
     }
     
-    static func fromDto(_ dto: AccountDTO, _ firm: Firm, _ type: AccountType) -> Account {
+    static func fromDto(_ dto: AccountDTO, _ firm: Firm, _ type: AccountType, _ tradable: Bool) -> Account {
         return Account(
             firm: firm,
             userId: dto.userId,
             accountId: dto.accountId,
             accountName: dto.accountName,
             ineligible: dto.ineligible,
+            canTrade: tradable,
             isLeader: dto.isLeader,
             isFollower: dto.isFollower,
             startingBalance: dto.startingBalance,

@@ -36,7 +36,7 @@ struct AppShell: View {
                                 let accounts = globalVM.allAccounts.filter({
                                     $0.firm == firm
                                     && ((globalVM.showEvaluationAccounts && $0.accountType == .evaluation) || (globalVM.showFundedAccounts && $0.accountType == .funded) || (globalVM.showPracticeAccounts && $0.accountType == .practice))
-                                    && ((globalVM.hideLockedAccounts && !globalVM.isLocked(firm, $0)) || !globalVM.hideLockedAccounts)
+                                    && ((globalVM.hideLockedAccounts && $0.canTrade) || !globalVM.hideLockedAccounts)
                                 })
                                 if !globalVM.hideEmptyFirms || !accounts.isEmpty {
                                     FirmCard(

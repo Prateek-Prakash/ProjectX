@@ -172,6 +172,22 @@ class XClient {
         }
     }
     
+    func searchAccounts() async -> SearchResponseDTO? {
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(gatewayToken!)"
+        ]
+        let params: [String: Bool] = [
+            "onlyActiveAccounts": true
+        ]
+        do {
+            let value = try await AF.request("\(gatewayUrl)/api/Account/search", method: .post, parameters: params, encoding: JSONEncoding.default, headers: headers).serializingDecodable(SearchResponseDTO.self).value
+            return value
+        } catch {
+            Helpers.debugLog("searchAccounts: \(error)")
+            return nil
+        }
+    }
+    
     func getDailyStats(_ id: Int) async -> [DailyStatsDTO] {
         do {
             let headers: HTTPHeaders = [

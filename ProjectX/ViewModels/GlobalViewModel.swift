@@ -241,9 +241,11 @@ class GlobalViewModel: ObservableObject {
     
     func loadAccounts(_ firm: Firm) async {
         let dtos = await XClient.get(firm).getAccounts()
+        let searches = await XClient.get(firm).searchAccounts()
         let accounts: [Account] = dtos.filter({ !$0.ineligible }).map({
             let id = $0.accountId
             var type = AccountType.evaluation
+            let tradable = searches?.accounts.filter({ $0.id == id }).first?.canTrade ?? true
             switch firm {
             case .alphaFutures:
                 type = alphaFuturesFunded.contains(id) ? .funded : alphaFuturesPractice.contains(id) ? .practice : .evaluation
@@ -262,7 +264,7 @@ class GlobalViewModel: ObservableObject {
             case .tradeify:
                 type = tradeifyFunded.contains(id) ? .funded : tradeifyPractice.contains(id) ? .practice : .evaluation
             }
-            return Account.fromDto($0, firm, type)
+            return Account.fromDto($0, firm, type, tradable)
         })
         if allAccounts.isEmpty {
             allAccounts.append(contentsOf: accounts)
@@ -479,12 +481,6 @@ class GlobalViewModel: ObservableObject {
         await linkFirm(firm, usernameInput, keyInput)
     }
     
-    func isLocked(_ firm: Firm, _ account: Account) -> Bool {
-        let accounts = allAccounts.filter({ $0.firm == firm })
-        let leader = accounts.first(where: { $0.isLeader })
-        return account.lockoutReason != nil || (leader != nil && leader!.lockoutReason != nil && account.isFollower)
-    }
-    
     // MARK: SignalR Stuff
     
     func initSignals(_ firm: Firm) async {
@@ -524,7 +520,7 @@ class GlobalViewModel: ObservableObject {
     func invokeUserSubscriptions() async {
         do {
             try await userCtx?.invoke(method: "SubscribeAccounts")
-            try await userCtx?.invoke(method: "SubscribePositions", arguments: 12277723)
+            try await userCtx?.invoke(method: "SubscribePositions", arguments: 67676767)
         } catch {
             Helpers.debugLog("invokeUserSubscriptions: \(error)")
         }
