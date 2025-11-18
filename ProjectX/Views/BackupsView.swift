@@ -32,6 +32,10 @@ struct BackupsView: View {
                                     .resizable()
                                     .frame(width: 20, height: 20)
                                     .clipShape(.circle)
+                                    .overlay {
+                                        Circle()
+                                            .stroke(.secondary, lineWidth: 0.5)
+                                    }
                                 VStack(alignment: .leading) {
                                     Text(backup.firm)
                                         .font(.system(size: 8, weight: .light, design: .rounded))
