@@ -18,6 +18,10 @@ struct AppShell: View {
     @State var showSettingsCover: Bool = false
     @State var successHaptic: Bool = false
     
+    @State var triggerSnapshot: Bool = false
+    @State var uiSnapshot: UIImage? = nil
+    @State var snapshotPadding: Bool = false
+    
     let refreshTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     var body: some View {
@@ -43,6 +47,10 @@ struct AppShell: View {
                             }
                         }
                     }
+                    .padding(.all, snapshotPadding ? 14 : 0)
+                    .snapshot(trigger: triggerSnapshot) {
+                        uiSnapshot = $0
+                    }
                     .padding(.horizontal)
                     .padding(.bottom)
                 }
@@ -51,9 +59,15 @@ struct AppShell: View {
             .toolbarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Image(systemName: "livephoto")
-                        .symbolEffect(.bounce, options: globalVM.refreshingData ? .repeating : .nonRepeating, value: globalVM.refreshingData)
-                        .imageScale(.small)
+                    Button {
+                        snapshotPadding = true
+                        triggerSnapshot.toggle()
+                    } label: {
+                        Image(systemName: "livephoto")
+                            .symbolEffect(.bounce, options: globalVM.refreshingData ? .repeating : .nonRepeating, value: globalVM.refreshingData)
+                            .imageScale(.small)
+                    }
+                    .buttonStyle(.plain)
                 }
                 .sharedBackgroundVisibility(.hidden)
                 
@@ -90,6 +104,23 @@ struct AppShell: View {
                         }
                     }
                 }
+            }
+        }
+        .overlay {
+            if let snapshot = uiSnapshot {
+                Image(uiImage: snapshot)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background {
+                        Rectangle()
+                            .fill(Color(.xBackground))
+                            .ignoresSafeArea()
+                            .onTapGesture {
+                                snapshotPadding = false
+                                uiSnapshot = nil
+                            }
+                    }
             }
         }
     }
