@@ -46,6 +46,72 @@ struct PerformanceView: View {
                             OriginCard {
                                 VStack(spacing: 0) {
                                     OriginHeader {
+                                        Text("PERSONAL LIMITS")
+                                            .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                            .tracking(2)
+                                            .foregroundStyle(Color(.xHeaderText))
+                                    }
+                                    
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    VStack(spacing: 0) {
+                                        Button {
+                                            // TODO: Edit PDPT
+                                        } label: {
+                                            GroupBox {
+                                                HStack {
+                                                    Text("Daily Profit Target")
+                                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                    Spacer()
+                                                    Text(account.personalDailyProfitTarget?.asCurrency() ?? "--")
+                                                        .font(.system(size: 12, design: .rounded))
+                                                        .foregroundStyle(.secondary)
+                                                    Image(systemName: "chevron.right")
+                                                        .foregroundStyle(.secondary)
+                                                        .fontDesign(.rounded)
+                                                        .imageScale(.small)
+                                                }
+                                                .frame(height: 12)
+                                            }
+                                            .backgroundStyle(Color(.xCardBackground))
+                                        }
+                                        .buttonStyle(.plain)
+                                        
+                                        Divider()
+                                            .frame(height: 1)
+                                            .overlay(Color(.xOutline))
+                                        
+                                        Button {
+                                            // TODO: Edit PDLL
+                                        } label: {
+                                            GroupBox {
+                                                HStack {
+                                                    Text("Daily Loss Limit")
+                                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                    Spacer()
+                                                    Text(account.personalDailyLossLimit?.asCurrency() ?? "--")
+                                                        .font(.system(size: 12, design: .rounded))
+                                                        .foregroundStyle(.secondary)
+                                                    Image(systemName: "chevron.right")
+                                                        .foregroundStyle(.secondary)
+                                                        .fontDesign(.rounded)
+                                                        .imageScale(.small)
+                                                }
+                                                .frame(height: 12)
+                                            }
+                                            .backgroundStyle(Color(.xCardBackground))
+                                        }
+                                        .buttonStyle(.plain)
+                                    }
+                                    .backgroundStyle(Color(.xCardBackground))
+                                }
+                            }
+                            
+                            OriginCard {
+                                VStack(spacing: 0) {
+                                    OriginHeader {
                                         Text("WIN PERCENTAGE")
                                             .font(.system(size: 8, weight: .semibold, design: .monospaced))
                                             .tracking(2)
