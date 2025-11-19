@@ -17,11 +17,14 @@ struct TradeDurationView: View {
             ZStack {
                 Color(.xBackground)
                     .edgesIgnoringSafeArea(.all)
-                ScrollView {
-                    
+                ContentUnavailableView {
+                    Label("WORK-IN-PROGRESS", systemImage: "wrench.and.screwdriver")
+                        .imageScale(.small)
+                        .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                        .tracking(2)
+                        .foregroundStyle(.secondary)
                 }
-                .padding(.horizontal)
-                .padding(.bottom)
+                .padding()
             }
         }
         .toolbarTitleDisplayMode(.inline)
