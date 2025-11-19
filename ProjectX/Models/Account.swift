@@ -28,7 +28,11 @@ struct Account: Identifiable, Equatable {
     var lockoutReason: String?
     var lockoutExpiration: String?
     var personalDailyProfitTarget: Double?
+    var personalDailyProfitTargetAction: LimitAction
     var personalDailyLossLimit: Double?
+    var personalDailyLossLimitAction: LimitAction
+    var personalDailyLossLimitTrailing: Bool
+    var pdllTrailingType: Int
     var winRate: Double
     
     var accountType: AccountType = .evaluation
@@ -57,7 +61,11 @@ struct Account: Identifiable, Equatable {
             lockoutReason: dto.lockoutReason,
             lockoutExpiration: dto.lockoutExpiration,
             personalDailyProfitTarget: dto.personalDailyProfitTarget,
+            personalDailyProfitTargetAction: dto.personalDailyLossLimitAction,
             personalDailyLossLimit: dto.personalDailyLossLimit,
+            personalDailyLossLimitAction: dto.personalDailyLossLimitAction,
+            personalDailyLossLimitTrailing: dto.personalDailyLossLimitTrailing,
+            pdllTrailingType: dto.pdllTrailingType,
             winRate: dto.winRate,
             accountType: type
         )
