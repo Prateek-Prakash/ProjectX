@@ -26,5 +26,6 @@ nonisolated struct AccountDTO: Identifiable, Codable {
     var lockoutReason: String?
     var lockoutExpiration: String?
     var personalDailyProfitTarget: Double?
+    var personalDailyLossLimit: Double?
     var winRate: Double
 }
