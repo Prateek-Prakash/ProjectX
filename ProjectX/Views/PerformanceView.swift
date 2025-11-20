@@ -12,6 +12,9 @@ struct PerformanceView: View {
     
     @State var successHaptic: Bool = false
     
+    @State var showDailyProfitTargetSheet: Bool = false
+    @State var showDailyLossLimitSheet: Bool = false
+    
     let account: Account
     
     var body: some View {
@@ -58,7 +61,7 @@ struct PerformanceView: View {
                                     
                                     VStack(spacing: 0) {
                                         Button {
-                                            // TODO: Edit PDPT
+                                            showDailyProfitTargetSheet.toggle()
                                         } label: {
                                             GroupBox {
                                                 HStack {
@@ -84,7 +87,7 @@ struct PerformanceView: View {
                                             .overlay(Color(.xOutline))
                                         
                                         Button {
-                                            // TODO: Edit PDLL
+                                            showDailyLossLimitSheet.toggle()
                                         } label: {
                                             GroupBox {
                                                 HStack {
@@ -351,6 +354,12 @@ struct PerformanceView: View {
                     .sensoryFeedback(.success, trigger: successHaptic)
                 }
                 .sharedBackgroundVisibility(.hidden)
+            }
+            .sheet(isPresented: $showDailyProfitTargetSheet) {
+                DailyProfitTargetView(account: account)
+            }
+            .sheet(isPresented: $showDailyLossLimitSheet) {
+                DailyLossLimitView(account: account)
             }
         }
         .interactiveDismissDisabled()
