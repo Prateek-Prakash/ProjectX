@@ -189,14 +189,16 @@ class XClient {
     }
     
     func setPersonalLimits(_ id: Int, _ pdpt: Int?, _ pdll: Int?) async -> Bool {
+        let pdpt = pdpt == 0 ? nil : pdpt
+        let pdll = pdll == 0 ? nil : pdll
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(userToken!)"
         ]
         let params: [String: Any?] = [
             "tradingAccountId": id,
-            "personalDailyProfitTarget": pdpt == 0 ? nil : pdpt,
+            "personalDailyProfitTarget": pdpt,
             "personalDailyProfitTargetAction": pdpt == nil ? 0 : 1,
-            "personalDailyLossLimit": pdll == 0 ? nil : pdll,
+            "personalDailyLossLimit": pdll,
             "personalDailyLossLimitAction": pdll == nil ? 0 : 1,
             "personalDailyLossLimitTrailing": false,
             "pdllTrailingType": 0
