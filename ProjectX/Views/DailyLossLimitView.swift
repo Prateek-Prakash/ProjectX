@@ -35,8 +35,10 @@ struct DailyLossLimitView: View {
                 }
                 
                 Button {
-                    // TODO: Set Personal Limits
-                    dismiss()
+                    Task {
+                        let _ = await XClient.get(account.firm).setPersonalLimits(account.accountId, account.personalDailyProfitTarget, dailyLossLimit.isEmpty ? 0 : Int(dailyLossLimit))
+                        dismiss()
+                    }
                 } label: {
                     ZStack {
                         Color.primary
