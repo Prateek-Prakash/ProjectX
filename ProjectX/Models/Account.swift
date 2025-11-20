@@ -28,9 +28,9 @@ struct Account: Identifiable, Equatable {
     var lockoutReason: String?
     var lockoutExpiration: String?
     var personalDailyProfitTarget: Double?
-    var personalDailyProfitTargetAction: LimitAction
+    var personalDailyProfitTargetAction: Int
     var personalDailyLossLimit: Double?
-    var personalDailyLossLimitAction: LimitAction
+    var personalDailyLossLimitAction: Int
     var personalDailyLossLimitTrailing: Bool
     var pdllTrailingType: Int
     var winRate: Double
