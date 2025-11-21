@@ -13,6 +13,7 @@ nonisolated struct AccountDTO: Identifiable, Codable {
     var userId: Int
     var accountId: Int
     var accountName: String
+    var nickname: String?
     var ineligible: Bool
     var isLeader: Bool
     var isFollower: Bool

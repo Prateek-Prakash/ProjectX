@@ -14,6 +14,7 @@ struct Account: Identifiable, Equatable {
     var userId: Int
     var accountId: Int
     var accountName: String
+    var nickname: String?
     var ineligible: Bool
     var canTrade: Bool
     var isLeader: Bool
@@ -47,6 +48,7 @@ struct Account: Identifiable, Equatable {
             userId: dto.userId,
             accountId: dto.accountId,
             accountName: dto.accountName,
+            nickname: dto.nickname,
             ineligible: dto.ineligible,
             canTrade: tradable,
             isLeader: dto.isLeader,

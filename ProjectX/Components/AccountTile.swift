@@ -41,7 +41,7 @@ struct AccountTile: View {
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text((globalVM.subtractStartingBalance ? account.balance - account.startingBalance : account.balance).asCurrency())
-                    Text("PDPT: \(account.personalDailyProfitTarget?.asCurrency() ?? "--")")
+                    Text(account.nickname ?? "...\(account.accountName.suffix(4))")
                         .font(.system(size: 8, weight: .thin, design: .monospaced))
                         .foregroundStyle(.secondary)
                 }
