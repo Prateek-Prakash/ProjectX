@@ -29,9 +29,6 @@ struct DailyProfitTargetView: View {
                         .padding(.all, 14)
                         .keyboardType(.numberPad)
                         .focused($isfocused)
-                        .onAppear {
-                            isfocused = true
-                        }
                 }
                 
                 Button {

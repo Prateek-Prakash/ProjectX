@@ -29,9 +29,6 @@ struct DailyLossLimitView: View {
                         .padding(.all, 14)
                         .keyboardType(.numberPad)
                         .focused($isfocused)
-                        .onAppear {
-                            isfocused = true
-                        }
                 }
                 
                 Button {
