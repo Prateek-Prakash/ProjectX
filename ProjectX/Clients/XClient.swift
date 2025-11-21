@@ -13,16 +13,8 @@ class XClient {
         switch firm {
         case .alphaFutures:
             return self.alphaFutures
-        case .aquaFutures:
-            return self.aquaFutures
-        case .blueGuardianFutures:
-            return self.blueGuardianFutures
-        case .fundingFutures:
-            return self.fundingFutures
         case .lucidTrading:
             return self.lucidTrading
-        case .theFuturesDesk:
-            return self.theFuturesDesk
         case .topstep:
             return self.topstep
         case .tradeify:
@@ -31,11 +23,7 @@ class XClient {
     }
     
     static let alphaFutures = XClient(.alphaFutures)
-    static let aquaFutures = XClient(.aquaFutures)
-    static let blueGuardianFutures = XClient(.blueGuardianFutures)
-    static let fundingFutures = XClient(.fundingFutures)
     static let lucidTrading = XClient(.lucidTrading)
-    static let theFuturesDesk = XClient(.theFuturesDesk)
     static let topstep = XClient(.topstep)
     static let tradeify = XClient(.tradeify)
     
@@ -56,31 +44,11 @@ class XClient {
             self.userUrl = "https://userapi.alphaticks.projectx.com"
             self.userHubUrl = "https://rtc.alphaticks.projectx.com/hubs/user"
             self.marketHubUrl = "https://rtc.alphaticks.projectx.com/hubs/market"
-        case .aquaFutures:
-            self.gatewayUrl = "https://api.aquafutures.projectx.com"
-            self.userUrl = "https://userapi.aquafutures.projectx.com"
-            self.userHubUrl = "https://rtc.aquafutures.projectx.com/hubs/user"
-            self.marketHubUrl = "https://rtc.aquafutures.projectx.com/hubs/market"
-        case .blueGuardianFutures:
-            self.gatewayUrl = "https://api.blueguardianfutures.projectx.com"
-            self.userUrl = "https://userapi.blueguardianfutures.projectx.com"
-            self.userHubUrl = "https://rtc.blueguardianfutures.projectx.com/hubs/user"
-            self.marketHubUrl = "https://rtc.blueguardianfutures.projectx.com/hubs/market"
-        case .fundingFutures:
-            self.gatewayUrl = "https://api.fundingfutures.projectx.com"
-            self.userUrl = "https://userapi.fundingfutures.projectx.com"
-            self.userHubUrl = "https://rtc.fundingfutures.projectx.com/hubs/user"
-            self.marketHubUrl = "https://rtc.fundingfutures.projectx.com/hubs/market"
         case .lucidTrading:
             self.gatewayUrl = "https://api.lucidtrading.projectx.com"
             self.userUrl = "https://userapi.lucidtrading.projectx.com"
             self.userHubUrl = "https://rtc.lucidtrading.projectx.com/hubs/user"
             self.marketHubUrl = "https://rtc.lucidtrading.projectx.com/hubs/market"
-        case .theFuturesDesk:
-            self.gatewayUrl = "https://api.thefuturesdesk.projectx.com"
-            self.userUrl = "https://userapi.thefuturesdesk.projectx.com"
-            self.userHubUrl = "https://rtc.thefuturesdesk.projectx.com/hubs/user"
-            self.marketHubUrl = "https://rtc.thefuturesdesk.projectx.com/hubs/market"
         case .topstep:
             self.gatewayUrl = "https://api.topstepx.com"
             self.userUrl = "https://userapi.topstepx.com"

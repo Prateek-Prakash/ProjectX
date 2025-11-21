@@ -19,31 +19,11 @@ class GlobalViewModel: ObservableObject {
     @AppStorage("alphaFuturesKey") var alphaFuturesKey: String = ""
     @AppStorage("alphaFuturesFunded") var alphaFuturesFunded: [Int] = []
     @AppStorage("alphaFuturesPractice") var alphaFuturesPractice: [Int] = []
-    // AquaFuturesX
-    @AppStorage("aquaFuturesUsername") var aquaFuturesUsername: String = ""
-    @AppStorage("aquaFuturesKey") var aquaFuturesKey: String = ""
-    @AppStorage("aquaFuturesFunded") var aquaFuturesFunded: [Int] = []
-    @AppStorage("aquaFuturesPractice") var aquaFuturesPractice: [Int] = []
-    // BlueGuardianFuturesX
-    @AppStorage("blueGuardianFuturesUsername") var blueGuardianFuturesUsername: String = ""
-    @AppStorage("blueGuardianFuturesKey") var blueGuardianFuturesKey: String = ""
-    @AppStorage("blueGuardianFuturesFunded") var blueGuardianFuturesFunded: [Int] = []
-    @AppStorage("blueGuardianFuturesPractice") var blueGuardianFuturesPractice: [Int] = []
-    // FundingFuturesX
-    @AppStorage("fundingFuturesUsername") var fundingFuturesUsername: String = ""
-    @AppStorage("fundingFuturesKey") var fundingFuturesKey: String = ""
-    @AppStorage("fundingFuturesFunded") var fundingFuturesFunded: [Int] = []
-    @AppStorage("fundingFuturesPractice") var fundingFuturesPractice: [Int] = []
     // LucidTradingX
     @AppStorage("lucidTradingUsername") var lucidTradingUsername: String = ""
     @AppStorage("lucidTradingKey") var lucidTradingKey: String = ""
     @AppStorage("lucidTradingFunded") var lucidTradingFunded: [Int] = []
     @AppStorage("lucidTradingPractice") var lucidTradingPractice: [Int] = []
-    // TheFuturesDeskX
-    @AppStorage("theFuturesDeskUsername") var theFuturesDeskUsername: String = ""
-    @AppStorage("theFuturesDeskKey") var theFuturesDeskKey: String = ""
-    @AppStorage("theFuturesDeskFunded") var theFuturesDeskFunded: [Int] = []
-    @AppStorage("theFuturesDeskPractice") var theFuturesDeskPractice: [Int] = []
     // TopstepX
     @AppStorage("topstepUsername") var topstepUsername: String = ""
     @AppStorage("topstepKey") var topstepKey: String = ""
@@ -115,16 +95,8 @@ class GlobalViewModel: ObservableObject {
             switch firm {
             case .alphaFutures:
                 await signIn(firm, alphaFuturesUsername, alphaFuturesKey)
-            case .aquaFutures:
-                await signIn(firm, aquaFuturesUsername, aquaFuturesKey)
-            case .blueGuardianFutures:
-                await signIn(firm, blueGuardianFuturesUsername, blueGuardianFuturesKey)
-            case .fundingFutures:
-                await signIn(firm, fundingFuturesUsername, fundingFuturesKey)
             case .lucidTrading:
                 await signIn(firm, lucidTradingUsername, lucidTradingKey)
-            case .theFuturesDesk:
-                await signIn(firm, theFuturesDeskUsername, theFuturesDeskKey)
             case .topstep:
                 await signIn(firm, topstepUsername, topstepKey)
             case .tradeify:
@@ -147,50 +119,10 @@ class GlobalViewModel: ObservableObject {
                     await signOut(firm)
                 }
             }
-        case .aquaFutures:
-            if aquaFuturesUsername != username || aquaFuturesKey != key {
-                aquaFuturesUsername = username
-                aquaFuturesKey = key
-                if isLinked(firm) {
-                    await signIn(firm, username, key)
-                } else {
-                    await signOut(firm)
-                }
-            }
-        case .blueGuardianFutures:
-            if blueGuardianFuturesUsername != username || blueGuardianFuturesKey != key {
-                blueGuardianFuturesUsername = username
-                blueGuardianFuturesKey = key
-                if isLinked(firm) {
-                    await signIn(firm, username, key)
-                } else {
-                    await signOut(firm)
-                }
-            }
-        case .fundingFutures:
-            if fundingFuturesUsername != username || fundingFuturesKey != key {
-                fundingFuturesUsername = username
-                fundingFuturesKey = key
-                if isLinked(firm) {
-                    await signIn(firm, username, key)
-                } else {
-                    await signOut(firm)
-                }
-            }
         case .lucidTrading:
             if lucidTradingUsername != username || lucidTradingKey != key {
                 lucidTradingUsername = username
                 lucidTradingKey = key
-                if isLinked(firm) {
-                    await signIn(firm, username, key)
-                } else {
-                    await signOut(firm)
-                }
-            }
-        case .theFuturesDesk:
-            if theFuturesDeskUsername != username || theFuturesDeskKey != key {
-                theFuturesDeskUsername = username
-                theFuturesDeskKey = key
                 if isLinked(firm) {
                     await signIn(firm, username, key)
                 } else {
@@ -249,16 +181,8 @@ class GlobalViewModel: ObservableObject {
             switch firm {
             case .alphaFutures:
                 type = alphaFuturesFunded.contains(id) ? .funded : alphaFuturesPractice.contains(id) ? .practice : .evaluation
-            case .aquaFutures:
-                type = aquaFuturesFunded.contains(id) ? .funded : aquaFuturesPractice.contains(id) ? .practice : .evaluation
-            case .blueGuardianFutures:
-                type = blueGuardianFuturesFunded.contains(id) ? .funded : blueGuardianFuturesPractice.contains(id) ? .practice : .evaluation
-            case .fundingFutures:
-                type = fundingFuturesFunded.contains(id) ? .funded : fundingFuturesPractice.contains(id) ? .practice : .evaluation
             case .lucidTrading:
                 type = lucidTradingFunded.contains(id) ? .funded : lucidTradingPractice.contains(id) ? .practice : .evaluation
-            case .theFuturesDesk:
-                type = theFuturesDeskFunded.contains(id) ? .funded : theFuturesDeskPractice.contains(id) ? .practice : .evaluation
             case .topstep:
                 type = topstepFunded.contains(id) ? .funded : topstepPractice.contains(id) ? .practice : .evaluation
             case .tradeify:
@@ -290,21 +214,9 @@ class GlobalViewModel: ObservableObject {
             case .alphaFutures:
                 alphaFuturesFunded.removeAll(where: { !ids.contains($0) })
                 alphaFuturesPractice.removeAll(where: { !ids.contains($0) })
-            case .aquaFutures:
-                aquaFuturesFunded.removeAll(where: { !ids.contains($0) })
-                aquaFuturesPractice.removeAll(where: { !ids.contains($0) })
-            case .blueGuardianFutures:
-                blueGuardianFuturesFunded.removeAll(where: { !ids.contains($0) })
-                blueGuardianFuturesPractice.removeAll(where: { !ids.contains($0) })
-            case .fundingFutures:
-                fundingFuturesFunded.removeAll(where: { !ids.contains($0) })
-                fundingFuturesPractice.removeAll(where: { !ids.contains($0) })
             case .lucidTrading:
                 lucidTradingFunded.removeAll(where: { !ids.contains($0) })
                 lucidTradingPractice.removeAll(where: { !ids.contains($0) })
-            case .theFuturesDesk:
-                theFuturesDeskFunded.removeAll(where: { !ids.contains($0) })
-                theFuturesDeskPractice.removeAll(where: { !ids.contains($0) })
             case .topstep:
                 topstepFunded.removeAll(where: { !ids.contains($0) })
                 topstepPractice.removeAll(where: { !ids.contains($0) })
@@ -339,21 +251,9 @@ class GlobalViewModel: ObservableObject {
         case .alphaFutures:
             alphaFuturesFunded.removeAll()
             alphaFuturesPractice.removeAll()
-        case .aquaFutures:
-            aquaFuturesFunded.removeAll()
-            aquaFuturesPractice.removeAll()
-        case .blueGuardianFutures:
-            blueGuardianFuturesFunded.removeAll()
-            blueGuardianFuturesPractice.removeAll()
-        case .fundingFutures:
-            fundingFuturesFunded.removeAll()
-            fundingFuturesPractice.removeAll()
         case .lucidTrading:
             lucidTradingFunded.removeAll()
             lucidTradingPractice.removeAll()
-        case .theFuturesDesk:
-            theFuturesDeskFunded.removeAll()
-            theFuturesDeskPractice.removeAll()
         case .topstep:
             topstepFunded.removeAll()
             topstepPractice.removeAll()
@@ -367,16 +267,8 @@ class GlobalViewModel: ObservableObject {
         switch firm {
         case .alphaFutures:
             return !alphaFuturesUsername.isEmpty && !alphaFuturesKey.isEmpty
-        case .aquaFutures:
-            return !aquaFuturesUsername.isEmpty && !aquaFuturesKey.isEmpty
-        case .blueGuardianFutures:
-            return !blueGuardianFuturesUsername.isEmpty && !blueGuardianFuturesKey.isEmpty
-        case .fundingFutures:
-            return !fundingFuturesUsername.isEmpty && !fundingFuturesKey.isEmpty
         case .lucidTrading:
             return !lucidTradingUsername.isEmpty && !lucidTradingKey.isEmpty
-        case .theFuturesDesk:
-            return !theFuturesDeskUsername.isEmpty && !theFuturesDeskKey.isEmpty
         case .topstep:
             return !topstepUsername.isEmpty && !topstepKey.isEmpty
         case .tradeify:
@@ -412,21 +304,9 @@ class GlobalViewModel: ObservableObject {
         case .alphaFutures:
             type == .funded ? alphaFuturesFunded.append(id) : alphaFuturesFunded.removeAll(where: { $0 == id })
             type == .practice ? alphaFuturesPractice.append(id) : alphaFuturesPractice.removeAll(where: { $0 == id })
-        case .aquaFutures:
-            type == .funded ? aquaFuturesFunded.append(id) : aquaFuturesFunded.removeAll(where: { $0 == id })
-            type == .practice ? aquaFuturesPractice.append(id) : aquaFuturesPractice.removeAll(where: { $0 == id })
-        case .blueGuardianFutures:
-            type == .funded ? blueGuardianFuturesFunded.append(id) : blueGuardianFuturesFunded.removeAll(where: { $0 == id })
-            type == .practice ? blueGuardianFuturesPractice.append(id) : blueGuardianFuturesPractice.removeAll(where: { $0 == id })
-        case .fundingFutures:
-            type == .funded ? fundingFuturesFunded.append(id) : fundingFuturesFunded.removeAll(where: { $0 == id })
-            type == .practice ? fundingFuturesPractice.append(id) : fundingFuturesPractice.removeAll(where: { $0 == id })
         case .lucidTrading:
             type == .funded ? lucidTradingFunded.append(id) : lucidTradingFunded.removeAll(where: { $0 == id })
             type == .practice ? lucidTradingPractice.append(id) : lucidTradingPractice.removeAll(where: { $0 == id })
-        case .theFuturesDesk:
-            type == .funded ? theFuturesDeskFunded.append(id) : theFuturesDeskFunded.removeAll(where: { $0 == id })
-            type == .practice ? theFuturesDeskPractice.append(id) : theFuturesDeskPractice.removeAll(where: { $0 == id })
         case .topstep:
             type == .funded ? topstepFunded.append(id) : topstepFunded.removeAll(where: { $0 == id })
             type == .practice ? topstepPractice.append(id) : topstepPractice.removeAll(where: { $0 == id })
@@ -453,21 +333,9 @@ class GlobalViewModel: ObservableObject {
         case .alphaFutures:
             usernameInput = alphaFuturesUsername
             keyInput = alphaFuturesKey
-        case .aquaFutures:
-            usernameInput = aquaFuturesUsername
-            keyInput = aquaFuturesKey
-        case .blueGuardianFutures:
-            usernameInput = blueGuardianFuturesUsername
-            keyInput = blueGuardianFuturesKey
-        case .fundingFutures:
-            usernameInput = fundingFuturesUsername
-            keyInput = fundingFuturesKey
         case .lucidTrading:
             usernameInput = lucidTradingUsername
             keyInput = lucidTradingKey
-        case .theFuturesDesk:
-            usernameInput = theFuturesDeskUsername
-            keyInput = theFuturesDeskKey
         case .topstep:
             usernameInput = topstepUsername
             keyInput = topstepKey
