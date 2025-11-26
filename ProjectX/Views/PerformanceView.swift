@@ -71,10 +71,9 @@ struct PerformanceView: View {
                                                     Text(account.personalDailyProfitTarget?.asCurrency() ?? "--")
                                                         .font(.system(size: 12, design: .rounded))
                                                         .foregroundStyle(.secondary)
-                                                    Image(systemName: "chevron.right")
+                                                    Image(systemName: account.personalDailyProfitTargetAction == 2 ? "multiply.square" : account.personalDailyProfitTargetAction == 1 ? "minus.square" : "square")
                                                         .foregroundStyle(.secondary)
                                                         .fontDesign(.rounded)
-                                                        .imageScale(.small)
                                                 }
                                                 .frame(height: 12)
                                             }
@@ -97,10 +96,9 @@ struct PerformanceView: View {
                                                     Text(account.personalDailyLossLimit?.asCurrency() ?? "--")
                                                         .font(.system(size: 12, design: .rounded))
                                                         .foregroundStyle(.secondary)
-                                                    Image(systemName: "chevron.right")
+                                                    Image(systemName: account.personalDailyLossLimitAction == 2 ? "multiply.square" : account.personalDailyLossLimitAction == 1 ? "minus.square" : "square")
                                                         .foregroundStyle(.secondary)
                                                         .fontDesign(.rounded)
-                                                        .imageScale(.small)
                                                 }
                                                 .frame(height: 12)
                                             }

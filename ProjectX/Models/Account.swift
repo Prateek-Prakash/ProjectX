@@ -63,7 +63,7 @@ struct Account: Identifiable, Equatable {
             lockoutReason: dto.lockoutReason,
             lockoutExpiration: dto.lockoutExpiration,
             personalDailyProfitTarget: dto.personalDailyProfitTarget,
-            personalDailyProfitTargetAction: dto.personalDailyLossLimitAction,
+            personalDailyProfitTargetAction: dto.personalDailyProfitTargetAction,
             personalDailyLossLimit: dto.personalDailyLossLimit,
             personalDailyLossLimitAction: dto.personalDailyLossLimitAction,
             personalDailyLossLimitTrailing: dto.personalDailyLossLimitTrailing,
