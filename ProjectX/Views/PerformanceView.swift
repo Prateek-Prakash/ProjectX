@@ -324,6 +324,7 @@ struct PerformanceView: View {
                     } // ScrollView
                 } // If-Else
             } // ZStack
+            .scrollIndicators(.never)
             .toolbarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
