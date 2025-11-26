@@ -17,13 +17,14 @@ struct DonateView: View {
             ZStack {
                 Color(.xBackground)
                     .edgesIgnoringSafeArea(.all)
-                ScrollView {
-                    VStack {
-                        
-                    }
-                    .padding(.horizontal)
-                    .padding(.bottom)
+                ContentUnavailableView {
+                    Label("WORK-IN-PROGRESS", systemImage: "wrench.and.screwdriver")
+                        .imageScale(.small)
+                        .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                        .tracking(2)
+                        .foregroundStyle(.secondary)
                 }
+                .padding()
             }
             .toolbarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
