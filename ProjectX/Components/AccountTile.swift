@@ -41,9 +41,17 @@ struct AccountTile: View {
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text((globalVM.subtractStartingBalance ? account.balance - account.startingBalance : account.balance).asCurrency())
-                    Text(account.nickname ?? "...\(account.accountName.suffix(4))")
-                        .font(.system(size: 8, weight: .thin, design: .monospaced))
-                        .foregroundStyle(.secondary)
+                    HStack(spacing: 4) {
+                        Image(systemName: account.isLeader ? "l.square.fill" : "l.square")
+                            .foregroundStyle(account.isLeader ? .primary : .secondary)
+                            .imageScale(.small)
+                        Image(systemName: account.isFollower ? "f.square.fill" : "f.square")
+                            .foregroundStyle(account.isFollower ? .primary : .secondary)
+                            .imageScale(.small)
+                        Text(account.nickname ?? "...\(account.accountName.suffix(4))")
+                            .font(.system(size: 8, weight: .thin, design: .monospaced))
+                            .foregroundStyle(.secondary)
+                    }
                 }
                 
                 Spacer()
