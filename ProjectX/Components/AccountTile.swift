@@ -13,7 +13,7 @@ struct AccountTile: View {
     let account: Account
     let tappable: Bool
     
-    @State var showAccountSheet: Bool = false
+    @State var showPerformanceCover: Bool = false
     
     var body: some View {
         Button {
@@ -28,7 +28,7 @@ struct AccountTile: View {
                     await globalVM.loadTrades(account)
                     globalVM.loadingTrades = false
                 }
-                showAccountSheet.toggle()
+                showPerformanceCover.toggle()
             }
         } label: {
             HStack(spacing: 0) {
@@ -70,7 +70,7 @@ struct AccountTile: View {
             .padding(.all, 14)
         }
         .buttonStyle(.plain)
-        .fullScreenCover(isPresented: $showAccountSheet) {
+        .fullScreenCover(isPresented: $showPerformanceCover) {
             PerformanceView(account: account)
         }
     }
