@@ -14,8 +14,9 @@ struct DailyProfitTargetView: View {
     
     @State var sheetHeight: CGFloat = 0
     
-    @FocusState var isfocused: Bool
+    @FocusState var isFocused: Bool
     @State var dailyProfitTarget: String = ""
+    @State var limitAction: Int = 0
     
     let account: Account
     
@@ -24,16 +25,23 @@ struct DailyProfitTargetView: View {
             Color(.xCardBackground)
                 .edgesIgnoringSafeArea(.all)
             VStack {
+                Picker("Limit Action", selection: $limitAction) {
+                    Text("Nothing").tag(0)
+                    Text("Liquidate").tag(1)
+                    Text("Block").tag(2)
+                }
+                .pickerStyle(.segmented)
+                
                 OriginCard {
                     TextField("Daily Profit Target", text: $dailyProfitTarget)
                         .padding(.all, 14)
                         .keyboardType(.numberPad)
-                        .focused($isfocused)
+                        .focused($isFocused)
                 }
                 
                 Button {
                     Task {
-                        let _ = await XClient.get(account.firm).setPersonalLimits(account.accountId, dailyProfitTarget.isEmpty ? 0 : Int(dailyProfitTarget), account.personalDailyLossLimit)
+                        let _ = await XClient.get(account.firm).setPersonalLimits(account.accountId, dailyProfitTarget.isEmpty ? 0 : Int(dailyProfitTarget), dailyProfitTarget.isEmpty ? 0 : limitAction, account.personalDailyLossLimit, account.personalDailyLossLimitAction)
                         dismiss()
                     }
                 } label: {
