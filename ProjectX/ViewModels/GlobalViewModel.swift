@@ -174,8 +174,10 @@ class GlobalViewModel: ObservableObject {
     func loadAccounts(_ firm: Firm) async {
         let dtos = await XClient.get(firm).getAccounts()
         let searches = await XClient.get(firm).searchAccounts()
-        let accounts: [Account] = dtos.filter({ !$0.ineligible }).map({
-            let id = $0.accountId
+        let actives = dtos.filter({ !$0.ineligible })
+        var accounts: [Account] = []
+        for active in actives {
+            let id = active.accountId
             var type = AccountType.evaluation
             let tradable = searches?.accounts.filter({ $0.id == id }).first?.canTrade ?? true
             switch firm {
@@ -188,8 +190,11 @@ class GlobalViewModel: ObservableObject {
             case .tradeify:
                 type = tradeifyFunded.contains(id) ? .funded : tradeifyPractice.contains(id) ? .practice : .evaluation
             }
-            return Account.fromDto($0, firm, type, tradable)
-        })
+            let positions: [Position] = await XClient.get(firm).getPositions(id)?.positions.map({ Position.fromDto($0) }) ?? []
+            let account = Account.fromDto(active, firm, type, tradable, positions)
+            accounts.append(account)
+        }
+        
         if allAccounts.isEmpty {
             allAccounts.append(contentsOf: accounts)
         } else {
@@ -347,6 +352,12 @@ class GlobalViewModel: ObservableObject {
     
     func saveCredentials(_ firm: Firm) async {
         await linkFirm(firm, usernameInput, keyInput)
+    }
+    
+    func isLocked(_ account: Account) -> Bool {
+        let accounts = allAccounts.filter({ $0.firm == account.firm })
+        let leader = accounts.first(where: { $0.isLeader })
+        return !account.canTrade || (leader != nil && !leader!.canTrade && account.isFollower)
     }
     
     // MARK: SignalR Stuff

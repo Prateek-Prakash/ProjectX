@@ -24,6 +24,7 @@ struct Account: Identifiable, Equatable {
     var balance: Double
     var realizedDayPnl: Double
     var openPnl: Double
+    var positions: [Position]
     var dailyLoss: Double
     var maximumLoss: Double
     var lockoutReason: String?
@@ -38,11 +39,7 @@ struct Account: Identifiable, Equatable {
     
     var accountType: AccountType = .evaluation
     
-    var statusColor: Color {
-        return !canTrade ? .red : self.realizedDayPnl >= self.firm.winningDay ? .green : .gray
-    }
-    
-    static func fromDto(_ dto: AccountDTO, _ firm: Firm, _ type: AccountType, _ tradable: Bool) -> Account {
+    static func fromDto(_ dto: AccountDTO, _ firm: Firm, _ type: AccountType, _ tradable: Bool, _ positions: [Position]) -> Account {
         return Account(
             firm: firm,
             userId: dto.userId,
@@ -58,6 +55,7 @@ struct Account: Identifiable, Equatable {
             balance: dto.balance,
             realizedDayPnl: dto.realizedDayPnl,
             openPnl: dto.openPnl,
+            positions: positions,
             dailyLoss: dto.dailyLoss,
             maximumLoss: dto.maximumLoss,
             lockoutReason: dto.lockoutReason,

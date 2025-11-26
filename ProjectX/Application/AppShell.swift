@@ -22,7 +22,7 @@ struct AppShell: View {
     @State var uiSnapshot: UIImage? = nil
     @State var snapshotPadding: Bool = false
     
-    let refreshTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    let refreshTimer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
     
     var body: some View {
         NavigationStack {

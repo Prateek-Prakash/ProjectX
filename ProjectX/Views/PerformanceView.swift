@@ -49,6 +49,74 @@ struct PerformanceView: View {
                             OriginCard {
                                 VStack(spacing: 0) {
                                     OriginHeader {
+                                        Text("POSITIONS")
+                                            .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                            .tracking(2)
+                                            .foregroundStyle(Color(.xHeaderText))
+                                    }
+                                    
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    LazyVStack(spacing: 0) {
+                                        if !account.positions.isEmpty {
+                                            ForEach(account.positions) { position in
+                                                HStack {
+                                                    HStack {
+                                                        Image(systemName: position.size < 0 ? "arrowtriangle.up.fill" : position.size > 0 ? "arrowtriangle.down.fill" : "questionmark")
+                                                            .resizable()
+                                                            .frame(width: 8, height: 8)
+                                                            .foregroundStyle(position.size < 0 ? .green : position.size > 0 ? .red : .primary)
+                                                        Text(contractMap[position.symbolId] ?? "--")
+                                                            .font(.system(size: 10, weight: .bold, design: .rounded))
+                                                        Spacer()
+                                                    }
+                                                    .frame(maxWidth: .infinity)
+                                                    
+                                                    VStack(alignment: .center) {
+                                                        Text(String(abs(position.size)))
+                                                            .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                                                        Text("CONTRACTS")
+                                                            .font(.system(size: 6, design: .monospaced))
+                                                            .foregroundStyle(.secondary)
+                                                    }
+                                                    .frame(maxWidth: .infinity)
+                                                    
+                                                    HStack {
+                                                        Spacer()
+                                                        VStack(alignment: .trailing) {
+                                                            Text(position.averagePrice.asCurrency())
+                                                                .font(.system(size: 10, weight: .bold, design: .rounded))
+                                                        }
+                                                    }
+                                                    .frame(maxWidth: .infinity)
+                                                }
+                                                .padding(.all, 14)
+                                                
+                                                if account.positions.last != position {
+                                                    Divider()
+                                                        .frame(height: 1)
+                                                        .overlay(Color(.xOutline))
+                                                }
+                                            }
+                                        } else {
+                                            ContentUnavailableView {
+                                                Label("NO POSITIONS", systemImage: "exclamationmark.triangle")
+                                                    .imageScale(.small)
+                                                    .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                                    .tracking(2)
+                                                    .foregroundStyle(.secondary)
+                                            }
+                                            .padding()
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            OriginCard {
+                                VStack(spacing: 0) {
+                                    OriginHeader {
                                         Text("PERSONAL LIMITS")
                                             .font(.system(size: 8, weight: .semibold, design: .monospaced))
                                             .tracking(2)

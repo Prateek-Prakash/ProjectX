@@ -61,7 +61,7 @@ struct TradeTile: View {
                         .font(.system(size: 10, weight: .semibold, design: .monospaced))
                         .foregroundStyle(trade.pnL > 0 ? .green : trade.pnL < 0 ? .red : .gray)
                     Text(trade.fees.asCurrency())
-                        .font(.system(size: 8, design: .monospaced))
+                        .font(.system(size: 8, weight: .light, design: .monospaced))
                         .foregroundStyle(.red)
                 }
             }

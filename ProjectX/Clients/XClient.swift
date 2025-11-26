@@ -156,6 +156,22 @@ class XClient {
         }
     }
     
+    func getPositions(_ id: Int) async -> PositionResponseDTO? {
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(gatewayToken!)"
+        ]
+        let params: [String: Int] = [
+            "accountId": id
+        ]
+        do {
+            let value = try await AF.request("\(gatewayUrl)/api/Position/searchOpen", method: .post, parameters: params, encoding: JSONEncoding.default, headers: headers).serializingDecodable(PositionResponseDTO.self).value
+            return value
+        } catch {
+            Helpers.debugLog("getPositions: \(error)")
+            return nil
+        }
+    }
+    
     func setPersonalLimits(_ id: Int, _ pdpt: Int?, _ pdptAction: Int, _ pdll: Int?, _ pdllAction: Int) async -> Bool {
         let pdpt = pdpt == 0 ? nil : pdpt
         let pdll = pdll == 0 ? nil : pdll

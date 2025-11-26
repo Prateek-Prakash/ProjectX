@@ -62,8 +62,8 @@ struct AccountTile: View {
                 
                 Image(systemName: "circle.fill")
                     .font(.system(size: 4))
-                    .foregroundStyle(account.statusColor)
-                    .shadow(color: account.statusColor, radius: 3)
+                    .foregroundStyle(statusColor)
+                    .shadow(color: statusColor, radius: 3)
                     .padding(.leading, 14)
             }
             .contentShape(.rect)
@@ -73,5 +73,9 @@ struct AccountTile: View {
         .fullScreenCover(isPresented: $showPerformanceCover) {
             PerformanceView(account: account)
         }
+    }
+    
+    var statusColor: Color {
+        return globalVM.isLocked(account) ? .red : !account.positions.isEmpty ? .yellow : .gray
     }
 }
