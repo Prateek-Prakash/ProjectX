@@ -62,8 +62,8 @@ struct AccountTile: View {
                 
                 Image(systemName: "circle.fill")
                     .font(.system(size: 4))
-                    .foregroundStyle(account.winningColor)
-                    .shadow(color: account.winningColor, radius: 3)
+                    .foregroundStyle(account.statusColor)
+                    .shadow(color: account.statusColor, radius: 3)
                     .padding(.leading, 14)
             }
             .contentShape(.rect)

@@ -38,7 +38,7 @@ struct Account: Identifiable, Equatable {
     
     var accountType: AccountType = .evaluation
     
-    var winningColor: Color {
+    var statusColor: Color {
         return !canTrade ? .red : self.realizedDayPnl >= self.firm.winningDay ? .green : .gray
     }
     
