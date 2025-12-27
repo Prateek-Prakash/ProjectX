@@ -23,9 +23,8 @@ struct SettingsCard: View {
                         .font(.system(size: 8, weight: .semibold, design: .monospaced))
                         .tracking(2)
                     Text(section.description.uppercased())
-                        .font(.system(size: 8, weight: .medium, design: .rounded))
+                        .font(.system(size: 8, weight: .thin, design: .rounded))
                         .tracking(1.25)
-                        .foregroundStyle(.secondary)
                 }
                 .padding(.leading, 8)
                 Spacer()
@@ -33,7 +32,8 @@ struct SettingsCard: View {
                     .foregroundStyle(.secondary)
                     .fontDesign(.rounded)
             }
-            .padding(.all, 14)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
             .background(Color(.xCardBackground))
         }
     }
