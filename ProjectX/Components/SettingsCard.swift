@@ -26,7 +26,6 @@ struct SettingsCard: View {
                         .font(.system(size: 8, weight: .thin, design: .rounded))
                         .tracking(1.25)
                 }
-                .padding(.leading, 8)
                 Spacer()
                 Image(systemName: "chevron.right")
                     .foregroundStyle(.secondary)
