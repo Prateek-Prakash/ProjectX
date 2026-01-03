@@ -62,7 +62,7 @@ struct DeveloperView: View {
                         OriginCard {
                             VStack(spacing: 0) {
                                 OriginHeader {
-                                    Text("DEBUGGING")
+                                    Text("ANIMATION DEBUGGING")
                                         .font(.system(size: 8, weight: .semibold, design: .monospaced))
                                         .tracking(2)
                                         .foregroundStyle(Color(.xHeaderText))
