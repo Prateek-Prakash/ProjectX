@@ -47,10 +47,6 @@ struct AppShell: View {
                             }
                         }
                     }
-                    .padding(.all, snapshotPadding ? 14 : 0)
-                    .snapshot(trigger: triggerSnapshot) {
-                        uiSnapshot = $0
-                    }
                     .padding(.horizontal)
                     .padding(.bottom)
                 }
@@ -59,15 +55,9 @@ struct AppShell: View {
             .toolbarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        snapshotPadding = true
-                        triggerSnapshot.toggle()
-                    } label: {
-                        Image(systemName: "livephoto")
-                            .symbolEffect(.bounce, options: globalVM.refreshingData ? .repeating : .nonRepeating, value: globalVM.refreshingData)
-                            .imageScale(.small)
-                    }
-                    .buttonStyle(.plain)
+                    Image(systemName: "livephoto")
+                        .symbolEffect(.bounce, options: globalVM.refreshingData ? .repeating : .nonRepeating, value: globalVM.refreshingData)
+                        .imageScale(.small)
                 }
                 .sharedBackgroundVisibility(.hidden)
                 
@@ -104,23 +94,6 @@ struct AppShell: View {
                         }
                     }
                 }
-            }
-        }
-        .overlay {
-            if let snapshot = uiSnapshot {
-                Image(uiImage: snapshot)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background {
-                        Rectangle()
-                            .fill(Color(.xBackground))
-                            .ignoresSafeArea()
-                            .onTapGesture {
-                                snapshotPadding = false
-                                uiSnapshot = nil
-                            }
-                    }
             }
         }
     }
