@@ -172,7 +172,7 @@ class XClient {
         }
     }
     
-    func setPersonalLimits(_ id: Int, _ pdpt: Int?, _ pdptAction: Int, _ pdll: Int?, _ pdllAction: Int) async -> Bool {
+    func setPersonalLimits(_ id: Int, _ pdpt: Int?, _ pdptAction: Int, _ pdll: Int?, _ pdllAction: Int, _ trailing: Bool) async -> Bool {
         let pdpt = pdpt == 0 ? nil : pdpt
         let pdll = pdll == 0 ? nil : pdll
         let headers: HTTPHeaders = [
@@ -184,8 +184,8 @@ class XClient {
             "personalDailyProfitTargetAction": pdptAction,
             "personalDailyLossLimit": pdll,
             "personalDailyLossLimitAction": pdllAction,
-            "personalDailyLossLimitTrailing": false,
-            "pdllTrailingType": 0
+            "personalDailyLossLimitTrailing": trailing,
+            "pdllTrailingType": trailing ? 1 : 0
         ]
         do {
             let value = try await AF.request("\(userUrl)/TradingAccount/personalLimits", method: .post, parameters: params, encoding: JSONEncoding.default, headers: headers).serializingDecodable(LimitResponseDTO.self).value
