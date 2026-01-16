@@ -28,6 +28,58 @@ struct PerformanceView: View {
                 } else {
                     ScrollView {
                         VStack {
+                            HStack {
+                                OriginCard {
+                                    GroupBox {
+                                        HStack {
+                                            Button {
+                                                // TODO: Lockout
+                                            } label: {
+                                                HStack {
+                                                    Image(systemName: "lock.fill")
+                                                        .imageScale(.small)
+                                                    Text("LOCKOUT")
+                                                        .tracking(2)
+                                                        .font(.system(size: 10, weight: .medium, design: .rounded))
+                                                }
+                                                .frame(maxWidth: .infinity)
+                                                .foregroundStyle(.red)
+                                            }
+                                            .buttonStyle(.plain)
+                                        }
+                                        .frame(height: 12)
+                                    }
+                                    .backgroundStyle(Color(.xCardBackground))
+                                } color: {
+                                    Color(.red)
+                                }
+                                
+                                OriginCard {
+                                    GroupBox {
+                                        HStack {
+                                            Button {
+                                                // TODO: Flatten
+                                            } label: {
+                                                HStack {
+                                                    Image(systemName: "exclamationmark.octagon.fill")
+                                                        .imageScale(.small)
+                                                    Text("FLATTEN")
+                                                        .tracking(2)
+                                                        .font(.system(size: 10, weight: .medium, design: .rounded))
+                                                }
+                                                .frame(maxWidth: .infinity)
+                                                .foregroundStyle(.yellow)
+                                            }
+                                            .buttonStyle(.plain)
+                                        }
+                                        .frame(height: 12)
+                                    }
+                                    .backgroundStyle(Color(.xCardBackground))
+                                } color: {
+                                    Color(.yellow)
+                                }
+                            }
+                            
                             OriginCard {
                                 VStack(spacing: 0) {
                                     OriginHeader {
