@@ -12,6 +12,7 @@ struct PerformanceView: View {
     
     @State var successHaptic: Bool = false
     
+    @State var showLockoutSheet: Bool = false
     @State var showDailyProfitTargetSheet: Bool = false
     @State var showDailyLossLimitSheet: Bool = false
     @State var isTrailing: Bool = false
@@ -33,10 +34,7 @@ struct PerformanceView: View {
                                     GroupBox {
                                         HStack {
                                             Button {
-                                                successHaptic.toggle()
-                                                Task {
-                                                    await globalVM.lockAccount(account)
-                                                }
+                                                showLockoutSheet.toggle()
                                             } label: {
                                                 HStack {
                                                     Image(systemName: "lock.fill")
@@ -62,7 +60,6 @@ struct PerformanceView: View {
                                     GroupBox {
                                         HStack {
                                             Button {
-                                                successHaptic.toggle()
                                                 Task {
                                                     await globalVM.flattenAccount(account)
                                                 }
@@ -502,6 +499,9 @@ struct PerformanceView: View {
                     .sensoryFeedback(.success, trigger: successHaptic)
                 }
                 .sharedBackgroundVisibility(.hidden)
+            }
+            .sheet(isPresented: $showLockoutSheet) {
+                LockoutView(account: account)
             }
             .sheet(isPresented: $showDailyProfitTargetSheet) {
                 DailyProfitTargetView(account: account)

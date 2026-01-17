@@ -117,6 +117,25 @@ struct DeveloperView: View {
                         
                         OriginCard {
                             Button {
+                                globalVM.executeLockouts.toggle()
+                            } label: {
+                                GroupBox {
+                                    HStack {
+                                        Text("Execute Lockouts")
+                                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                                        Spacer()
+                                        Toggle("", isOn: $globalVM.executeLockouts)
+                                            .scaleEffect(0.6, anchor: .trailing)
+                                    }
+                                    .frame(height: 12)
+                                }
+                                .backgroundStyle(Color(.xCardBackground))
+                            }
+                            .buttonStyle(.plain)
+                        }
+                        
+                        OriginCard {
+                            Button {
                                 successHaptic.toggle()
                                 globalVM.clearOldIds()
                             } label: {

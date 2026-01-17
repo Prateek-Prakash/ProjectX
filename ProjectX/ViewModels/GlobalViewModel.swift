@@ -52,6 +52,7 @@ class GlobalViewModel: ObservableObject {
     @AppStorage("automaticBackup") var automaticBackup: Bool = false
     @AppStorage("delayAuthentication") var delayAuthentication: Bool = false
     @AppStorage("delayLoadingTrades") var delayLoadingTrades: Bool = false
+    @AppStorage("executeLockouts") var executeLockouts: Bool = true
     
     @Published var authenticatingStates: [Firm:Bool] = [:]
     @Published var connectedStates: [Firm:Bool] = [:]
@@ -360,13 +361,12 @@ class GlobalViewModel: ObservableObject {
         return !account.canTrade || (leader != nil && !leader!.canTrade && account.isFollower)
     }
     
-    func lockAccount(_ account: Account) async {
-        // TODO: Custom Lockout Period
-        let start = Date.now
-        let end = start.addingTimeInterval(90)
+    func lockAccount(_ account: Account, _ start: Date, _ end: Date) async {
         Helpers.debugLog("Start: \(start.asFractionalDateTime())")
         Helpers.debugLog("End: \(end.asFractionalDateTime())")
-        await XClient.get(account.firm).lockAccount(account.accountId, account.userId, start, end)
+        if executeLockouts {
+            await XClient.get(account.firm).lockAccount(account.accountId, account.userId, start, end)
+        }
     }
     
     func flattenAccount(_ account: Account) async {
