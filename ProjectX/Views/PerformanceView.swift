@@ -33,8 +33,8 @@ struct PerformanceView: View {
                                     GroupBox {
                                         HStack {
                                             Button {
-                                                // TODO: Lockout
                                                 successHaptic.toggle()
+                                                // TODO: Lockout
                                             } label: {
                                                 HStack {
                                                     Image(systemName: "lock.fill")
@@ -60,8 +60,10 @@ struct PerformanceView: View {
                                     GroupBox {
                                         HStack {
                                             Button {
-                                                // TODO: Flatten
                                                 successHaptic.toggle()
+                                                Task {
+                                                    await globalVM.flattenAccount(account)
+                                                }
                                             } label: {
                                                 HStack {
                                                     Image(systemName: "exclamationmark.octagon.fill")

@@ -224,4 +224,15 @@ class XClient {
             return []
         }
     }
+    
+    func closePosition(_ id: String) async {
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(gatewayToken!)"
+        ]
+        do {
+            let _ = try await AF.request("\(gatewayUrl)/api/Position/closeContract", method: .get, headers: headers).serializingDecodable(CloseResponseDTO.self).value
+        } catch {
+            Helpers.debugLog("closePosition: \(error)")
+        }
+    }
 }

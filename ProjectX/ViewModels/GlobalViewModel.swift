@@ -360,6 +360,14 @@ class GlobalViewModel: ObservableObject {
         return !account.canTrade || (leader != nil && !leader!.canTrade && account.isFollower)
     }
     
+    func flattenAccount(_ account: Account) async {
+        let contracts = await XClient.get(account.firm).getContracts()
+        // TODO: Parallelize
+        for contract in contracts {
+            await XClient.get(account.firm).closePosition(contract.id)
+        }
+    }
+    
     // MARK: SignalR Stuff
     
     func initSignals(_ firm: Firm) async {
