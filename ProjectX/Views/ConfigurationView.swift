@@ -20,7 +20,9 @@ struct ConfigurationView: View {
                 ScrollView {
                     VStack {
                         ForEach(Firm.allCases) { firm in
-                            FirmSettingsCard(firm: firm)
+                            if firm == .topstep {
+                                FirmSettingsCard(firm: firm)
+                            }
                         }
                     }
                     .padding(.horizontal)
