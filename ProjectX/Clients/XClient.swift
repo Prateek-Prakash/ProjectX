@@ -239,7 +239,7 @@ class XClient {
             )
         ]
         do {
-            let _ = try await AF.request("\(userUrl)/PersonalLockout/add", method: .post, parameters: params, headers: headers).serializingDecodable(LockoutResponseDTO.self).value
+            let _ = try await AF.request("\(userUrl)/PersonalLockout/add", method: .post, parameters: params, encoder: JSONParameterEncoder.default, headers: headers).serializingDecodable(LockoutResponseDTO.self).value
         } catch {
             Helpers.debugLog("lockAccount: \(error)")
         }
