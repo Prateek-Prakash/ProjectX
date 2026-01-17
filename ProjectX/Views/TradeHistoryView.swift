@@ -12,6 +12,8 @@ struct TradeHistoryView: View {
     
     @ObservedObject var globalVM = GlobalViewModel.shared
     
+    @State var showTradeFilterCover: Bool = false
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -58,6 +60,20 @@ struct TradeHistoryView: View {
                         .font(.system(size: 10, weight: .semibold, design: .monospaced))
                         .tracking(2)
                 }
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showTradeFilterCover.toggle()
+                    } label: {
+                        Image(systemName: "line.3.horizontal.decrease")
+                            .imageScale(.small)
+                    }
+                    .buttonStyle(.plain)
+                }
+                .sharedBackgroundVisibility(.hidden)
+            }
+            .fullScreenCover(isPresented: $showTradeFilterCover) {
+                TradeFilterView()
             }
         }
     }
