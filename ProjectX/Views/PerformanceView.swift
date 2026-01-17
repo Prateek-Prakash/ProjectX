@@ -34,7 +34,9 @@ struct PerformanceView: View {
                                         HStack {
                                             Button {
                                                 successHaptic.toggle()
-                                                // TODO: Lockout
+                                                Task {
+                                                    await globalVM.lockAccount(account)
+                                                }
                                             } label: {
                                                 HStack {
                                                     Image(systemName: "lock.fill")

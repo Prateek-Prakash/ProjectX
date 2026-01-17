@@ -225,14 +225,34 @@ class XClient {
         }
     }
     
-    func closePosition(_ id: String) async {
+    func flattenAccount(_ id: Int) async -> Bool {
         let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(gatewayToken!)"
+            "Authorization": "Bearer \(userToken!)"
         ]
         do {
-            let _ = try await AF.request("\(gatewayUrl)/api/Position/closeContract", method: .get, headers: headers).serializingDecodable(CloseResponseDTO.self).value
+            let value = try await AF.request("\(userUrl)/Position/close/\(id)", method: .delete, headers: headers).serializingString(emptyResponseCodes: [200]).value
+            return value.isEmpty
         } catch {
-            Helpers.debugLog("closePosition: \(error)")
+            Helpers.debugLog("flattenAccount: \(error)")
+            return false
+        }
+    }
+    
+    func lockAccount(_ account: Int, _ user: Int, _ start: Date, _ end: Date) async {
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(userToken!)"
+        ]
+        let params: [String: Any] = [
+            "tradingAccountId": account,
+            "userId": user,
+            "createdAt": start.asFractionalDateTime(),
+            "startsAt": start.asFractionalDateTime(),
+            "expiresAt": end.asFractionalDateTime()
+        ]
+        do {
+            let _ = try await AF.request("\(userUrl)/PersonalLockout/add", method: .post, parameters: params, encoding: JSONEncoding.default, headers: headers).serializingDecodable(LockoutResponseDTO.self).value
+        } catch {
+            Helpers.debugLog("lockAccount: \(error)")
         }
     }
 }

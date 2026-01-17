@@ -360,12 +360,18 @@ class GlobalViewModel: ObservableObject {
         return !account.canTrade || (leader != nil && !leader!.canTrade && account.isFollower)
     }
     
+    func lockAccount(_ account: Account) async {
+        // TODO: Custom Lockout Period
+        let start = Date.now
+        let end = start.addingTimeInterval(90)
+        Helpers.debugLog("Start: \(start.asFractionalDateTime())")
+        Helpers.debugLog("End: \(end.asFractionalDateTime())")
+        await XClient.get(account.firm).lockAccount(account.accountId, account.userId, start, end)
+    }
+    
     func flattenAccount(_ account: Account) async {
-        let contracts = await XClient.get(account.firm).getContracts()
-        // TODO: Parallelize
-        for contract in contracts {
-            await XClient.get(account.firm).closePosition(contract.id)
-        }
+        let success = await XClient.get(account.firm).flattenAccount(account.accountId)
+        Helpers.debugLog("Flatten: \(account.accountId) \(success ? "Success" : "Failed")")
     }
     
     // MARK: SignalR Stuff
