@@ -12,19 +12,46 @@ struct DonateView: View {
     
     @ObservedObject var globalVM = GlobalViewModel.shared
     
+    @State var selectedDonation: Donation? = nil
+    
+    let allDonations = [
+        Donation(name: "Buy Me A Coffee", url: URL(string: "https://buymeacoffee.com/teekoder")!),
+        Donation(name: "Ko-fi", url: URL(string: "https://ko-fi.com/teekoder")!)
+    ]
+    
     var body: some View {
         NavigationStack {
             ZStack {
                 Color(.xBackground)
                     .edgesIgnoringSafeArea(.all)
-                ContentUnavailableView {
-                    Label("WORK-IN-PROGRESS", systemImage: "wrench.and.screwdriver")
-                        .imageScale(.small)
-                        .font(.system(size: 8, weight: .semibold, design: .monospaced))
-                        .tracking(2)
-                        .foregroundStyle(.secondary)
+                ScrollView {
+                    VStack {
+                        ForEach(allDonations) { donation in
+                            OriginCard {
+                                Button {
+                                    selectedDonation = donation
+                                } label: {
+                                    GroupBox {
+                                        HStack {
+                                            Text(donation.name)
+                                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            Spacer()
+                                            Image(systemName: "chevron.right")
+                                                .foregroundStyle(.secondary)
+                                                .fontDesign(.rounded)
+                                                .imageScale(.small)
+                                        }
+                                        .frame(height: 12)
+                                    }
+                                    .backgroundStyle(Color(.xCardBackground))
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
+                    }
+                    .padding(.horizontal)
+                    .padding(.bottom)
                 }
-                .padding()
             }
             .toolbarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
@@ -39,6 +66,9 @@ struct DonateView: View {
                         .font(.system(size: 10, weight: .semibold, design: .monospaced))
                         .tracking(2)
                 }
+            }
+            .sheet(item: $selectedDonation) {
+                SafariView(url: $0.url)
             }
         }
     }
