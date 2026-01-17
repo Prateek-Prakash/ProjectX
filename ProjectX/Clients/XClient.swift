@@ -225,6 +225,26 @@ class XClient {
         }
     }
     
+    func lockAccount(_ account: Int, _ user: Int, _ start: Date, _ end: Date) async {
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(userToken!)"
+        ]
+        let params: [LockoutDTO] = [
+            LockoutDTO(
+                tradingAccountId: account,
+                userId: user,
+                createdAt: start.asFractionalDateTime(),
+                startsAt: start.asFractionalDateTime(),
+                expiresAt: end.asFractionalDateTime()
+            )
+        ]
+        do {
+            let _ = try await AF.request("\(userUrl)/PersonalLockout/add", method: .post, parameters: params, headers: headers).serializingDecodable(LockoutResponseDTO.self).value
+        } catch {
+            Helpers.debugLog("lockAccount: \(error)")
+        }
+    }
+    
     func flattenAccount(_ id: Int) async -> Bool {
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(userToken!)"
@@ -235,24 +255,6 @@ class XClient {
         } catch {
             Helpers.debugLog("flattenAccount: \(error)")
             return false
-        }
-    }
-    
-    func lockAccount(_ account: Int, _ user: Int, _ start: Date, _ end: Date) async {
-        let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(userToken!)"
-        ]
-        let params: [String: Any] = [
-            "tradingAccountId": account,
-            "userId": user,
-            "createdAt": start.asFractionalDateTime(),
-            "startsAt": start.asFractionalDateTime(),
-            "expiresAt": end.asFractionalDateTime()
-        ]
-        do {
-            let _ = try await AF.request("\(userUrl)/PersonalLockout/add", method: .post, parameters: params, encoding: JSONEncoding.default, headers: headers).serializingDecodable(LockoutResponseDTO.self).value
-        } catch {
-            Helpers.debugLog("lockAccount: \(error)")
         }
     }
 }
