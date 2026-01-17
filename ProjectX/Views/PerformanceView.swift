@@ -186,7 +186,6 @@ struct PerformanceView: View {
                                     VStack(spacing: 0) {
                                         Button {
                                             showDailyProfitTargetSheet.toggle()
-                                            // TODO: Refresh Trailing Loss Limit
                                         } label: {
                                             GroupBox {
                                                 HStack {
@@ -212,7 +211,6 @@ struct PerformanceView: View {
                                         
                                         Button {
                                             showDailyLossLimitSheet.toggle()
-                                            // TODO: Refresh Trailing Loss Limit
                                         } label: {
                                             GroupBox {
                                                 HStack {
@@ -237,7 +235,7 @@ struct PerformanceView: View {
                                             .overlay(Color(.xOutline))
                                         
                                         Button {
-                                            // TODO: Toggle Trailing
+                                            isTrailing.toggle()
                                         } label: {
                                             GroupBox {
                                                 HStack {
@@ -491,7 +489,6 @@ struct PerformanceView: View {
                             successHaptic.toggle()
                             await globalVM.loadDailyStats(account)
                             await globalVM.loadTrades(account)
-                            // TODO: Refresh Trailing Loss Limit
                         }
                     } label: {
                         Image(systemName: "arrow.clockwise")
@@ -514,6 +511,11 @@ struct PerformanceView: View {
             .onChange(of: isTrailing) {
                 Task {
                     let _ = await XClient.get(account.firm).setPersonalLimits(account.accountId, account.personalDailyProfitTarget, account.personalDailyProfitTargetAction, account.personalDailyLossLimit, account.personalDailyLossLimitAction, isTrailing)
+                }
+            }
+            .onChange(of: account) {
+                if isTrailing != account.personalDailyLossLimitTrailing {
+                    isTrailing = account.personalDailyLossLimitTrailing
                 }
             }
         }
