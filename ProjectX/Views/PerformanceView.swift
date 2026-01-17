@@ -34,6 +34,7 @@ struct PerformanceView: View {
                                         HStack {
                                             Button {
                                                 // TODO: Lockout
+                                                successHaptic.toggle()
                                             } label: {
                                                 HStack {
                                                     Image(systemName: "lock.fill")
@@ -46,6 +47,7 @@ struct PerformanceView: View {
                                                 .foregroundStyle(.red)
                                             }
                                             .buttonStyle(.plain)
+                                            .disabled(!account.canTrade)
                                         }
                                         .frame(height: 12)
                                     }
@@ -59,6 +61,7 @@ struct PerformanceView: View {
                                         HStack {
                                             Button {
                                                 // TODO: Flatten
+                                                successHaptic.toggle()
                                             } label: {
                                                 HStack {
                                                     Image(systemName: "exclamationmark.octagon.fill")
