@@ -374,6 +374,31 @@ class GlobalViewModel: ObservableObject {
         Helpers.debugLog("Flatten: \(account.accountId) \(success ? "Success" : "Failed")")
     }
     
+    // MARK: Market Timing
+    
+    func isMarketClosed() -> Bool {
+        guard let zone = TimeZone(identifier: "America/New_York") else {
+            return false
+        }
+        
+        var calendar = Calendar.current
+        calendar.timeZone = zone
+        
+        let now = Date()
+        let components = calendar.dateComponents([.weekday, .hour], from: now)
+        
+        guard let weekday = components.weekday, let hour = components.hour else {
+            return false
+        }
+        
+        if weekday == 6 && hour >= 17 { return true }
+        if weekday == 7 { return true }
+        if weekday == 1 && hour < 18 { return true }
+        if hour == 17 { return true }
+        
+        return false
+    }
+    
     // MARK: SignalR Stuff
     
     func initSignals(_ firm: Firm) async {

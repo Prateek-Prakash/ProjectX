@@ -47,7 +47,7 @@ struct PerformanceView: View {
                                                 .foregroundStyle(.red)
                                             }
                                             .buttonStyle(.plain)
-                                            .disabled(!account.canTrade)
+                                            .disabled(!account.canTrade || globalVM.isMarketClosed())
                                         }
                                         .frame(height: 12)
                                     }
