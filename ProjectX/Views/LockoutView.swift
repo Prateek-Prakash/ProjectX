@@ -93,7 +93,8 @@ struct LockoutView: View {
                 Button {
                     Task {
                         let start = Date.now
-                        if let end = Date.now.nextOccurrence(ofHour: 17) {
+                        if let next = Date.now.nextOccurrence(ofHour: 17) {
+                            let end = next.addingTimeInterval(60 * 15)
                             await globalVM.lockAccount(account, start, end)
                         }
                     }
