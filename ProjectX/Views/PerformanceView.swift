@@ -44,14 +44,14 @@ struct PerformanceView: View {
                                                         .font(.system(size: 10, weight: .medium, design: .rounded))
                                                 }
                                                 .frame(maxWidth: .infinity)
-                                                .foregroundStyle(Color(.xBackground))
+                                                .foregroundStyle(.red)
                                             }
                                             .buttonStyle(.plain)
                                             .disabled(!account.canTrade)
                                         }
                                         .frame(height: 12)
                                     }
-                                    .backgroundStyle(.red)
+                                    .backgroundStyle(Color(.xCardBackground))
                                 } color: {
                                     Color(.red)
                                 }
@@ -72,13 +72,13 @@ struct PerformanceView: View {
                                                         .font(.system(size: 10, weight: .medium, design: .rounded))
                                                 }
                                                 .frame(maxWidth: .infinity)
-                                                .foregroundStyle(Color(.xBackground))
+                                                .foregroundStyle(.yellow)
                                             }
                                             .buttonStyle(.plain)
                                         }
                                         .frame(height: 12)
                                     }
-                                    .backgroundStyle(.yellow)
+                                    .backgroundStyle(Color(.xCardBackground))
                                 } color: {
                                     Color(.yellow)
                                 }
