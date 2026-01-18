@@ -37,21 +37,21 @@ struct PerformanceView: View {
                                                 showLockoutSheet.toggle()
                                             } label: {
                                                 HStack {
-                                                    Image(systemName: "lock.fill")
+                                                    Image(systemName: "lock")
                                                         .imageScale(.small)
                                                     Text("LOCKOUT")
                                                         .tracking(2)
                                                         .font(.system(size: 10, weight: .medium, design: .rounded))
                                                 }
                                                 .frame(maxWidth: .infinity)
-                                                .foregroundStyle(.red)
+                                                .foregroundStyle(Color(.xBackground))
                                             }
                                             .buttonStyle(.plain)
                                             .disabled(!account.canTrade)
                                         }
                                         .frame(height: 12)
                                     }
-                                    .backgroundStyle(Color(.xCardBackground))
+                                    .backgroundStyle(.red)
                                 } color: {
                                     Color(.red)
                                 }
@@ -65,20 +65,20 @@ struct PerformanceView: View {
                                                 }
                                             } label: {
                                                 HStack {
-                                                    Image(systemName: "exclamationmark.octagon.fill")
+                                                    Image(systemName: "exclamationmark.octagon")
                                                         .imageScale(.small)
                                                     Text("FLATTEN")
                                                         .tracking(2)
                                                         .font(.system(size: 10, weight: .medium, design: .rounded))
                                                 }
                                                 .frame(maxWidth: .infinity)
-                                                .foregroundStyle(.yellow)
+                                                .foregroundStyle(Color(.xBackground))
                                             }
                                             .buttonStyle(.plain)
                                         }
                                         .frame(height: 12)
                                     }
-                                    .backgroundStyle(Color(.xCardBackground))
+                                    .backgroundStyle(.yellow)
                                 } color: {
                                     Color(.yellow)
                                 }

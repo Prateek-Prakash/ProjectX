@@ -92,7 +92,10 @@ struct LockoutView: View {
                 
                 Button {
                     Task {
-                        // TODO: Implement
+                        let start = Date.now
+                        if let end = Date.now.nextOccurrence(ofHour: 17) {
+                            await globalVM.lockAccount(account, start, end)
+                        }
                     }
                     dismiss()
                 } label: {
@@ -110,7 +113,6 @@ struct LockoutView: View {
                     .overlay(RoundedRectangle(cornerRadius: 12).stroke(.primary, lineWidth: 1))
                 }
                 .buttonStyle(.plain)
-                .disabled(true)
                 
                 Button {
                     Task {
