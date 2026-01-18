@@ -53,10 +53,13 @@ class GlobalViewModel: ObservableObject {
     @AppStorage("delayAuthentication") var delayAuthentication: Bool = false
     @AppStorage("delayLoadingTrades") var delayLoadingTrades: Bool = false
     @AppStorage("executeLockouts") var executeLockouts: Bool = true
+    @AppStorage("nextMarketOpen") var nextMarketOpen: String = ""
+    @AppStorage("nextMarketClose") var nextMarketClose: String = ""
     
     @Published var authenticatingStates: [Firm:Bool] = [:]
     @Published var connectedStates: [Firm:Bool] = [:]
     
+    @Published var inTradingHours: Bool = false
     @Published var refreshingData: Bool = false
     @Published var allAccounts: [Account] = []
     
@@ -83,9 +86,15 @@ class GlobalViewModel: ObservableObject {
                         }
                     }
                 }
+                
+                if let marketStatus = await XClient.topstep.getMarketStatus() {
+                    nextMarketOpen = marketStatus.nextOpen
+                    nextMarketClose = marketStatus.close
+                }
             }
             Helpers.debugLog("initTime: \(initTime.description.split(separator: " ")[0])")
             self.isInitialized = true
+            
         }
     }
     
@@ -374,7 +383,7 @@ class GlobalViewModel: ObservableObject {
         Helpers.debugLog("Flatten: \(account.accountId) \(success ? "Success" : "Failed")")
     }
     
-    // MARK: Market Timing
+    // MARK: Market Status
     
     func isMarketClosed() -> Bool {
         guard let zone = TimeZone(identifier: "America/New_York") else {
@@ -384,8 +393,7 @@ class GlobalViewModel: ObservableObject {
         var calendar = Calendar.current
         calendar.timeZone = zone
         
-        let now = Date()
-        let components = calendar.dateComponents([.weekday, .hour], from: now)
+        let components = calendar.dateComponents([.weekday, .hour], from: Date.now)
         
         guard let weekday = components.weekday, let hour = components.hour else {
             return false

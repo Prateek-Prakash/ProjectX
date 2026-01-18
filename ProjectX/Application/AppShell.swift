@@ -22,7 +22,8 @@ struct AppShell: View {
     @State var uiSnapshot: UIImage? = nil
     @State var snapshotPadding: Bool = false
     
-    let refreshTimer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
+    let oneSecondTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    let twoSecondTimer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
     
     var body: some View {
         NavigationStack {
@@ -81,7 +82,12 @@ struct AppShell: View {
             .fullScreenCover(isPresented: $showSettingsCover) {
                 SettingsView()
             }
-            .onReceive(refreshTimer) { _ in
+            .onReceive(oneSecondTimer) { _ in
+                if globalVM.isInitialized {
+                    globalVM.inTradingHours = !globalVM.isMarketClosed()
+                }
+            }
+            .onReceive(twoSecondTimer) { _ in
                 if globalVM.isInitialized {
                     if globalVM.automaticRefresh {
                         Task {

@@ -22,6 +22,52 @@ struct DeveloperView: View {
                 ScrollView {
                     VStack {
                         OriginCard {
+                            VStack(spacing: 0) {
+                                OriginHeader {
+                                    Text("MARKET STATUS")
+                                        .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                        .tracking(2)
+                                        .foregroundStyle(Color(.xHeaderText))
+                                }
+                                
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                                
+                                VStack(spacing: 0) {
+                                    GroupBox {
+                                        HStack {
+                                            Text("Next Open")
+                                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            Spacer()
+                                            Text(globalVM.nextMarketOpen)
+                                                .font(.system(size: 12, design: .rounded))
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        .frame(height: 12)
+                                    }
+                                    
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    GroupBox {
+                                        HStack {
+                                            Text("Next Close")
+                                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            Spacer()
+                                            Text(globalVM.nextMarketClose)
+                                                .font(.system(size: 12, design: .rounded))
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        .frame(height: 12)
+                                    }
+                                }
+                                .backgroundStyle(Color(.xCardBackground))
+                            }
+                        }
+                        
+                        OriginCard {
                             Button {
                                 globalVM.automaticRefresh.toggle()
                             } label: {

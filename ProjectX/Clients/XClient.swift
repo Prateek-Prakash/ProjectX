@@ -114,6 +114,19 @@ class XClient {
         return true
     }
     
+    func getMarketStatus() async -> MarketStatusDTO? {
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(userToken!)"
+        ]
+        do {
+            let value = try await AF.request("\(userUrl)/MarketStatus/summary", method: .get, headers: headers).serializingDecodable(MarketStatusDTO.self).value
+            return value
+        } catch {
+            Helpers.debugLog("getMarketStatus: \(error)")
+            return nil
+        }
+    }
+    
     func getContracts() async -> [ContractDTO] {
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(userToken!)"
