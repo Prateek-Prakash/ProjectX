@@ -72,7 +72,6 @@ class GlobalViewModel: ObservableObject {
     @Published var usernameInput: String = ""
     @Published var keyInput: String = ""
     
-    @Published var userCtx: HubConnection?
     @Published var marketCtx: HubConnection?
     @Published var nqPrice: Double? = nil
     @Published var mnqPrice: Double? = nil
@@ -416,51 +415,6 @@ class GlobalViewModel: ObservableObject {
     }
     
     // MARK: SignalR Stuff
-    
-    func initUserSignals(_ firm: Firm) async {
-        do {
-            var options = HttpConnectionOptions()
-            options.transport = .webSockets
-            options.skipNegotiation = true
-            options.accessTokenFactory = { return await XClient.get(firm).gatewayToken! }
-            options.timeout = 10000
-            options.logLevel = .information
-            
-            userCtx = HubConnectionBuilder()
-                .withUrl(url: XClient.get(firm).authUserHubUrl, options: options)
-                .withAutomaticReconnect(retryDelays: [1, 1, 1, 1, 1])
-                .build()
-            
-            await userCtx?.on("GatewayUserAccount") { (data: String) in
-                Helpers.debugLog("initUserSignals: GatewayUserAccount")
-            }
-            
-            await userCtx?.on("GatewayUserPosition") { (data: String) in
-                Helpers.debugLog("initUserSignals: GatewayUserPosition")
-            }
-            
-            try await userCtx?.start()
-            await invokeUserSubscriptions()
-            await userCtx?.onReconnecting { _ in
-                Helpers.debugLog("initUserSignals: Disconnected")
-            }
-            await userCtx?.onReconnected {
-                Helpers.debugLog("initUserSignals: Reconnected")
-                await self.invokeUserSubscriptions()
-            }
-        } catch {
-            Helpers.debugLog("initUserSignals: \(error)")
-        }
-    }
-    
-    func invokeUserSubscriptions() async {
-        do {
-            try await userCtx?.invoke(method: "SubscribeAccounts")
-            try await userCtx?.invoke(method: "SubscribePositions", arguments: 67676767)
-        } catch {
-            Helpers.debugLog("invokeUserSubscriptions: \(error)")
-        }
-    }
     
     func initMarketSignals(_ firm: Firm) async {
         do {
