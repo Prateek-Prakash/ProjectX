@@ -77,6 +77,10 @@ class GlobalViewModel: ObservableObject {
     @Published var mnqPrice: Double? = nil
     @Published var esPrice: Double? = nil
     @Published var mesPrice: Double? = nil
+    @Published var gcPrice: Double? = nil
+    @Published var mgcPrice: Double? = nil
+    @Published var siPrice: Double? = nil
+    @Published var silPrice: Double? = nil
     
     @Published var isInitialized = false
     let continuousClock = ContinuousClock()
@@ -443,6 +447,14 @@ class GlobalViewModel: ObservableObject {
                         self.esPrice = price
                     } else if id.contains("CON.F.US.MES") {
                         self.mesPrice = price
+                    } else if id.contains("CON.F.US.GCE") {
+                        self.gcPrice = price
+                    } else if id.contains("CON.F.US.MGC") {
+                        self.mgcPrice = price
+                    } else if id.contains("CON.F.US.SIE") {
+                        self.siPrice = price
+                    } else if id.contains("CON.F.US.SIL") {
+                        self.silPrice = price
                     }
                 }
             }
@@ -467,6 +479,10 @@ class GlobalViewModel: ObservableObject {
             try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.MNQ.H26")
             try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.EP.H26")
             try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.MES.H26")
+            try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.GCE.G26")
+            try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.MGC.G26")
+            try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.SIE.H26")
+            try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.SIL.H26")
         } catch {
             Helpers.debugLog("invokeMarketSubscriptions: \(error)")
         }
