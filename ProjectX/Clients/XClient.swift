@@ -71,7 +71,7 @@ class XClient {
     }
     
     var authMarketHubUrl: String {
-        "\(userHubUrl)?access_token=\(gatewayToken!)"
+        "\(marketHubUrl)?access_token=\(gatewayToken!)"
     }
     
     func signIn(_ username: String, _ key: String) async -> Bool {

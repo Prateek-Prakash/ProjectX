@@ -5,6 +5,7 @@
 //  Created by Prateek Prakash on 8/27/25.
 //
 
+import SignalRClient
 import SwiftUI
 
 struct DeveloperView: View {
@@ -68,41 +69,67 @@ struct DeveloperView: View {
                         }
                         
                         OriginCard {
-                            Button {
-                                globalVM.automaticRefresh.toggle()
-                            } label: {
-                                GroupBox {
-                                    HStack {
-                                        Text("Automatic Refresh")
-                                            .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        Spacer()
-                                        Toggle("", isOn: $globalVM.automaticRefresh)
-                                            .scaleEffect(0.6, anchor: .trailing)
+                            VStack(spacing: 0) {
+                                OriginHeader {
+                                    Text("STREAMING")
+                                        .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                        .tracking(2)
+                                        .foregroundStyle(Color(.xHeaderText))
+                                }
+                                
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                                
+                                VStack(spacing: 0) {
+                                    Button {
+                                        globalVM.priceStreaming.toggle()
+                                    } label: {
+                                        GroupBox {
+                                            HStack {
+                                                Text("Price Streaming")
+                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                Spacer()
+                                                Toggle("", isOn: $globalVM.priceStreaming)
+                                                    .scaleEffect(0.6, anchor: .trailing)
+                                            }
+                                            .frame(height: 12)
+                                        }
+                                        .backgroundStyle(Color(.xCardBackground))
                                     }
-                                    .frame(height: 12)
+                                    .buttonStyle(.plain)
+                                    
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    GroupBox {
+                                        HStack {
+                                            Text("MNQ Price")
+                                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            Spacer()
+                                            Text(globalVM.mnqPrice?.asCurrency() ?? "--")
+                                                .font(.system(size: 12, design: .rounded))
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        .frame(height: 12)
+                                    }
+                                    .onChange(of: globalVM.priceStreaming) {
+                                        if !globalVM.priceStreaming {
+                                            Task {
+                                                await globalVM.marketCtx?.stop()
+                                                globalVM.marketCtx = nil
+                                                globalVM.mnqPrice = nil
+                                            }
+                                        } else {
+                                            Task {
+                                                await globalVM.initMarketSignals(.topstep)
+                                            }
+                                        }
+                                    }
                                 }
                                 .backgroundStyle(Color(.xCardBackground))
                             }
-                            .buttonStyle(.plain)
-                        }
-                        
-                        OriginCard {
-                            Button {
-                                globalVM.automaticBackup.toggle()
-                            } label: {
-                                GroupBox {
-                                    HStack {
-                                        Text("Automatic Backup")
-                                            .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        Spacer()
-                                        Toggle("", isOn: $globalVM.automaticBackup)
-                                            .scaleEffect(0.6, anchor: .trailing)
-                                    }
-                                    .frame(height: 12)
-                                }
-                                .backgroundStyle(Color(.xCardBackground))
-                            }
-                            .buttonStyle(.plain)
                         }
                         
                         OriginCard {
@@ -159,6 +186,44 @@ struct DeveloperView: View {
                                 }
                                 .backgroundStyle(Color(.xCardBackground))
                             }
+                        }
+                        
+                        OriginCard {
+                            Button {
+                                globalVM.automaticRefresh.toggle()
+                            } label: {
+                                GroupBox {
+                                    HStack {
+                                        Text("Automatic Refresh")
+                                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                                        Spacer()
+                                        Toggle("", isOn: $globalVM.automaticRefresh)
+                                            .scaleEffect(0.6, anchor: .trailing)
+                                    }
+                                    .frame(height: 12)
+                                }
+                                .backgroundStyle(Color(.xCardBackground))
+                            }
+                            .buttonStyle(.plain)
+                        }
+                        
+                        OriginCard {
+                            Button {
+                                globalVM.automaticBackup.toggle()
+                            } label: {
+                                GroupBox {
+                                    HStack {
+                                        Text("Automatic Backup")
+                                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                                        Spacer()
+                                        Toggle("", isOn: $globalVM.automaticBackup)
+                                            .scaleEffect(0.6, anchor: .trailing)
+                                    }
+                                    .frame(height: 12)
+                                }
+                                .backgroundStyle(Color(.xCardBackground))
+                            }
+                            .buttonStyle(.plain)
                         }
                         
                         OriginCard {

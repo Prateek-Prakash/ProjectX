@@ -48,13 +48,14 @@ class GlobalViewModel: ObservableObject {
     @AppStorage("subtractStartingBalance") var subtractStartingBalance: Bool = true
     
     // Developer
-    @AppStorage("automaticRefresh") var automaticRefresh: Bool = true
-    @AppStorage("automaticBackup") var automaticBackup: Bool = false
-    @AppStorage("delayAuthentication") var delayAuthentication: Bool = false
-    @AppStorage("delayLoadingTrades") var delayLoadingTrades: Bool = false
-    @AppStorage("executeLockouts") var executeLockouts: Bool = true
     @AppStorage("nextMarketOpen") var nextMarketOpen: String = ""
     @AppStorage("nextMarketClose") var nextMarketClose: String = ""
+    @AppStorage("priceStreaming") var priceStreaming: Bool = false
+    @AppStorage("delayAuthentication") var delayAuthentication: Bool = false
+    @AppStorage("delayLoadingTrades") var delayLoadingTrades: Bool = false
+    @AppStorage("automaticRefresh") var automaticRefresh: Bool = true
+    @AppStorage("automaticBackup") var automaticBackup: Bool = false
+    @AppStorage("executeLockouts") var executeLockouts: Bool = true
     
     @Published var authenticatingStates: [Firm:Bool] = [:]
     @Published var connectedStates: [Firm:Bool] = [:]
@@ -72,13 +73,15 @@ class GlobalViewModel: ObservableObject {
     @Published var keyInput: String = ""
     
     @Published var userCtx: HubConnection?
+    @Published var marketCtx: HubConnection?
+    @Published var mnqPrice: Double? = nil
     
     @Published var isInitialized = false
     let continuousClock = ContinuousClock()
     
     init() {
         Task {
-            let initTime = await continuousClock.measure {
+            let initTime = await self.continuousClock.measure {
                 await withTaskGroup(of: Void.self) { group in
                     for firm in Firm.allCases {
                         group.addTask {
@@ -88,8 +91,12 @@ class GlobalViewModel: ObservableObject {
                 }
                 
                 if let marketStatus = await XClient.topstep.getMarketStatus() {
-                    nextMarketOpen = marketStatus.nextOpen
-                    nextMarketClose = marketStatus.close
+                    self.nextMarketOpen = marketStatus.nextOpen
+                    self.nextMarketClose = marketStatus.close
+                }
+                
+                if self.priceStreaming {
+                    await self.initMarketSignals(.topstep)
                 }
             }
             Helpers.debugLog("initTime: \(initTime.description.split(separator: " ")[0])")
@@ -409,7 +416,7 @@ class GlobalViewModel: ObservableObject {
     
     // MARK: SignalR Stuff
     
-    func initSignals(_ firm: Firm) async {
+    func initUserSignals(_ firm: Firm) async {
         do {
             var options = HttpConnectionOptions()
             options.transport = .webSockets
@@ -424,22 +431,22 @@ class GlobalViewModel: ObservableObject {
                 .build()
             
             await userCtx?.on("GatewayUserAccount") { (data: String) in
-                Helpers.debugLog("initSignals: GatewayUserAccount")
+                Helpers.debugLog("initUserSignals: GatewayUserAccount")
             }
             await userCtx?.on("GatewayUserPosition") { (data: String) in
-                Helpers.debugLog("initSignals: GatewayUserPosition")
+                Helpers.debugLog("initUserSignals: GatewayUserPosition")
             }
             try await userCtx?.start()
             await invokeUserSubscriptions()
             await userCtx?.onReconnecting { _ in
-                Helpers.debugLog("initSignals: Disconnected")
+                Helpers.debugLog("initUserSignals: Disconnected")
             }
             await userCtx?.onReconnected {
-                Helpers.debugLog("initSignals: Reconnected")
+                Helpers.debugLog("initUserSignals: Reconnected")
                 await self.invokeUserSubscriptions()
             }
         } catch {
-            Helpers.debugLog("initSignals: \(error)")
+            Helpers.debugLog("initUserSignals: \(error)")
         }
     }
     
@@ -449,6 +456,48 @@ class GlobalViewModel: ObservableObject {
             try await userCtx?.invoke(method: "SubscribePositions", arguments: 67676767)
         } catch {
             Helpers.debugLog("invokeUserSubscriptions: \(error)")
+        }
+    }
+    
+    func initMarketSignals(_ firm: Firm) async {
+        do {
+            var options = HttpConnectionOptions()
+            options.transport = .webSockets
+            options.skipNegotiation = true
+            options.accessTokenFactory = { return await XClient.get(firm).gatewayToken! }
+            options.timeout = 10000
+            options.logLevel = .information
+            
+            marketCtx = HubConnectionBuilder()
+                .withUrl(url: XClient.get(firm).authMarketHubUrl, options: options)
+                .withAutomaticReconnect(retryDelays: [1, 1, 1, 1, 1])
+                .build()
+            
+            await marketCtx?.on("GatewayQuote") { (id: String, quote: QuoteDTO) in
+                if let price = quote.lastPrice {
+                    Helpers.debugLog("\(id): \(price)")
+                    self.mnqPrice = price
+                }
+            }
+            try await marketCtx?.start()
+            await invokeMarketSubscriptions()
+            await marketCtx?.onReconnecting { _ in
+                Helpers.debugLog("initMarketSignals: Disconnected")
+            }
+            await marketCtx?.onReconnected {
+                Helpers.debugLog("initMarketSignals: Reconnected")
+                await self.invokeMarketSubscriptions()
+            }
+        } catch {
+            Helpers.debugLog("initMarketSignals: \(error)")
+        }
+    }
+    
+    func invokeMarketSubscriptions() async {
+        do {
+            try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.MNQ.H26")
+        } catch {
+            Helpers.debugLog("invokeMarketSubscriptions: \(error)")
         }
     }
 }
