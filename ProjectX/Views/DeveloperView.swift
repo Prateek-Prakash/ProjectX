@@ -105,7 +105,9 @@ struct DeveloperView: View {
                                     
                                     GroupBox {
                                         HStack {
-                                            Text("NQ Price")
+                                            Image(systemName: "text.page")
+                                                .imageScale(.small)
+                                            Text("NQ")
                                                 .font(.system(size: 12, weight: .medium, design: .rounded))
                                             Spacer()
                                             Text(globalVM.nqPrice?.asCurrency() ?? "--")
@@ -121,10 +123,48 @@ struct DeveloperView: View {
                                     
                                     GroupBox {
                                         HStack {
-                                            Text("MNQ Price")
+                                            Image(systemName: "text.page")
+                                                .imageScale(.small)
+                                            Text("MNQ")
                                                 .font(.system(size: 12, weight: .medium, design: .rounded))
                                             Spacer()
                                             Text(globalVM.mnqPrice?.asCurrency() ?? "--")
+                                                .font(.system(size: 12, design: .rounded))
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        .frame(height: 12)
+                                    }
+                                    
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    GroupBox {
+                                        HStack {
+                                            Image(systemName: "text.page")
+                                                .imageScale(.small)
+                                            Text("ES")
+                                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            Spacer()
+                                            Text(globalVM.esPrice?.asCurrency() ?? "--")
+                                                .font(.system(size: 12, design: .rounded))
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        .frame(height: 12)
+                                    }
+                                    
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    GroupBox {
+                                        HStack {
+                                            Image(systemName: "text.page")
+                                                .imageScale(.small)
+                                            Text("MES")
+                                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            Spacer()
+                                            Text(globalVM.mesPrice?.asCurrency() ?? "--")
                                                 .font(.system(size: 12, design: .rounded))
                                                 .foregroundStyle(.secondary)
                                         }
@@ -306,4 +346,8 @@ struct DeveloperView: View {
             }
         }
     }
+}
+
+#Preview {
+    DeveloperView()
 }

@@ -75,6 +75,8 @@ class GlobalViewModel: ObservableObject {
     @Published var marketCtx: HubConnection?
     @Published var nqPrice: Double? = nil
     @Published var mnqPrice: Double? = nil
+    @Published var esPrice: Double? = nil
+    @Published var mesPrice: Double? = nil
     
     @Published var isInitialized = false
     let continuousClock = ContinuousClock()
@@ -437,6 +439,10 @@ class GlobalViewModel: ObservableObject {
                         self.nqPrice = price
                     } else if id.contains("CON.F.US.MNQ") {
                         self.mnqPrice = price
+                    } else if id.contains("CON.F.US.EP") {
+                        self.esPrice = price
+                    } else if id.contains("CON.F.US.MES") {
+                        self.mesPrice = price
                     }
                 }
             }
@@ -459,6 +465,8 @@ class GlobalViewModel: ObservableObject {
         do {
             try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.ENQ.H26")
             try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.MNQ.H26")
+            try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.EP.H26")
+            try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.MES.H26")
         } catch {
             Helpers.debugLog("invokeMarketSubscriptions: \(error)")
         }
