@@ -50,8 +50,8 @@ struct SettingsView: View {
         switch section {
         case SettingsSection.configuration:
             ConfigurationView()
-        case SettingsSection.automation:
-            AutomationView()
+        case SettingsSection.journal:
+            JournalView()
         case SettingsSection.notifications:
             NotificationsView()
         case SettingsSection.customization:

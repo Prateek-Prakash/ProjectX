@@ -11,7 +11,7 @@ import SwiftUI
 enum SettingsSection: String, CaseIterable, Identifiable {
     var id: String { self.rawValue }
     case configuration = "Configuration"
-    case automation = "Automation"
+    case journal = "Journal"
     case notifications = "Notifications"
     case customization = "Customization"
     case developer = "Developer"
@@ -23,8 +23,8 @@ enum SettingsSection: String, CaseIterable, Identifiable {
         switch self {
         case .configuration:
             return "slider.horizontal.3"
-        case .automation:
-            return "sparkles"
+        case .journal:
+            return "book.closed"
         case .notifications:
             return "bell"
         case .customization:
@@ -44,7 +44,7 @@ enum SettingsSection: String, CaseIterable, Identifiable {
         switch self {
         case .configuration:
             return .cyan
-        case .automation:
+        case .journal:
             return .indigo
         case .notifications:
             return .red
@@ -68,9 +68,9 @@ enum SettingsSection: String, CaseIterable, Identifiable {
     var description: String {
         switch self {
         case .configuration:
-            return "Manage ProjectX Connections"
-        case .automation:
-            return "Configure ATS Options"
+            return "Update TopstepX Credentials"
+        case .journal:
+            return "Manage Journal Logs"
         case .notifications:
             return "Setup Preferred Notifications"
         case .customization:
