@@ -71,3 +71,26 @@ struct TradeTile: View {
     }
 }
 
+#Preview {
+    let trade = Trade(
+        id: 1949646815,
+        symbolId: "F.US.ENQ",
+        contractId: "CON.F.US.ENQ.H26",
+        accountId: 16046342,
+        createdAt: "2026-01-19T17:19:12.118432+00:00",
+        tradeDay: "2026-01-19T06:00:00+00:00",
+        exitedAt: "2026-01-19T17:20:11.093067+00:00",
+        entryPrice: 25386.500000000,
+        exitPrice: 25393.750000000,
+        fees: 14.00000,
+        pnL: 725.000000000,
+        positionSize: -5,
+        voided: false,
+        tradeDuration: "00:00:58.9746350",
+        tradeDurationDisplay: "00:00:58"
+    )
+    OriginCard {
+        TradeTile(trade: trade)
+    }
+    .padding()
+}

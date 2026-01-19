@@ -105,6 +105,22 @@ struct DeveloperView: View {
                                     
                                     GroupBox {
                                         HStack {
+                                            Text("NQ Price")
+                                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            Spacer()
+                                            Text(globalVM.nqPrice?.asCurrency() ?? "--")
+                                                .font(.system(size: 12, design: .rounded))
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        .frame(height: 12)
+                                    }
+                                    
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    GroupBox {
+                                        HStack {
                                             Text("MNQ Price")
                                                 .font(.system(size: 12, weight: .medium, design: .rounded))
                                             Spacer()
@@ -113,19 +129,6 @@ struct DeveloperView: View {
                                                 .foregroundStyle(.secondary)
                                         }
                                         .frame(height: 12)
-                                    }
-                                    .onChange(of: globalVM.priceStreaming) {
-                                        if !globalVM.priceStreaming {
-                                            Task {
-                                                await globalVM.marketCtx?.stop()
-                                                globalVM.marketCtx = nil
-                                                globalVM.mnqPrice = nil
-                                            }
-                                        } else {
-                                            Task {
-                                                await globalVM.initMarketSignals(.topstep)
-                                            }
-                                        }
                                     }
                                 }
                                 .backgroundStyle(Color(.xCardBackground))
@@ -285,6 +288,20 @@ struct DeveloperView: View {
                     Text("DEVELOPER")
                         .font(.system(size: 10, weight: .semibold, design: .monospaced))
                         .tracking(2)
+                }
+            }
+            .onChange(of: globalVM.priceStreaming) {
+                if !globalVM.priceStreaming {
+                    Task {
+                        await globalVM.marketCtx?.stop()
+                        globalVM.marketCtx = nil
+                        globalVM.nqPrice = nil
+                        globalVM.mnqPrice = nil
+                    }
+                } else {
+                    Task {
+                        await globalVM.initMarketSignals(.topstep)
+                    }
                 }
             }
         }

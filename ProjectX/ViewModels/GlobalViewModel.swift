@@ -74,6 +74,7 @@ class GlobalViewModel: ObservableObject {
     
     @Published var userCtx: HubConnection?
     @Published var marketCtx: HubConnection?
+    @Published var nqPrice: Double? = nil
     @Published var mnqPrice: Double? = nil
     
     @Published var isInitialized = false
@@ -433,9 +434,11 @@ class GlobalViewModel: ObservableObject {
             await userCtx?.on("GatewayUserAccount") { (data: String) in
                 Helpers.debugLog("initUserSignals: GatewayUserAccount")
             }
+            
             await userCtx?.on("GatewayUserPosition") { (data: String) in
                 Helpers.debugLog("initUserSignals: GatewayUserPosition")
             }
+            
             try await userCtx?.start()
             await invokeUserSubscriptions()
             await userCtx?.onReconnecting { _ in
@@ -476,9 +479,14 @@ class GlobalViewModel: ObservableObject {
             await marketCtx?.on("GatewayQuote") { (id: String, quote: QuoteDTO) in
                 if let price = quote.lastPrice {
                     Helpers.debugLog("\(id): \(price)")
-                    self.mnqPrice = price
+                    if id.contains("CON.F.US.ENQ") {
+                        self.nqPrice = price
+                    } else if id.contains("CON.F.US.MNQ") {
+                        self.mnqPrice = price
+                    }
                 }
             }
+            
             try await marketCtx?.start()
             await invokeMarketSubscriptions()
             await marketCtx?.onReconnecting { _ in
@@ -495,6 +503,7 @@ class GlobalViewModel: ObservableObject {
     
     func invokeMarketSubscriptions() async {
         do {
+            try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.ENQ.H26")
             try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.MNQ.H26")
         } catch {
             Helpers.debugLog("invokeMarketSubscriptions: \(error)")

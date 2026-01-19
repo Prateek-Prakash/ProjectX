@@ -119,38 +119,7 @@ struct PerformanceView: View {
                                     LazyVStack(spacing: 0) {
                                         if !account.positions.isEmpty {
                                             ForEach(account.positions) { position in
-                                                HStack {
-                                                    HStack {
-                                                        Image(systemName: position.type == 1 ? "arrowtriangle.up.fill" : position.size == 2 ? "arrowtriangle.down.fill" : "questionmark")
-                                                            .resizable()
-                                                            .frame(width: 8, height: 8)
-                                                            .foregroundStyle(position.type == 1 ? .green : position.type == 2 ? .red : .primary)
-                                                        Text(contractMap[position.symbolId] ?? "--")
-                                                            .font(.system(size: 10, weight: .bold, design: .rounded))
-                                                        Spacer()
-                                                    }
-                                                    .frame(maxWidth: .infinity)
-                                                    
-                                                    VStack(alignment: .center) {
-                                                        Text(String(abs(position.size)))
-                                                            .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                                                        Text("CONTRACTS")
-                                                            .font(.system(size: 6, design: .monospaced))
-                                                            .foregroundStyle(.secondary)
-                                                    }
-                                                    .frame(maxWidth: .infinity)
-                                                    
-                                                    HStack {
-                                                        Spacer()
-                                                        VStack(alignment: .trailing) {
-                                                            Text(position.averagePrice.asCurrency())
-                                                                .font(.system(size: 10, weight: .bold, design: .rounded))
-                                                        }
-                                                    }
-                                                    .frame(maxWidth: .infinity)
-                                                }
-                                                .padding(.all, 14)
-                                                
+                                                PositionTile(position: position)
                                                 if account.positions.last != position {
                                                     Divider()
                                                         .frame(height: 1)
