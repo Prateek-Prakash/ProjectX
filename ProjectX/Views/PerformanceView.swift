@@ -121,10 +121,10 @@ struct PerformanceView: View {
                                             ForEach(account.positions) { position in
                                                 HStack {
                                                     HStack {
-                                                        Image(systemName: position.size < 0 ? "arrowtriangle.up.fill" : position.size > 0 ? "arrowtriangle.down.fill" : "questionmark")
+                                                        Image(systemName: position.type == 1 ? "arrowtriangle.up.fill" : position.size == 2 ? "arrowtriangle.down.fill" : "questionmark")
                                                             .resizable()
                                                             .frame(width: 8, height: 8)
-                                                            .foregroundStyle(position.size < 0 ? .green : position.size > 0 ? .red : .primary)
+                                                            .foregroundStyle(position.type == 1 ? .green : position.type == 2 ? .red : .primary)
                                                         Text(contractMap[position.symbolId] ?? "--")
                                                             .font(.system(size: 10, weight: .bold, design: .rounded))
                                                         Spacer()
