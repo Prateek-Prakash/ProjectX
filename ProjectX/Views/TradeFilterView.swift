@@ -30,7 +30,7 @@ struct TradeFilterView: View {
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    CloseButton()
+                    BackButton()
                 }
                 .sharedBackgroundVisibility(.hidden)
                 

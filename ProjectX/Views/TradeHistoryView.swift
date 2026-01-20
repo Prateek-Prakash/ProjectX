@@ -12,7 +12,7 @@ struct TradeHistoryView: View {
     
     @ObservedObject var globalVM = GlobalViewModel.shared
     
-    @State var showTradeFilterCover: Bool = false
+    @State var showTradeFilterSheet: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -63,7 +63,7 @@ struct TradeHistoryView: View {
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        showTradeFilterCover.toggle()
+                        showTradeFilterSheet.toggle()
                     } label: {
                         Image(systemName: "line.3.horizontal.decrease")
                             .imageScale(.small)
@@ -72,7 +72,7 @@ struct TradeHistoryView: View {
                 }
                 .sharedBackgroundVisibility(.hidden)
             }
-            .fullScreenCover(isPresented: $showTradeFilterCover) {
+            .sheet(isPresented: $showTradeFilterSheet) {
                 TradeFilterView()
             }
         }
