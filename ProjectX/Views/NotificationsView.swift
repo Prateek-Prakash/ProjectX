@@ -18,7 +18,7 @@ struct NotificationsView: View {
                 Color(.xBackground)
                     .edgesIgnoringSafeArea(.all)
                 ScrollView {
-                    VStack {
+                    VStack(spacing: 10) {
                         OriginCard {
                             Button {
                                 globalVM.pushNotifications.toggle()

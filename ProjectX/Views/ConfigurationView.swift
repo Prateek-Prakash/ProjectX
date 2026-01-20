@@ -18,7 +18,7 @@ struct ConfigurationView: View {
                 Color(.xBackground)
                     .edgesIgnoringSafeArea(.all)
                 ScrollView {
-                    VStack {
+                    VStack(spacing: 10) {
                         ForEach(Firm.allCases) { firm in
                             if firm == .topstep {
                                 FirmSettingsCard(firm: firm)

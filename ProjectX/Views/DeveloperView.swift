@@ -21,7 +21,7 @@ struct DeveloperView: View {
                 Color(.xBackground)
                     .edgesIgnoringSafeArea(.all)
                 ScrollView {
-                    VStack {
+                    VStack(spacing: 10) {
                         OriginCard {
                             VStack(spacing: 0) {
                                 OriginHeader {

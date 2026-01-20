@@ -28,8 +28,8 @@ struct PerformanceView: View {
                     ProgressView()
                 } else {
                     ScrollView {
-                        VStack {
-                            HStack {
+                        VStack(spacing: 10) {
+                            HStack(spacing: 10) {
                                 OriginCard {
                                     GroupBox {
                                         HStack {

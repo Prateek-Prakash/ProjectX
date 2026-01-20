@@ -25,7 +25,7 @@ struct DonateView: View {
                 Color(.xBackground)
                     .edgesIgnoringSafeArea(.all)
                 ScrollView {
-                    VStack {
+                    VStack(spacing: 10) {
                         ForEach(allDonations) { donation in
                             OriginCard {
                                 Button {

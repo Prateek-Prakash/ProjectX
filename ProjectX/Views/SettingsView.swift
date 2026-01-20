@@ -14,7 +14,7 @@ struct SettingsView: View {
                 Color(.xBackground)
                     .edgesIgnoringSafeArea(.all)
                 ScrollView {
-                    VStack {
+                    VStack(spacing: 10) {
                         ForEach(SettingsSection.allCases) { section in
                             NavigationLink {
                                 getTargetView(section)

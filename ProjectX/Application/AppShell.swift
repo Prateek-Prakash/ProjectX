@@ -32,9 +32,9 @@ struct AppShell: View {
                     .edgesIgnoringSafeArea(.all)
                 if !globalVM.isInitialized {
                     ProgressView()
-                } else {
+                } else if !globalVM.allAccounts.isEmpty {
                     ScrollView {
-                        VStack {
+                        VStack(spacing: 10) {
                             ForEach(Firm.allCases) { firm in
                                 if globalVM.isLinked(firm) && globalVM.isConnected(firm) {
                                     let accounts = globalVM.allAccounts.filter({
@@ -54,6 +54,16 @@ struct AppShell: View {
                         .padding(.horizontal)
                         .padding(.bottom)
                     }
+                } else {
+                    
+                        ContentUnavailableView {
+                            Label("NO ACCOUNTS", systemImage: "exclamationmark.triangle")
+                                .imageScale(.small)
+                                .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                .tracking(2)
+                                .foregroundStyle(.secondary)
+                        }
+                        .padding()
                 }
             }
             .scrollIndicators(.never)
