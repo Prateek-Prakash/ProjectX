@@ -15,11 +15,11 @@ extension Double {
         return formatter.string(from: NSNumber(value: self)) ?? "--"
     }
     
-    func asPoints() -> String {
+    func asPoints(_ digits: Int) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
-        formatter.minimumFractionDigits = 2
-        formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = digits
+        formatter.maximumFractionDigits = digits
         return formatter.string(from: NSNumber(value: self)) ?? "--"
     }
 }
