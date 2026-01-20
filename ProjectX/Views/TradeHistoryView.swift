@@ -61,7 +61,7 @@ struct TradeHistoryView: View {
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink {
-                        TradeHistoryView()
+                        TradeFilterView()
                     } label: {
                         Image(systemName: "line.3.horizontal.decrease")
                             .imageScale(.small)
