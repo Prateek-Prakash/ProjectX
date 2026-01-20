@@ -30,26 +30,30 @@ struct AppShell: View {
             ZStack {
                 Color(.xBackground)
                     .edgesIgnoringSafeArea(.all)
-                ScrollView {
-                    VStack {
-                        ForEach(Firm.allCases) { firm in
-                            if globalVM.isLinked(firm) && globalVM.isConnected(firm) {
-                                let accounts = globalVM.allAccounts.filter({
-                                    $0.firm == firm
-                                    && ((globalVM.showEvaluationAccounts && $0.accountType == .evaluation) || (globalVM.showFundedAccounts && $0.accountType == .funded) || (globalVM.showPracticeAccounts && $0.accountType == .practice))
-                                    && ((globalVM.hideLockedAccounts && $0.canTrade) || !globalVM.hideLockedAccounts)
-                                })
-                                if !globalVM.hideEmptyFirms || !accounts.isEmpty {
-                                    FirmCard(
-                                        firm: firm,
-                                        accounts: accounts
-                                    )
+                if !globalVM.isInitialized {
+                    ProgressView()
+                } else {
+                    ScrollView {
+                        VStack {
+                            ForEach(Firm.allCases) { firm in
+                                if globalVM.isLinked(firm) && globalVM.isConnected(firm) {
+                                    let accounts = globalVM.allAccounts.filter({
+                                        $0.firm == firm
+                                        && ((globalVM.showEvaluationAccounts && $0.accountType == .evaluation) || (globalVM.showFundedAccounts && $0.accountType == .funded) || (globalVM.showPracticeAccounts && $0.accountType == .practice))
+                                        && ((globalVM.hideLockedAccounts && $0.canTrade) || !globalVM.hideLockedAccounts)
+                                    })
+                                    if !globalVM.hideEmptyFirms || !accounts.isEmpty {
+                                        FirmCard(
+                                            firm: firm,
+                                            accounts: accounts
+                                        )
+                                    }
                                 }
                             }
                         }
+                        .padding(.horizontal)
+                        .padding(.bottom)
                     }
-                    .padding(.horizontal)
-                    .padding(.bottom)
                 }
             }
             .scrollIndicators(.never)
