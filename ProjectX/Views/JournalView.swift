@@ -35,7 +35,7 @@ struct JournalView: View {
                 .sharedBackgroundVisibility(.hidden)
                 
                 ToolbarItem(placement: .title) {
-                    Text("Journal")
+                    Text("JOURNAL")
                         .font(.system(size: 10, weight: .semibold, design: .monospaced))
                         .tracking(2)
                 }
