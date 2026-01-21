@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct JournalView: View {
-    @Environment(\.dismiss) private var dismiss
-    
     @ObservedObject var globalVM = GlobalViewModel.shared
     
     var body: some View {

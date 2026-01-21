@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct DonateView: View {
-    @Environment(\.dismiss) private var dismiss
-    
     @ObservedObject var globalVM = GlobalViewModel.shared
     
     @State var selectedDonation: Donation? = nil

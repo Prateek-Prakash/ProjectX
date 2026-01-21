@@ -9,8 +9,6 @@ import SignalRClient
 import SwiftUI
 
 struct DeveloperView: View {
-    @Environment(\.dismiss) private var dismiss
-    
     @ObservedObject var globalVM = GlobalViewModel.shared
     
     @State var successHaptic: Bool = false

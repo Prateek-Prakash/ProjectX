@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct AboutView: View {
-    @Environment(\.dismiss) private var dismiss
-    
     @State var selected: Dependency?
     
     let dependencies = [

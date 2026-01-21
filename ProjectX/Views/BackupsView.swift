@@ -9,8 +9,6 @@ import SwiftData
 import SwiftUI
 
 struct BackupsView: View {
-    @Environment(\.dismiss) private var dismiss
-    
     @ObservedObject var globalVM = GlobalViewModel.shared
     
     @Environment(\.modelContext) var modelContext

@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct ConfigurationView: View {
-    @Environment(\.dismiss) private var dismiss
-    
     @ObservedObject var globalVM = GlobalViewModel.shared
     
     var body: some View {
