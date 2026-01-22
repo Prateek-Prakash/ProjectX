@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct AboutView: View {
-    @State var selected: Dependency?
+    @State var selectedDependency: Dependency?
     
-    let dependencies = [
+    let allDependencies = [
         Dependency(name: "Alamofire", version: "5.10.2", url: URL(string: "https://github.com/Alamofire/Alamofire/tree/5.10.2")!),
         Dependency(name: "SignalRClient", version: "Main", url: URL(string: "https://github.com/dotnet/signalr-client-swift/tree/main")!)
     ]
@@ -160,9 +160,9 @@ struct AboutView: View {
                                     .overlay(Color(.xOutline))
                                 
                                 VStack(spacing: 0) {
-                                    ForEach(dependencies) { dependency in
+                                    ForEach(allDependencies) { dependency in
                                         Button {
-                                            selected = dependency
+                                            selectedDependency = dependency
                                         } label: {
                                             GroupBox {
                                                 HStack {
@@ -183,7 +183,7 @@ struct AboutView: View {
                                         }
                                         .buttonStyle(.plain)
                                         
-                                        if dependencies.last != dependency {
+                                        if allDependencies.last != dependency {
                                             Divider()
                                                 .frame(height: 1)
                                                 .overlay(Color(.xOutline))
@@ -212,7 +212,7 @@ struct AboutView: View {
                         .tracking(2)
                 }
             }
-            .sheet(item: $selected) { dependency in
+            .sheet(item: $selectedDependency) { dependency in
                 SafariView(url: dependency.url)
             }
         }
