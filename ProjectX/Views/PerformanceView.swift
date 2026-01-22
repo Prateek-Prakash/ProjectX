@@ -452,22 +452,6 @@ struct PerformanceView: View {
                         .font(.system(size: 10, weight: .semibold, design: .monospaced))
                         .tracking(2)
                 }
-                
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        Task {
-                            successHaptic.toggle()
-                            await globalVM.loadDailyStats(account)
-                            await globalVM.loadTrades(account)
-                        }
-                    } label: {
-                        Image(systemName: "arrow.clockwise")
-                            .imageScale(.small)
-                    }
-                    .buttonStyle(.plain)
-                    .sensoryFeedback(.success, trigger: successHaptic)
-                }
-                .sharedBackgroundVisibility(.hidden)
             }
             .sheet(isPresented: $showLockoutSheet) {
                 LockoutView(account: account)
@@ -486,9 +470,16 @@ struct PerformanceView: View {
                     let _ = await XClient.get(account.firm).setPersonalLimits(account.accountId, account.personalDailyProfitTarget, account.personalDailyProfitTargetAction, account.personalDailyLossLimit, account.personalDailyLossLimitAction, isTrailing)
                 }
             }
-            .onChange(of: account) {
-                if isTrailing != account.personalDailyLossLimitTrailing {
-                    isTrailing = account.personalDailyLossLimitTrailing
+            .onChange(of: account) { old, new in
+                if isTrailing != new.personalDailyLossLimitTrailing {
+                    isTrailing = new.personalDailyLossLimitTrailing
+                }
+                
+                if old.realizedDayPnl != new.realizedDayPnl || old.positions.count != new.positions.count {
+                    Task {
+                        await globalVM.loadDailyStats(account)
+                        await globalVM.loadTrades(account)
+                    }
                 }
             }
         }

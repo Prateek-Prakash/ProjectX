@@ -53,8 +53,6 @@ class GlobalViewModel: ObservableObject {
     @AppStorage("priceStreaming") var priceStreaming: Bool = false
     @AppStorage("delayAuthentication") var delayAuthentication: Bool = false
     @AppStorage("delayLoadingTrades") var delayLoadingTrades: Bool = false
-    @AppStorage("automaticRefresh") var automaticRefresh: Bool = true
-    @AppStorage("automaticBackup") var automaticBackup: Bool = false
     @AppStorage("executeLockouts") var executeLockouts: Bool = true
     
     @Published var authenticatingStates: [Firm:Bool] = [:]

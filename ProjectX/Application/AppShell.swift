@@ -16,11 +16,6 @@ struct AppShell: View {
     @Query(sort: [SortDescriptor(\RawBackup.firm), SortDescriptor(\RawBackup.name)]) var rawBackups: [RawBackup]
     
     @State var showSettingsCover: Bool = false
-    @State var successHaptic: Bool = false
-    
-    @State var triggerSnapshot: Bool = false
-    @State var uiSnapshot: UIImage? = nil
-    @State var snapshotPadding: Bool = false
     
     let oneSecondTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     let twoSecondTimer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
@@ -56,33 +51,20 @@ struct AppShell: View {
                     }
                 } else {
                     
-                        ContentUnavailableView {
-                            Label("NO ACCOUNTS", systemImage: "exclamationmark.triangle")
-                                .imageScale(.small)
-                                .font(.system(size: 8, weight: .semibold, design: .monospaced))
-                                .tracking(2)
-                                .foregroundStyle(.secondary)
-                        }
-                        .padding()
+                    ContentUnavailableView {
+                        Label("NO ACCOUNTS", systemImage: "exclamationmark.triangle")
+                            .imageScale(.small)
+                            .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                            .tracking(2)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding()
                 }
             }
             .scrollIndicators(.never)
             .toolbarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Image(systemName: "livephoto")
-                        .symbolEffect(.bounce, options: globalVM.refreshingData ? .repeating : .nonRepeating, value: globalVM.refreshingData)
-                        .imageScale(.small)
-                }
-                .sharedBackgroundVisibility(.hidden)
-                
-                ToolbarItem(placement: .title) {
-                    Text("DASHBOARD")
-                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                        .tracking(2)
-                }
-                
-                ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         showSettingsCover.toggle()
                     } label: {
@@ -92,6 +74,12 @@ struct AppShell: View {
                     .buttonStyle(.plain)
                 }
                 .sharedBackgroundVisibility(.hidden)
+                
+                ToolbarItem(placement: .title) {
+                    Text("DASHBOARD")
+                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                        .tracking(2)
+                }
             }
             .fullScreenCover(isPresented: $showSettingsCover) {
                 SettingsView()
@@ -103,15 +91,8 @@ struct AppShell: View {
             }
             .onReceive(twoSecondTimer) { _ in
                 if globalVM.isInitialized {
-                    if globalVM.automaticRefresh {
-                        Task {
-                            await globalVM.refreshData()
-                        }
-                    }
-                    if globalVM.automaticBackup {
-                        Task {
-                            await backupAccounts()
-                        }
+                    Task {
+                        await globalVM.refreshData()
                     }
                 }
             }
