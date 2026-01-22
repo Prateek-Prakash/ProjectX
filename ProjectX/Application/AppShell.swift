@@ -16,6 +16,7 @@ struct AppShell: View {
     @Query(sort: [SortDescriptor(\RawBackup.firm), SortDescriptor(\RawBackup.name)]) var rawBackups: [RawBackup]
     
     @State var showSettingsCover: Bool = false
+    @State var successHaptic: Bool = false
     
     let oneSecondTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     let twoSecondTimer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
@@ -83,12 +84,14 @@ struct AppShell: View {
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
+                        successHaptic.toggle()
                         // TODO: Screenshot
                     } label: {
-                        Image(systemName: "camera.viewfinder")
+                        Image(systemName: "camera.aperture")
                             .imageScale(.small)
                     }
                     .buttonStyle(.plain)
+                    .sensoryFeedback(.success, trigger: successHaptic)
                 }
                 .sharedBackgroundVisibility(.hidden)
             }

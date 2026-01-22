@@ -60,6 +60,7 @@ struct PerformanceView: View {
                                     GroupBox {
                                         HStack {
                                             Button {
+                                                successHaptic.toggle()
                                                 Task {
                                                     await globalVM.flattenAccount(account)
                                                 }
@@ -75,6 +76,7 @@ struct PerformanceView: View {
                                                 .foregroundStyle(.yellow)
                                             }
                                             .buttonStyle(.plain)
+                                            .sensoryFeedback(.success, trigger: successHaptic)
                                         }
                                         .frame(height: 12)
                                     }
