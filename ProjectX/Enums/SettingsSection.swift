@@ -68,7 +68,7 @@ enum SettingsSection: String, CaseIterable, Identifiable {
     var description: String {
         switch self {
         case .configuration:
-            return "Update TopstepX Credentials"
+            return "Update ProjectX Credentials"
         case .journal:
             return "Manage Journal Logs"
         case .notifications:

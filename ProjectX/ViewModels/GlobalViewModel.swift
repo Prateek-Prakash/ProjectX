@@ -14,26 +14,16 @@ import SwiftUI
 class GlobalViewModel: ObservableObject {
     static let shared = GlobalViewModel()
     
-    // AlphaFuturesX
-    @AppStorage("alphaFuturesUsername") var alphaFuturesUsername: String = ""
-    @AppStorage("alphaFuturesKey") var alphaFuturesKey: String = ""
-    @AppStorage("alphaFuturesFunded") var alphaFuturesFunded: [Int] = []
-    @AppStorage("alphaFuturesPractice") var alphaFuturesPractice: [Int] = []
-    // LucidTradingX
-    @AppStorage("lucidTradingUsername") var lucidTradingUsername: String = ""
-    @AppStorage("lucidTradingKey") var lucidTradingKey: String = ""
-    @AppStorage("lucidTradingFunded") var lucidTradingFunded: [Int] = []
-    @AppStorage("lucidTradingPractice") var lucidTradingPractice: [Int] = []
+    // TheFuturesDeskX
+    @AppStorage("theFuturesDeskUsername") var theFuturesDeskUsername: String = ""
+    @AppStorage("theFuturesDeskKey") var theFuturesDeskKey: String = ""
+    @AppStorage("theFuturesDeskFunded") var theFuturesDeskFunded: [Int] = []
+    @AppStorage("theFuturesDeskPractice") var theFuturesDeskPractice: [Int] = []
     // TopstepX
     @AppStorage("topstepUsername") var topstepUsername: String = ""
     @AppStorage("topstepKey") var topstepKey: String = ""
     @AppStorage("topstepFunded") var topstepFunded: [Int] = []
     @AppStorage("topstepPractice") var topstepPractice: [Int] = []
-    // TradeifyX
-    @AppStorage("tradeifyUsername") var tradeifyUsername: String = ""
-    @AppStorage("tradeifyKey") var tradeifyKey: String = ""
-    @AppStorage("tradeifyFunded") var tradeifyFunded: [Int] = []
-    @AppStorage("tradeifyPractice") var tradeifyPractice: [Int] = []
     
     // Notifications
     @AppStorage("pushNotifications") var pushNotifications: Bool = false
@@ -114,14 +104,10 @@ class GlobalViewModel: ObservableObject {
         connectedStates[firm] = false
         if isLinked(firm) {
             switch firm {
-            case .alphaFutures:
-                await signIn(firm, alphaFuturesUsername, alphaFuturesKey)
-            case .lucidTrading:
-                await signIn(firm, lucidTradingUsername, lucidTradingKey)
+            case .theFuturesDesk:
+                await signIn(firm, theFuturesDeskUsername, theFuturesDeskKey)
             case .topstep:
                 await signIn(firm, topstepUsername, topstepKey)
-            case .tradeify:
-                await signIn(firm, tradeifyUsername, tradeifyKey)
             }
         } else {
             authenticatingStates[firm] = false
@@ -130,20 +116,10 @@ class GlobalViewModel: ObservableObject {
     
     func linkFirm(_ firm: Firm, _ username: String, _ key: String) async {
         switch firm {
-        case .alphaFutures:
-            if alphaFuturesUsername != username || alphaFuturesKey != key {
-                alphaFuturesUsername = username
-                alphaFuturesKey = key
-                if isLinked(firm) {
-                    await signIn(firm, username, key)
-                } else {
-                    await signOut(firm)
-                }
-            }
-        case .lucidTrading:
-            if lucidTradingUsername != username || lucidTradingKey != key {
-                lucidTradingUsername = username
-                lucidTradingKey = key
+        case .theFuturesDesk:
+            if theFuturesDeskUsername != username || theFuturesDeskKey != key {
+                theFuturesDeskUsername = username
+                theFuturesDeskKey = key
                 if isLinked(firm) {
                     await signIn(firm, username, key)
                 } else {
@@ -154,16 +130,6 @@ class GlobalViewModel: ObservableObject {
             if topstepUsername != username || topstepKey != key {
                 topstepUsername = username
                 topstepKey = key
-                if isLinked(firm) {
-                    await signIn(firm, username, key)
-                } else {
-                    await signOut(firm)
-                }
-            }
-        case .tradeify:
-            if tradeifyUsername != username || tradeifyKey != key {
-                tradeifyUsername = username
-                tradeifyKey = key
                 if isLinked(firm) {
                     await signIn(firm, username, key)
                 } else {
@@ -202,14 +168,10 @@ class GlobalViewModel: ObservableObject {
             var type = AccountType.evaluation
             let tradable = searches?.accounts.filter({ $0.id == id }).first?.canTrade ?? true
             switch firm {
-            case .alphaFutures:
-                type = alphaFuturesFunded.contains(id) ? .funded : alphaFuturesPractice.contains(id) ? .practice : .evaluation
-            case .lucidTrading:
-                type = lucidTradingFunded.contains(id) ? .funded : lucidTradingPractice.contains(id) ? .practice : .evaluation
+            case .theFuturesDesk:
+                type = theFuturesDeskFunded.contains(id) ? .funded : theFuturesDeskPractice.contains(id) ? .practice : .evaluation
             case .topstep:
                 type = topstepFunded.contains(id) ? .funded : topstepPractice.contains(id) ? .practice : .evaluation
-            case .tradeify:
-                type = tradeifyFunded.contains(id) ? .funded : tradeifyPractice.contains(id) ? .practice : .evaluation
             }
             let positions: [Position] = await XClient.get(firm).getPositions(id)?.positions.map({ Position.fromDto($0) }) ?? []
             let account = Account.fromDto(active, firm, type, tradable, positions)
@@ -237,18 +199,12 @@ class GlobalViewModel: ObservableObject {
             let accounts = allAccounts.filter({ $0.firm == firm })
             let ids = accounts.map({ $0.accountId })
             switch firm {
-            case .alphaFutures:
-                alphaFuturesFunded.removeAll(where: { !ids.contains($0) })
-                alphaFuturesPractice.removeAll(where: { !ids.contains($0) })
-            case .lucidTrading:
-                lucidTradingFunded.removeAll(where: { !ids.contains($0) })
-                lucidTradingPractice.removeAll(where: { !ids.contains($0) })
+            case .theFuturesDesk:
+                theFuturesDeskFunded.removeAll(where: { !ids.contains($0) })
+                theFuturesDeskPractice.removeAll(where: { !ids.contains($0) })
             case .topstep:
                 topstepFunded.removeAll(where: { !ids.contains($0) })
                 topstepPractice.removeAll(where: { !ids.contains($0) })
-            case .tradeify:
-                tradeifyFunded.removeAll(where: { !ids.contains($0) })
-                tradeifyPractice.removeAll(where: { !ids.contains($0) })
             }
         }
     }
@@ -274,31 +230,21 @@ class GlobalViewModel: ObservableObject {
         allAccounts.removeAll(where: { $0.firm == firm })
         // Clear Saved IDs
         switch firm {
-        case .alphaFutures:
-            alphaFuturesFunded.removeAll()
-            alphaFuturesPractice.removeAll()
-        case .lucidTrading:
-            lucidTradingFunded.removeAll()
-            lucidTradingPractice.removeAll()
+        case .theFuturesDesk:
+            theFuturesDeskFunded.removeAll()
+            theFuturesDeskPractice.removeAll()
         case .topstep:
             topstepFunded.removeAll()
             topstepPractice.removeAll()
-        case .tradeify:
-            tradeifyFunded.removeAll()
-            tradeifyPractice.removeAll()
         }
     }
     
     func isLinked(_ firm: Firm) -> Bool {
         switch firm {
-        case .alphaFutures:
-            return !alphaFuturesUsername.isEmpty && !alphaFuturesKey.isEmpty
-        case .lucidTrading:
-            return !lucidTradingUsername.isEmpty && !lucidTradingKey.isEmpty
+        case .theFuturesDesk:
+            return !theFuturesDeskUsername.isEmpty && !theFuturesDeskKey.isEmpty
         case .topstep:
             return !topstepUsername.isEmpty && !topstepKey.isEmpty
-        case .tradeify:
-            return !tradeifyUsername.isEmpty && !tradeifyKey.isEmpty
         }
     }
     
@@ -327,18 +273,12 @@ class GlobalViewModel: ObservableObject {
     
     func persistAccountType(_ firm: Firm, _ id: Int, _ type: AccountType) {
         switch firm {
-        case .alphaFutures:
-            type == .funded ? alphaFuturesFunded.append(id) : alphaFuturesFunded.removeAll(where: { $0 == id })
-            type == .practice ? alphaFuturesPractice.append(id) : alphaFuturesPractice.removeAll(where: { $0 == id })
-        case .lucidTrading:
-            type == .funded ? lucidTradingFunded.append(id) : lucidTradingFunded.removeAll(where: { $0 == id })
-            type == .practice ? lucidTradingPractice.append(id) : lucidTradingPractice.removeAll(where: { $0 == id })
+        case .theFuturesDesk:
+            type == .funded ? theFuturesDeskFunded.append(id) : theFuturesDeskFunded.removeAll(where: { $0 == id })
+            type == .practice ? theFuturesDeskPractice.append(id) : theFuturesDeskPractice.removeAll(where: { $0 == id })
         case .topstep:
             type == .funded ? topstepFunded.append(id) : topstepFunded.removeAll(where: { $0 == id })
             type == .practice ? topstepPractice.append(id) : topstepPractice.removeAll(where: { $0 == id })
-        case .tradeify:
-            type == .funded ? tradeifyFunded.append(id) : tradeifyFunded.removeAll(where: { $0 == id })
-            type == .practice ? tradeifyPractice.append(id) : tradeifyPractice.removeAll(where: { $0 == id })
         }
     }
     
@@ -356,18 +296,12 @@ class GlobalViewModel: ObservableObject {
     
     func loadCredentials(_ firm: Firm)  {
         switch firm {
-        case .alphaFutures:
-            usernameInput = alphaFuturesUsername
-            keyInput = alphaFuturesKey
-        case .lucidTrading:
-            usernameInput = lucidTradingUsername
-            keyInput = lucidTradingKey
+        case .theFuturesDesk:
+            usernameInput = theFuturesDeskUsername
+            keyInput = theFuturesDeskKey
         case .topstep:
             usernameInput = topstepUsername
             keyInput = topstepKey
-        case .tradeify:
-            usernameInput = tradeifyUsername
-            keyInput = tradeifyKey
         }
     }
     
