@@ -208,7 +208,7 @@ struct AboutView: View {
                 
                 ToolbarItem(placement: .title) {
                     Text("ABOUT")
-                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                        .font(.system(size: 12, weight: .semibold, design: .monospaced))
                         .tracking(2)
                 }
             }

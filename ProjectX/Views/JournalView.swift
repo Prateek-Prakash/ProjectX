@@ -34,7 +34,7 @@ struct JournalView: View {
                 
                 ToolbarItem(placement: .title) {
                     Text("JOURNAL")
-                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                        .font(.system(size: 12, weight: .semibold, design: .monospaced))
                         .tracking(2)
                 }
             }
