@@ -80,6 +80,17 @@ struct AppShell: View {
                         .font(.system(size: 10, weight: .semibold, design: .monospaced))
                         .tracking(2)
                 }
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        // TODO: Screenshot
+                    } label: {
+                        Image(systemName: "camera.viewfinder")
+                            .imageScale(.small)
+                    }
+                    .buttonStyle(.plain)
+                }
+                .sharedBackgroundVisibility(.hidden)
             }
             .fullScreenCover(isPresented: $showSettingsCover) {
                 SettingsView()
