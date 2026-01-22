@@ -87,7 +87,7 @@ struct AppShell: View {
                         successHaptic.toggle()
                         // TODO: Screenshot
                     } label: {
-                        Image(systemName: "camera.aperture")
+                        Image(systemName: "camera.fill")
                             .imageScale(.small)
                     }
                     .buttonStyle(.plain)
