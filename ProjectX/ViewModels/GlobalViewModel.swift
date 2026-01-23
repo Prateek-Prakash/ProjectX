@@ -40,6 +40,7 @@ class GlobalViewModel: ObservableObject {
     // Developer
     @AppStorage("nextMarketOpen") var nextMarketOpen: String = ""
     @AppStorage("nextMarketClose") var nextMarketClose: String = ""
+    @AppStorage("streamingSource") var streamingSource: Firm = .topstep
     @AppStorage("priceStreaming") var priceStreaming: Bool = false
     @AppStorage("delayAuthentication") var delayAuthentication: Bool = false
     @AppStorage("delayLoadingTrades") var delayLoadingTrades: Bool = false
@@ -90,7 +91,7 @@ class GlobalViewModel: ObservableObject {
                 }
                 
                 if self.priceStreaming {
-                    await self.initMarketSignals(.topstep)
+                    await self.initMarketSignals()
                 }
             }
             Helpers.debugLog("initTime: \(initTime.description.split(separator: " ")[0])")
@@ -354,17 +355,17 @@ class GlobalViewModel: ObservableObject {
     
     // MARK: SignalR Stuff
     
-    func initMarketSignals(_ firm: Firm) async {
+    func initMarketSignals() async {
         do {
             var options = HttpConnectionOptions()
             options.transport = .webSockets
             options.skipNegotiation = true
-            options.accessTokenFactory = { return await XClient.get(firm).gatewayToken! }
+            options.accessTokenFactory = { return await XClient.get(self.streamingSource).gatewayToken! }
             options.timeout = 10000
             options.logLevel = .information
             
             marketCtx = HubConnectionBuilder()
-                .withUrl(url: XClient.get(firm).authMarketHubUrl, options: options)
+                .withUrl(url: XClient.get(streamingSource).authMarketHubUrl, options: options)
                 .withAutomaticReconnect(retryDelays: [1, 1, 1, 1, 1])
                 .build()
             

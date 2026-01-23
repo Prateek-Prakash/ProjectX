@@ -88,7 +88,7 @@ struct DeveloperView: View {
                                                 Text("Streaming Source")
                                                     .font(.system(size: 12, weight: .medium, design: .rounded))
                                                 Spacer()
-                                                Text("Topstep")
+                                                Text(globalVM.streamingSource.rawValue)
                                                     .font(.system(size: 12, design: .rounded))
                                                     .foregroundStyle(.secondary)
                                                 Image(systemName: "chevron.right")
@@ -406,7 +406,7 @@ struct DeveloperView: View {
                     }
                 } else {
                     Task {
-                        await globalVM.initMarketSignals(.topstep)
+                        await globalVM.initMarketSignals()
                     }
                 }
             }
