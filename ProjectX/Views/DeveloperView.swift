@@ -81,6 +81,32 @@ struct DeveloperView: View {
                                 
                                 VStack(spacing: 0) {
                                     Button {
+                                        // TODO: Select Streaming Source
+                                    } label: {
+                                        GroupBox {
+                                            HStack {
+                                                Text("Streaming Source0")
+                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                Spacer()
+                                                Text("Topstep")
+                                                    .font(.system(size: 12, design: .rounded))
+                                                    .foregroundStyle(.secondary)
+                                                Image(systemName: "chevron.right")
+                                                    .foregroundStyle(.secondary)
+                                                    .fontDesign(.rounded)
+                                                    .imageScale(.small)
+                                            }
+                                            .frame(height: 12)
+                                        }
+                                        .backgroundStyle(Color(.xCardBackground))
+                                    }
+                                    .buttonStyle(.plain)
+                                    
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    Button {
                                         globalVM.priceStreaming.toggle()
                                     } label: {
                                         GroupBox {
