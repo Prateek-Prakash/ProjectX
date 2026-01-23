@@ -46,7 +46,6 @@ struct AppShell: View {
                                     }
                                 }
                             }
-                            renderedImage
                         }
                         .padding(.horizontal)
                         .padding(.bottom)
