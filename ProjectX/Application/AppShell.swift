@@ -46,6 +46,7 @@ struct AppShell: View {
                                     }
                                 }
                             }
+                            renderedImage
                         }
                         .padding(.horizontal)
                         .padding(.bottom)
@@ -111,31 +112,6 @@ struct AppShell: View {
                 }
             }
         }
-    }
-    
-    func backupAccounts() async {
-        for account in globalVM.allAccounts {
-            let existing = rawBackups.first(where: { $0.firm == account.firm.headerName && $0.name == account.accountName })
-            
-            let trades = await XClient.get(account.firm).getTrades(account.accountId)
-            if !trades.isEmpty {
-                let data = try! JSONEncoder().encode(trades)
-                let json = String(data: data, encoding: .utf8)!
-                
-                if existing != nil {
-                    existing?.update(json)
-                } else {
-                    let backup = RawBackup(
-                        firm: account.firm.headerName,
-                        name: account.accountName,
-                        json: json,
-                        timestamp: Date.now.ISO8601Format()
-                    )
-                    modelContext.insert(backup)
-                }
-            }
-        }
-        try? modelContext.save()
     }
 }
 
