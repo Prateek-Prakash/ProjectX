@@ -10,6 +10,11 @@ import SwiftData
 import SwiftUI
 
 struct AppShell: View {
+    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
+    @Environment(\.displayScale) var displayScale
+    @State private var viewWidth: CGFloat = 0
+    
     @ObservedObject var globalVM = GlobalViewModel.shared
     
     @Environment(\.modelContext) var modelContext
@@ -17,6 +22,8 @@ struct AppShell: View {
     
     @State var showSettingsCover: Bool = false
     @State var successHaptic: Bool = false
+    
+    @State var screenshotImage: UIImage? = nil
     
     let oneSecondTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     let twoSecondTimer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
@@ -69,7 +76,7 @@ struct AppShell: View {
                     Button {
                         showSettingsCover.toggle()
                     } label: {
-                        Image(systemName: "gearshape.fill")
+                        Image(systemName: "gearshape")
                             .imageScale(.small)
                     }
                     .buttonStyle(.plain)
@@ -83,15 +90,13 @@ struct AppShell: View {
                 }
                 
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        successHaptic.toggle()
-                        // TODO: Screenshot
-                    } label: {
-                        Image(systemName: "camera.fill")
-                            .imageScale(.small)
-                    }
-                    .buttonStyle(.plain)
-                    .sensoryFeedback(.success, trigger: successHaptic)
+                    ShareLink(
+                            item: prepareExport(),
+                            preview: SharePreview("", image: renderAsImage())
+                        ) {
+                            Image(systemName: "square.and.arrow.up")
+                                .imageScale(.small)
+                        }
                 }
                 .sharedBackgroundVisibility(.hidden)
             }
@@ -110,7 +115,61 @@ struct AppShell: View {
                     }
                 }
             }
+            .overlay {
+                if let screenshotImage = screenshotImage {
+                    Image(uiImage: screenshotImage)
+                }
+            }
+            .onGeometryChange(for: CGSize.self) {
+                $0.size
+            } action: { size in
+                viewWidth = size.width
+            }
         }
+    }
+    
+    @MainActor
+    private func prepareExport() -> ExportableImage {
+        let imageRenderer = ImageRenderer(content: createScreenshot())
+        imageRenderer.scale = displayScale
+        imageRenderer.proposedSize = ProposedViewSize(width: viewWidth, height: nil)
+        return ExportableImage(uiImage: imageRenderer.uiImage ?? UIImage(), fileName: "Stats-\(Int(Date.now.timeIntervalSince1970))")
+    }
+
+    @MainActor
+    private func renderAsImage() -> Image {
+        let imageRenderer = ImageRenderer(content: createScreenshot())
+        imageRenderer.scale = displayScale
+        imageRenderer.proposedSize = ProposedViewSize(width: viewWidth, height: nil)
+        return Image(uiImage: imageRenderer.uiImage ?? UIImage())
+    }
+    
+    func createScreenshot() -> some View {
+        ZStack {
+            Color(.xBackground)
+                .edgesIgnoringSafeArea(.all)
+            VStack(spacing: 10) {
+                ForEach(Firm.allCases) { firm in
+                    if globalVM.isLinked(firm) && globalVM.isConnected(firm) {
+                        let accounts = globalVM.allAccounts.filter({
+                            $0.firm == firm
+                            && ((globalVM.showEvaluationAccounts && $0.accountType == .evaluation) || (globalVM.showFundedAccounts && $0.accountType == .funded) || (globalVM.showPracticeAccounts && $0.accountType == .practice))
+                            && ((globalVM.hideLockedAccounts && $0.canTrade) || !globalVM.hideLockedAccounts)
+                        })
+                        if !globalVM.hideEmptyFirms || !accounts.isEmpty {
+                            FirmCard(
+                                firm: firm,
+                                accounts: accounts
+                            )
+                        }
+                    }
+                }
+            }
+            .padding()
+        }
+        .environment(\.colorScheme, colorScheme)
+        .environment(\.dynamicTypeSize, dynamicTypeSize)
+        .environment(\.displayScale, displayScale)
     }
 }
 
