@@ -76,7 +76,6 @@ struct PerformanceView: View {
                                                 .foregroundStyle(.yellow)
                                             }
                                             .buttonStyle(.plain)
-                                            .sensoryFeedback(.success, trigger: successHaptic)
                                         }
                                         .frame(height: 12)
                                     }
@@ -485,6 +484,7 @@ struct PerformanceView: View {
                 }
             }
         }
+        .sensoryFeedback(.success, trigger: successHaptic)
         .interactiveDismissDisabled()
     }
 }

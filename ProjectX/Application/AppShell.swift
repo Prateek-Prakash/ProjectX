@@ -20,10 +20,10 @@ struct AppShell: View {
     @Environment(\.modelContext) var modelContext
     @Query(sort: [SortDescriptor(\RawBackup.firm), SortDescriptor(\RawBackup.name)]) var rawBackups: [RawBackup]
     
-    @State var showSettingsCover: Bool = false
     @State var showCustomizationSheet: Bool = false
+    @State var showSettingsCover: Bool = false
     
-    @State var screenshotImage: UIImage? = nil
+    @State var errorHaptic: Bool = false
     
     let oneSecondTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     let twoSecondTimer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
@@ -86,6 +86,15 @@ struct AppShell: View {
                             Label("Customization", systemImage: "theatermask.and.paintbrush")
                         }
                         
+                        Button {
+                            errorHaptic.toggle()
+                            Task {
+                                await backupAccounts()
+                            }
+                        } label: {
+                            Label("Backup", systemImage: "clock.arrow.trianglehead.2.counterclockwise.rotate.90")
+                        }
+                        
                         ShareLink(item: prepareExport(), preview: SharePreview("", image: renderAsImage())) {
                             Label("Export", systemImage: "square.and.arrow.up")
                         }
@@ -120,18 +129,16 @@ struct AppShell: View {
                     }
                 }
             }
-            .overlay {
-                if let screenshotImage = screenshotImage {
-                    Image(uiImage: screenshotImage)
-                }
-            }
             .onGeometryChange(for: CGSize.self) {
                 $0.size
             } action: { size in
                 viewWidth = size.width
             }
         }
+        .sensoryFeedback(.error, trigger: errorHaptic)
     }
+    
+    // MARK: Export
     
     @MainActor
     private func prepareExport() -> ExportableImage {
@@ -175,6 +182,33 @@ struct AppShell: View {
         .environment(\.colorScheme, colorScheme)
         .environment(\.dynamicTypeSize, dynamicTypeSize)
         .environment(\.displayScale, displayScale)
+    }
+    
+    // MARK: Backup
+    
+    func backupAccounts() async {
+        for account in globalVM.allAccounts {
+            let existing = rawBackups.first(where: { $0.firm == account.firm.headerName && $0.name == account.accountName })
+            
+            let trades = await XClient.get(account.firm).getTrades(account.accountId)
+            if !trades.isEmpty {
+                let data = try! JSONEncoder().encode(trades)
+                let json = String(data: data, encoding: .utf8)!
+                
+                if existing != nil {
+                    existing?.update(json)
+                } else {
+                    let backup = RawBackup(
+                        firm: account.firm.headerName,
+                        name: account.accountName,
+                        json: json,
+                        timestamp: Date.now.ISO8601Format()
+                    )
+                    modelContext.insert(backup)
+                }
+            }
+        }
+        try? modelContext.save()
     }
 }
 

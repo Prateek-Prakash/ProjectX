@@ -369,7 +369,6 @@ struct DeveloperView: View {
                                 .backgroundStyle(Color(.xCardBackground))
                             }
                             .buttonStyle(.plain)
-                            .sensoryFeedback(.success, trigger: successHaptic)
                         }
                     }
                     .padding(.horizontal)
@@ -411,6 +410,7 @@ struct DeveloperView: View {
                 }
             }
         }
+        .sensoryFeedback(.success, trigger: successHaptic)
     }
 }
 

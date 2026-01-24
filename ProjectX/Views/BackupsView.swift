@@ -54,7 +54,6 @@ struct BackupsView: View {
                                         .fontDesign(.rounded)
                                         .imageScale(.small)
                                 }
-                                .sensoryFeedback(.success, trigger: successHaptic)
                             }
                             .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                                 Button(role: .destructive) {
@@ -104,11 +103,12 @@ struct BackupsView: View {
                             .imageScale(.small)
                     }
                     .buttonStyle(.plain)
-                    .sensoryFeedback(.error, trigger: errorHaptic)
                 }
                 .sharedBackgroundVisibility(.hidden)
             }
         }
+        .sensoryFeedback(.error, trigger: errorHaptic)
+        .sensoryFeedback(.success, trigger: successHaptic)
     }
     
     func backupAccounts() async {

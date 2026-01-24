@@ -91,7 +91,6 @@ struct FirmSettingsCard: View {
                                         .backgroundStyle(Color(.xCardBackground))
                                     }
                                     .buttonStyle(.plain)
-                                    .sensoryFeedback(.success, trigger: successHaptic)
                                     
                                     if accounts.last != account {
                                         Divider()
@@ -106,6 +105,7 @@ struct FirmSettingsCard: View {
                 }
             }
         }
+        .sensoryFeedback(.success, trigger: successHaptic)
         .sheet(isPresented: $showAuthSheet) {
             CredentialsSheet(firm: firm)
         }
