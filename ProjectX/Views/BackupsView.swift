@@ -14,9 +14,6 @@ struct BackupsView: View {
     @Environment(\.modelContext) var modelContext
     @Query(sort: [SortDescriptor(\RawBackup.firm), SortDescriptor(\RawBackup.name)]) var rawBackups: [RawBackup]
     
-    @State var errorHaptic: Bool = false
-    @State var successHaptic: Bool = false
-    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -46,7 +43,7 @@ struct BackupsView: View {
                                 }
                                 Spacer()
                                 Button {
-                                    successHaptic.toggle()
+                                    HapticViewModel.shared.successHaptic()
                                     UIPasteboard.general.string = backup.json
                                 } label: {
                                     Image(systemName: "document.on.document")
@@ -94,7 +91,7 @@ struct BackupsView: View {
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        errorHaptic.toggle()
+                        HapticViewModel.shared.errorHaptic()
                         Task {
                             await backupAccounts()
                         }
@@ -107,8 +104,6 @@ struct BackupsView: View {
                 .sharedBackgroundVisibility(.hidden)
             }
         }
-        .sensoryFeedback(.error, trigger: errorHaptic)
-        .sensoryFeedback(.success, trigger: successHaptic)
     }
     
     func backupAccounts() async {

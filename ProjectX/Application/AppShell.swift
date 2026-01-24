@@ -23,8 +23,6 @@ struct AppShell: View {
     @State var showCustomizationSheet: Bool = false
     @State var showSettingsCover: Bool = false
     
-    @State var errorHaptic: Bool = false
-    
     let oneSecondTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     let twoSecondTimer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
     
@@ -87,7 +85,7 @@ struct AppShell: View {
                         }
                         
                         Button {
-                            errorHaptic.toggle()
+                            HapticViewModel.shared.errorHaptic()
                             Task {
                                 await backupAccounts()
                             }
@@ -135,7 +133,8 @@ struct AppShell: View {
                 viewWidth = size.width
             }
         }
-        .sensoryFeedback(.error, trigger: errorHaptic)
+        .sensoryFeedback(.success, trigger: HapticViewModel.shared.success)
+        .sensoryFeedback(.error, trigger: HapticViewModel.shared.error)
     }
     
     // MARK: Export

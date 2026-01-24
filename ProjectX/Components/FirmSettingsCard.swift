@@ -12,7 +12,6 @@ struct FirmSettingsCard: View {
     
     let firm: Firm
     
-    @State var successHaptic: Bool = false
     @State var isRotating = 0.0
     
     @State var showAuthSheet: Bool = false
@@ -68,7 +67,7 @@ struct FirmSettingsCard: View {
                                 let accounts = globalVM.allAccounts.filter({ $0.firm == firm })
                                 ForEach(accounts) { account in
                                     Button {
-                                        successHaptic.toggle()
+                                        HapticViewModel.shared.successHaptic()
                                         globalVM.rotateAccountType(account)
                                     } label: {
                                         GroupBox {
@@ -105,7 +104,6 @@ struct FirmSettingsCard: View {
                 }
             }
         }
-        .sensoryFeedback(.success, trigger: successHaptic)
         .sheet(isPresented: $showAuthSheet) {
             CredentialsSheet(firm: firm)
         }

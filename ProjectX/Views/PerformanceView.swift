@@ -10,8 +10,6 @@ import SwiftUI
 struct PerformanceView: View {
     @ObservedObject var globalVM = GlobalViewModel.shared
     
-    @State var successHaptic: Bool = false
-    
     @State var showLockoutSheet: Bool = false
     @State var showDailyProfitTargetSheet: Bool = false
     @State var showDailyLossLimitSheet: Bool = false
@@ -60,7 +58,7 @@ struct PerformanceView: View {
                                     GroupBox {
                                         HStack {
                                             Button {
-                                                successHaptic.toggle()
+                                                HapticViewModel.shared.successHaptic()
                                                 Task {
                                                     await globalVM.flattenAccount(account)
                                                 }
@@ -484,7 +482,6 @@ struct PerformanceView: View {
                 }
             }
         }
-        .sensoryFeedback(.success, trigger: successHaptic)
         .interactiveDismissDisabled()
     }
 }

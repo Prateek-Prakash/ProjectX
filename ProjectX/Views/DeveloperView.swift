@@ -11,8 +11,6 @@ import SwiftUI
 struct DeveloperView: View {
     @ObservedObject var globalVM = GlobalViewModel.shared
     
-    @State var successHaptic: Bool = false
-    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -350,7 +348,7 @@ struct DeveloperView: View {
                         
                         OriginCard {
                             Button {
-                                successHaptic.toggle()
+                                HapticViewModel.shared.successHaptic()
                                 globalVM.clearOldIds()
                             } label: {
                                 GroupBox {
@@ -410,7 +408,6 @@ struct DeveloperView: View {
                 }
             }
         }
-        .sensoryFeedback(.success, trigger: successHaptic)
     }
 }
 
