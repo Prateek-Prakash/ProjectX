@@ -92,79 +92,87 @@ struct CustomizationView: View {
                         }
                         
                         OriginCard {
-                            Button {
-                                globalVM.hideEmptyFirms.toggle()
-                            } label: {
-                                GroupBox {
-                                    HStack {
-                                        Text("Hide Empty Firms")
-                                            .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        Spacer()
-                                        Toggle("", isOn: $globalVM.hideEmptyFirms)
-                                            .scaleEffect(0.6, anchor: .trailing)
+                            VStack(spacing: 0) {
+                                Button {
+                                    globalVM.hideEmptyFirms.toggle()
+                                } label: {
+                                    GroupBox {
+                                        HStack {
+                                            Text("Hide Empty Firms")
+                                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            Spacer()
+                                            Toggle("", isOn: $globalVM.hideEmptyFirms)
+                                                .scaleEffect(0.6, anchor: .trailing)
+                                        }
+                                        .frame(height: 12)
                                     }
-                                    .frame(height: 12)
+                                    .backgroundStyle(Color(.xCardBackground))
                                 }
-                                .backgroundStyle(Color(.xCardBackground))
+                                .buttonStyle(.plain)
+                                
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                                
+                                Button {
+                                    globalVM.hideLockedAccounts.toggle()
+                                } label: {
+                                    GroupBox {
+                                        HStack {
+                                            Text("Hide Locked Accounts")
+                                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            Spacer()
+                                            Toggle("", isOn: $globalVM.hideLockedAccounts)
+                                                .scaleEffect(0.6, anchor: .trailing)
+                                        }
+                                        .frame(height: 12)
+                                    }
+                                    .backgroundStyle(Color(.xCardBackground))
+                                }
+                                .buttonStyle(.plain)
                             }
-                            .buttonStyle(.plain)
                         }
                         
                         OriginCard {
-                            Button {
-                                globalVM.hideLockedAccounts.toggle()
-                            } label: {
-                                GroupBox {
-                                    HStack {
-                                        Text("Hide Locked Accounts")
-                                            .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        Spacer()
-                                        Toggle("", isOn: $globalVM.hideLockedAccounts)
-                                            .scaleEffect(0.6, anchor: .trailing)
+                            VStack(spacing: 0) {
+                                Button {
+                                    globalVM.subtractStartingBalance.toggle()
+                                } label: {
+                                    GroupBox {
+                                        HStack {
+                                            Text("Subtract Starting Balance")
+                                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            Spacer()
+                                            Toggle("", isOn: $globalVM.subtractStartingBalance)
+                                                .scaleEffect(0.6, anchor: .trailing)
+                                        }
+                                        .frame(height: 12)
                                     }
-                                    .frame(height: 12)
+                                    .backgroundStyle(Color(.xCardBackground))
                                 }
-                                .backgroundStyle(Color(.xCardBackground))
-                            }
-                            .buttonStyle(.plain)
-                        }
-                        
-                        OriginCard {
-                            Button {
-                                globalVM.subtractStartingBalance.toggle()
-                            } label: {
-                                GroupBox {
-                                    HStack {
-                                        Text("Subtract Starting Balance")
-                                            .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        Spacer()
-                                        Toggle("", isOn: $globalVM.subtractStartingBalance)
-                                            .scaleEffect(0.6, anchor: .trailing)
+                                .buttonStyle(.plain)
+                                
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                                
+                                Button {
+                                    globalVM.blurBalances.toggle()
+                                } label: {
+                                    GroupBox {
+                                        HStack {
+                                            Text("Blur Balances")
+                                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            Spacer()
+                                            Toggle("", isOn: $globalVM.blurBalances)
+                                                .scaleEffect(0.6, anchor: .trailing)
+                                        }
+                                        .frame(height: 12)
                                     }
-                                    .frame(height: 12)
+                                    .backgroundStyle(Color(.xCardBackground))
                                 }
-                                .backgroundStyle(Color(.xCardBackground))
+                                .buttonStyle(.plain)
                             }
-                            .buttonStyle(.plain)
-                        }
-                        
-                        OriginCard {
-                            Button {
-                                globalVM.blurAccountBalance.toggle()
-                            } label: {
-                                GroupBox {
-                                    HStack {
-                                        Text("Blur Account Balance")
-                                            .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        Spacer()
-                                        Toggle("", isOn: $globalVM.blurAccountBalance)
-                                            .scaleEffect(0.6, anchor: .trailing)
-                                    }
-                                    .frame(height: 12)
-                                }
-                                .backgroundStyle(Color(.xCardBackground))
-                            }
-                            .buttonStyle(.plain)
                         }
                     }
                     .padding(.horizontal)

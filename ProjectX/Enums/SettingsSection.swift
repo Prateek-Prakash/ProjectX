@@ -28,7 +28,7 @@ enum SettingsSection: String, CaseIterable, Identifiable {
         case .notifications:
             return "bell"
         case .customization:
-            return "paintpalette"
+            return "theatermask.and.paintbrush"
         case .developer:
             return "ant"
         case .backups:

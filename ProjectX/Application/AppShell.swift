@@ -72,17 +72,6 @@ struct AppShell: View {
             .scrollIndicators(.never)
             .toolbarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        showSettingsCover.toggle()
-                    } label: {
-                        Image(systemName: "gearshape")
-                            .imageScale(.small)
-                    }
-                    .buttonStyle(.plain)
-                }
-                .sharedBackgroundVisibility(.hidden)
-                
                 ToolbarItem(placement: .title) {
                     Text("DASHBOARD")
                         .font(.system(size: 12, weight: .semibold, design: .monospaced))
@@ -90,13 +79,20 @@ struct AppShell: View {
                 }
                 
                 ToolbarItem(placement: .topBarTrailing) {
-                    ShareLink(
-                            item: prepareExport(),
-                            preview: SharePreview("", image: renderAsImage())
-                        ) {
-                            Image(systemName: "square.and.arrow.up")
-                                .imageScale(.small)
+                    Menu {
+                        ShareLink(item: prepareExport(), preview: SharePreview("", image: renderAsImage())) {
+                            Label("Export", systemImage: "square.and.arrow.up")
                         }
+                        
+                        Button {
+                            showSettingsCover.toggle()
+                        } label: {
+                            Label("Settings", systemImage: "gearshape")
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis.circle")
+                            .imageScale(.medium)
+                    }
                 }
                 .sharedBackgroundVisibility(.hidden)
             }
@@ -135,7 +131,7 @@ struct AppShell: View {
         imageRenderer.proposedSize = ProposedViewSize(width: viewWidth, height: nil)
         return ExportableImage(uiImage: imageRenderer.uiImage ?? UIImage(), fileName: "Stats-\(Int(Date.now.timeIntervalSince1970))")
     }
-
+    
     @MainActor
     private func renderAsImage() -> Image {
         let imageRenderer = ImageRenderer(content: createScreenshot())

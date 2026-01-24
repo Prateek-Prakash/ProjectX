@@ -41,7 +41,7 @@ struct AccountTile: View {
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text((globalVM.subtractStartingBalance ? account.balance - account.startingBalance : account.balance).asCurrency())
-                        .blur(radius: globalVM.blurAccountBalance ? 4 : 0)
+                        .blur(radius: globalVM.blurBalances ? 4 : 0)
                     HStack(spacing: 4) {
                         Image(systemName: account.isLeader ? "l.square.fill" : "l.square")
                             .foregroundStyle(account.isLeader ? .primary : .secondary)

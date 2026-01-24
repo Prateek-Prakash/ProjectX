@@ -45,7 +45,7 @@ class GlobalViewModel: ObservableObject {
     @AppStorage("delayAuthentication") var delayAuthentication: Bool = false
     @AppStorage("delayLoadingTrades") var delayLoadingTrades: Bool = false
     @AppStorage("executeLockouts") var executeLockouts: Bool = true
-    @AppStorage("blurAccountBalance") var blurAccountBalance: Bool = false
+    @AppStorage("blurBalances") var blurBalances: Bool = false
     
     @Published var authenticatingStates: [Firm:Bool] = [:]
     @Published var connectedStates: [Firm:Bool] = [:]
