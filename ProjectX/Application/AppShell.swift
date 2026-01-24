@@ -21,7 +21,7 @@ struct AppShell: View {
     @Query(sort: [SortDescriptor(\RawBackup.firm), SortDescriptor(\RawBackup.name)]) var rawBackups: [RawBackup]
     
     @State var showSettingsCover: Bool = false
-    @State var successHaptic: Bool = false
+    @State var showCustomizationSheet: Bool = false
     
     @State var screenshotImage: UIImage? = nil
     
@@ -80,6 +80,12 @@ struct AppShell: View {
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
+                        Button {
+                            showCustomizationSheet.toggle()
+                        } label: {
+                            Label("Customization", systemImage: "theatermask.and.paintbrush")
+                        }
+                        
                         ShareLink(item: prepareExport(), preview: SharePreview("", image: renderAsImage())) {
                             Label("Export", systemImage: "square.and.arrow.up")
                         }
@@ -98,6 +104,9 @@ struct AppShell: View {
             }
             .fullScreenCover(isPresented: $showSettingsCover) {
                 SettingsView()
+            }
+            .sheet(isPresented: $showCustomizationSheet) {
+                CustomizationSheet()
             }
             .onReceive(oneSecondTimer) { _ in
                 if globalVM.isInitialized {
