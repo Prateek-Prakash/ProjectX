@@ -66,7 +66,7 @@ struct DonateView: View {
                 }
             }
             .sheet(item: $selectedDonation) {
-                SafariView(url: $0.url)
+                SafariSheet(url: $0.url)
             }
         }
     }

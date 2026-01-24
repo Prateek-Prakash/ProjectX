@@ -213,7 +213,7 @@ struct AboutView: View {
                 }
             }
             .sheet(item: $selectedDependency) { dependency in
-                SafariView(url: dependency.url)
+                SafariSheet(url: dependency.url)
             }
         }
     }
