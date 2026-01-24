@@ -28,12 +28,12 @@ struct PerformanceView: View {
                     ScrollView {
                         VStack(spacing: 10) {
                             HStack(spacing: 10) {
-                                OriginCard {
-                                    GroupBox {
-                                        HStack {
-                                            Button {
-                                                showLockoutSheet.toggle()
-                                            } label: {
+                                Button {
+                                    showLockoutSheet.toggle()
+                                } label: {
+                                    OriginCard(color: .red) {
+                                        GroupBox {
+                                            HStack {
                                                 HStack {
                                                     Image(systemName: "lock")
                                                         .imageScale(.small)
@@ -44,25 +44,23 @@ struct PerformanceView: View {
                                                 .frame(maxWidth: .infinity)
                                                 .foregroundStyle(.red)
                                             }
-                                            .buttonStyle(.plain)
-                                            .disabled(!account.canTrade || !globalVM.inTradingHours)
+                                            .frame(height: 12)
                                         }
-                                        .frame(height: 12)
+                                        .backgroundStyle(Color(.xCardBackground))
                                     }
-                                    .backgroundStyle(Color(.xCardBackground))
-                                } color: {
-                                    Color(.red)
                                 }
+                                .buttonStyle(.plain)
+                                .disabled(!account.canTrade || !globalVM.inTradingHours)
                                 
-                                OriginCard {
-                                    GroupBox {
-                                        HStack {
-                                            Button {
-                                                HapticViewModel.shared.successHaptic()
-                                                Task {
-                                                    await globalVM.flattenAccount(account)
-                                                }
-                                            } label: {
+                                Button {
+                                    HapticViewModel.shared.successHaptic()
+                                    Task {
+                                        await globalVM.flattenAccount(account)
+                                    }
+                                } label: {
+                                    OriginCard(color: .yellow) {
+                                        GroupBox {
+                                            HStack {
                                                 HStack {
                                                     Image(systemName: "exclamationmark.octagon")
                                                         .imageScale(.small)
@@ -73,14 +71,12 @@ struct PerformanceView: View {
                                                 .frame(maxWidth: .infinity)
                                                 .foregroundStyle(.yellow)
                                             }
-                                            .buttonStyle(.plain)
+                                            .frame(height: 12)
                                         }
-                                        .frame(height: 12)
+                                        .backgroundStyle(Color(.xCardBackground))
                                     }
-                                    .backgroundStyle(Color(.xCardBackground))
-                                } color: {
-                                    Color(.yellow)
                                 }
+                                .buttonStyle(.plain)
                             }
                             
                             OriginCard {

@@ -11,14 +11,9 @@ struct OriginCard<Content: View>: View {
     let content: Content
     let color: Color?
     
-    init(@ViewBuilder content: () -> Content) {
+    init(color: Color? = nil, @ViewBuilder content: () -> Content) {
+        self.color = color
         self.content = content()
-        self.color = nil
-    }
-    
-    init(@ViewBuilder content: () -> Content, @ViewBuilder color: () -> Color?) {
-        self.content = content()
-        self.color = color()
     }
     
     var body: some View {
@@ -26,9 +21,9 @@ struct OriginCard<Content: View>: View {
             ZStack {
                 content
             }
-            .background(color?.opacity(0.15) ?? Color(.xCardBackground))
+            .background(Color(.xCardBackground))
         }
         .clipShape(.rect(cornerRadius: 12))
-        .overlay(RoundedRectangle(cornerRadius: 12).stroke(color?.opacity(0.45) ?? Color(.xOutline), lineWidth: 1))
+        .overlay(RoundedRectangle(cornerRadius: 12).stroke(color ?? Color(.xOutline), lineWidth:  1))
     }
 }
