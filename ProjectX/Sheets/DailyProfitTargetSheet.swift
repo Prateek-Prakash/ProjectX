@@ -1,5 +1,5 @@
 //
-//  DailyProfitTargetView.swift
+//  DailyProfitTargetSheet.swift
 //  ProjectX
 //
 //  Created by Prateek Prakash on 11/20/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DailyProfitTargetView: View {
+struct DailyProfitTargetSheet: View {
     @Environment(\.dismiss) private var dismiss
     
     @ObservedObject var globalVM = GlobalViewModel.shared

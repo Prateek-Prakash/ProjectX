@@ -1,5 +1,5 @@
 //
-//  CredentialsView.swift
+//  CredentialsSheet.swift
 //  ProjectX
 //
 //  Created by Prateek Prakash on 9/19/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CredentialsView: View {
+struct CredentialsSheet: View {
     @Environment(\.dismiss) private var dismiss
     
     @ObservedObject var globalVM = GlobalViewModel.shared

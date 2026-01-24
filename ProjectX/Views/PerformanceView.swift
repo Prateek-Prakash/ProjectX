@@ -130,7 +130,7 @@ struct PerformanceView: View {
                                             }
                                         } else {
                                             ContentUnavailableView {
-                                                Label("NO POSITIONS", systemImage: "exclamationmark.triangle")
+                                                Label("NO POSITIONS FOUND", systemImage: "exclamationmark.triangle")
                                                     .imageScale(.small)
                                                     .font(.system(size: 8, weight: .semibold, design: .monospaced))
                                                     .tracking(2)
@@ -296,7 +296,7 @@ struct PerformanceView: View {
                                             }
                                         } else {
                                             ContentUnavailableView {
-                                                Label("NO DAILY STATS", systemImage: "exclamationmark.triangle")
+                                                Label("NO DAILY STATS FOUND", systemImage: "exclamationmark.triangle")
                                                     .imageScale(.small)
                                                     .font(.system(size: 8, weight: .semibold, design: .monospaced))
                                                     .tracking(2)
@@ -341,7 +341,7 @@ struct PerformanceView: View {
                                             }
                                         } else {
                                             ContentUnavailableView {
-                                                Label("NO TRADES", systemImage: "exclamationmark.triangle")
+                                                Label("NO TRADES FOUND", systemImage: "exclamationmark.triangle")
                                                     .imageScale(.small)
                                                     .font(.system(size: 8, weight: .semibold, design: .monospaced))
                                                     .tracking(2)
@@ -456,13 +456,13 @@ struct PerformanceView: View {
                 }
             }
             .sheet(isPresented: $showLockoutSheet) {
-                LockoutView(account: account)
+                LockoutSheet(account: account)
             }
             .sheet(isPresented: $showDailyProfitTargetSheet) {
-                DailyProfitTargetView(account: account)
+                DailyProfitTargetSheet(account: account)
             }
             .sheet(isPresented: $showDailyLossLimitSheet) {
-                DailyLossLimitView(account: account)
+                DailyLossLimitSheet(account: account)
             }
             .onAppear {
                 isTrailing = account.personalDailyLossLimitTrailing

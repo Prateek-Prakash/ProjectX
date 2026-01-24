@@ -1,5 +1,5 @@
 //
-//  LockoutView.swift
+//  LockoutSheet.swift
 //  ProjectX
 //
 //  Created by Prateek Prakash on 1/17/26.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct LockoutView: View {
+struct LockoutSheet: View {
     @Environment(\.dismiss) private var dismiss
     
     @ObservedObject var globalVM = GlobalViewModel.shared

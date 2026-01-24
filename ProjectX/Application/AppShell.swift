@@ -60,7 +60,7 @@ struct AppShell: View {
                 } else {
                     
                     ContentUnavailableView {
-                        Label("NO ACCOUNTS", systemImage: "exclamationmark.triangle")
+                        Label("NO ACCOUNTS FOUND", systemImage: "exclamationmark.triangle")
                             .imageScale(.small)
                             .font(.system(size: 8, weight: .semibold, design: .monospaced))
                             .tracking(2)

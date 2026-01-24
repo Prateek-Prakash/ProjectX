@@ -107,7 +107,7 @@ struct FirmSettingsCard: View {
             }
         }
         .sheet(isPresented: $showAuthSheet) {
-            CredentialsView(firm: firm)
+            CredentialsSheet(firm: firm)
         }
     }
 }

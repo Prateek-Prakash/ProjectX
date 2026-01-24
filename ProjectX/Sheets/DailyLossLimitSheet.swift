@@ -1,5 +1,5 @@
 //
-//  DailyLossLimitView.swift
+//  DailyLossLimitSheet.swift
 //  ProjectX
 //
 //  Created by Prateek Prakash on 11/20/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DailyLossLimitView: View {
+struct DailyLossLimitSheet: View {
     @Environment(\.dismiss) private var dismiss
     
     @ObservedObject var globalVM = GlobalViewModel.shared
