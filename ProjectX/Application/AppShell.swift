@@ -94,7 +94,7 @@ struct AppShell: View {
                         }
                         
                         ShareLink(item: prepareExport(), preview: SharePreview("", image: renderAsImage())) {
-                            Label("Export", systemImage: "square.and.arrow.up")
+                            Label("Share", systemImage: "square.and.arrow.up")
                         }
                         
                         Button {

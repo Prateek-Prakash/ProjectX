@@ -321,6 +321,7 @@ class GlobalViewModel: ObservableObject {
         Helpers.debugLog("Start: \(start.asFractionalDateTime())")
         Helpers.debugLog("End: \(end.asFractionalDateTime())")
         if executeLockouts {
+            HapticViewModel.shared.successHaptic()
             await XClient.get(account.firm).lockAccount(account.accountId, account.userId, start, end)
         }
     }

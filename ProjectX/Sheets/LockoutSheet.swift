@@ -23,7 +23,6 @@ struct LockoutSheet: View {
                     .edgesIgnoringSafeArea(.all)
                 VStack {
                     Button {
-                        HapticViewModel.shared.successHaptic()
                         Task {
                             let start = Date.now
                             let end = Date.now.addingTimeInterval(60 * 15)
@@ -47,7 +46,6 @@ struct LockoutSheet: View {
                     .buttonStyle(.plain)
                     
                     Button {
-                        HapticViewModel.shared.successHaptic()
                         Task {
                             let start = Date.now
                             let end = Date.now.addingTimeInterval(60 * 30)
@@ -71,7 +69,6 @@ struct LockoutSheet: View {
                     .buttonStyle(.plain)
                     
                     Button {
-                        HapticViewModel.shared.successHaptic()
                         Task {
                             let start = Date.now
                             let end = Date.now.addingTimeInterval(60 * 60)
@@ -95,7 +92,6 @@ struct LockoutSheet: View {
                     .buttonStyle(.plain)
                     
                     Button {
-                        HapticViewModel.shared.successHaptic()
                         Task {
                             let start = Date.now
                             if let next = Date.now.nextOccurrence(ofHour: 17) {
