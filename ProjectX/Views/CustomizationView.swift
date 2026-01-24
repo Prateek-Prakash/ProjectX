@@ -147,6 +147,25 @@ struct CustomizationView: View {
                             }
                             .buttonStyle(.plain)
                         }
+                        
+                        OriginCard {
+                            Button {
+                                globalVM.blurAccountBalance.toggle()
+                            } label: {
+                                GroupBox {
+                                    HStack {
+                                        Text("Blur Account Balance")
+                                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                                        Spacer()
+                                        Toggle("", isOn: $globalVM.blurAccountBalance)
+                                            .scaleEffect(0.6, anchor: .trailing)
+                                    }
+                                    .frame(height: 12)
+                                }
+                                .backgroundStyle(Color(.xCardBackground))
+                            }
+                            .buttonStyle(.plain)
+                        }
                     }
                     .padding(.horizontal)
                     .padding(.bottom)
