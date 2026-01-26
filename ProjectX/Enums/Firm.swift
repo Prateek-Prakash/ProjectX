@@ -20,13 +20,4 @@ enum Firm: String, CaseIterable, Identifiable {
     var headerName: String {
         return self.rawValue.uppercased()
     }
-    
-    var winningDay: Double {
-        switch self {
-        case .theFuturesDesk:
-            return 0
-        case .topstep:
-            return 150
-        }
-    }
 }
