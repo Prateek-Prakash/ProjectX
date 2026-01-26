@@ -314,7 +314,8 @@ class GlobalViewModel: ObservableObject {
     func isLocked(_ account: Account) -> Bool {
         let accounts = allAccounts.filter({ $0.firm == account.firm })
         let leader = accounts.first(where: { $0.isLeader })
-        return !account.canTrade || (leader != nil && !leader!.canTrade && account.isFollower)
+        let blocked = account.personalDailyProfitTarget != nil && account.realizedDayPnl >= Double(account.personalDailyProfitTarget!) && account.personalDailyProfitTargetAction == 1
+        return !account.canTrade || (leader != nil && !leader!.canTrade && account.isFollower) || blocked
     }
     
     func lockAccount(_ account: Account, _ start: Date, _ end: Date) async {
