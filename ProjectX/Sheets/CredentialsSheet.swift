@@ -19,8 +19,10 @@ struct CredentialsSheet: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(.xCardBackground)
-                    .edgesIgnoringSafeArea(.all)
+                if !globalVM.glassSheets {
+                    Color(.xCardBackground)
+                        .edgesIgnoringSafeArea(.all)
+                }
                 VStack {
                     OriginCard {
                         TextField("Username", text: $globalVM.usernameInput)

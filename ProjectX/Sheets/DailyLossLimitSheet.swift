@@ -23,8 +23,10 @@ struct DailyLossLimitSheet: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(.xCardBackground)
-                    .edgesIgnoringSafeArea(.all)
+                if !globalVM.glassSheets {
+                    Color(.xCardBackground)
+                        .edgesIgnoringSafeArea(.all)
+                }
                 VStack {
                     Picker("Limit Action", selection: $limitAction) {
                         Text("Nothing").tag(0)

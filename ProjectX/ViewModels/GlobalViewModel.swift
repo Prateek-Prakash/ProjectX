@@ -36,6 +36,7 @@ class GlobalViewModel: ObservableObject {
     @AppStorage("hideEmptyFirms") var hideEmptyFirms: Bool = true
     @AppStorage("hideLockedAccounts") var hideLockedAccounts: Bool = false
     @AppStorage("subtractStartingBalance") var subtractStartingBalance: Bool = true
+    @AppStorage("glassSheets") var glassSheets: Bool = true
     
     // Developer
     @AppStorage("nextMarketOpen") var nextMarketOpen: String = ""

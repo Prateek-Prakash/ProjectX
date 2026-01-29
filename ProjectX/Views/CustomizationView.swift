@@ -174,6 +174,25 @@ struct CustomizationView: View {
                                 .buttonStyle(.plain)
                             }
                         }
+                        
+                        OriginCard {
+                            Button {
+                                globalVM.glassSheets.toggle()
+                            } label: {
+                                GroupBox {
+                                    HStack {
+                                        Text("Glass Sheets")
+                                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                                        Spacer()
+                                        Toggle("", isOn: $globalVM.glassSheets)
+                                            .scaleEffect(0.6, anchor: .trailing)
+                                    }
+                                    .frame(height: 12)
+                                }
+                                .backgroundStyle(Color(.xCardBackground))
+                            }
+                            .buttonStyle(.plain)
+                        }
                     }
                     .padding(.horizontal)
                     .padding(.bottom)

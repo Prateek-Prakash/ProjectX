@@ -17,8 +17,10 @@ struct CustomizationSheet: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(.xCardBackground)
-                    .edgesIgnoringSafeArea(.all)
+                if !globalVM.glassSheets {
+                    Color(.xCardBackground)
+                        .edgesIgnoringSafeArea(.all)
+                }
                 VStack {
                     OriginCard {
                         VStack(spacing: 0) {
@@ -176,6 +178,25 @@ struct CustomizationSheet: View {
                             }
                             .buttonStyle(.plain)
                         }
+                    }
+                    
+                    OriginCard {
+                        Button {
+                            globalVM.glassSheets.toggle()
+                        } label: {
+                            GroupBox {
+                                HStack {
+                                    Text("Glass Sheets")
+                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                                    Spacer()
+                                    Toggle("", isOn: $globalVM.glassSheets)
+                                        .scaleEffect(0.6, anchor: .trailing)
+                                }
+                                .frame(height: 12)
+                            }
+                            .backgroundStyle(Color(.xCardBackground))
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
                 .fixedSize(horizontal: false, vertical: true)
