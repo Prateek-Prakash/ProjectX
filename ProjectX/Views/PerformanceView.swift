@@ -101,43 +101,6 @@ struct PerformanceView: View {
                             OriginCard {
                                 VStack(spacing: 0) {
                                     OriginHeader {
-                                        Text("POSITIONS")
-                                            .font(.system(size: 8, weight: .semibold, design: .monospaced))
-                                            .tracking(2)
-                                            .foregroundStyle(Color(.xHeaderText))
-                                    }
-                                    
-                                    Divider()
-                                        .frame(height: 1)
-                                        .overlay(Color(.xOutline))
-                                    
-                                    LazyVStack(spacing: 0) {
-                                        if !account.positions.isEmpty {
-                                            ForEach(account.positions) { position in
-                                                PositionTile(position: position)
-                                                if account.positions.last != position {
-                                                    Divider()
-                                                        .frame(height: 1)
-                                                        .overlay(Color(.xOutline))
-                                                }
-                                            }
-                                        } else {
-                                            ContentUnavailableView {
-                                                Label("NO POSITIONS FOUND", systemImage: "exclamationmark.triangle")
-                                                    .imageScale(.small)
-                                                    .font(.system(size: 8, weight: .semibold, design: .monospaced))
-                                                    .tracking(2)
-                                                    .foregroundStyle(.secondary)
-                                            }
-                                            .padding()
-                                        }
-                                    }
-                                }
-                            }
-                            
-                            OriginCard {
-                                VStack(spacing: 0) {
-                                    OriginHeader {
                                         Text("PERSONAL LIMITS")
                                             .font(.system(size: 8, weight: .semibold, design: .monospaced))
                                             .tracking(2)
@@ -223,6 +186,88 @@ struct PerformanceView: View {
                             OriginCard {
                                 VStack(spacing: 0) {
                                     OriginHeader {
+                                        Text("POSITIONS")
+                                            .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                            .tracking(2)
+                                            .foregroundStyle(Color(.xHeaderText))
+                                    }
+                                    
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    LazyVStack(spacing: 0) {
+                                        if !account.positions.isEmpty {
+                                            ForEach(account.positions) { position in
+                                                PositionTile(position: position)
+                                                if account.positions.last != position {
+                                                    Divider()
+                                                        .frame(height: 1)
+                                                        .overlay(Color(.xOutline))
+                                                }
+                                            }
+                                        } else {
+                                            ContentUnavailableView {
+                                                Label("NO POSITIONS FOUND", systemImage: "exclamationmark.triangle")
+                                                    .imageScale(.small)
+                                                    .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                                    .tracking(2)
+                                                    .foregroundStyle(.secondary)
+                                            }
+                                            .padding()
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            OriginCard {
+                                VStack(spacing: 0) {
+                                    NavigationLink {
+                                        TradeHistoryView()
+                                    } label: {
+                                        OriginHeader {
+                                            Text("LATEST TRADES")
+                                                .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                                .tracking(2)
+                                                .foregroundStyle(Color(.xHeaderText))
+                                            Image(systemName: "chevron.right")
+                                                .foregroundStyle(Color(.xHeaderText))
+                                                .font(.system(size: 6, weight: .semibold, design: .rounded))
+                                        }
+                                    }
+                                    .buttonStyle(.plain)
+                                    
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    LazyVStack(spacing: 0) {
+                                        if !globalVM.accountTrades.isEmpty {
+                                            ForEach(Array(globalVM.accountTrades.prefix(5))) { trade in
+                                                TradeTile(trade: trade)
+                                                if globalVM.accountTrades.last != trade {
+                                                    Divider()
+                                                        .frame(height: 1)
+                                                        .overlay(Color(.xOutline))
+                                                }
+                                            }
+                                        } else {
+                                            ContentUnavailableView {
+                                                Label("NO TRADES FOUND", systemImage: "exclamationmark.triangle")
+                                                    .imageScale(.small)
+                                                    .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                                    .tracking(2)
+                                                    .foregroundStyle(.secondary)
+                                            }
+                                            .padding()
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            OriginCard {
+                                VStack(spacing: 0) {
+                                    OriginHeader {
                                         Text("WIN PERCENTAGE")
                                             .font(.system(size: 8, weight: .semibold, design: .monospaced))
                                             .tracking(2)
@@ -290,51 +335,6 @@ struct PerformanceView: View {
                                         } else {
                                             ContentUnavailableView {
                                                 Label("NO DAILY STATS FOUND", systemImage: "exclamationmark.triangle")
-                                                    .imageScale(.small)
-                                                    .font(.system(size: 8, weight: .semibold, design: .monospaced))
-                                                    .tracking(2)
-                                                    .foregroundStyle(.secondary)
-                                            }
-                                            .padding()
-                                        }
-                                    }
-                                }
-                            }
-                            
-                            OriginCard {
-                                VStack(spacing: 0) {
-                                    NavigationLink {
-                                        TradeHistoryView()
-                                    } label: {
-                                        OriginHeader {
-                                            Text("LATEST TRADES")
-                                                .font(.system(size: 8, weight: .semibold, design: .monospaced))
-                                                .tracking(2)
-                                                .foregroundStyle(Color(.xHeaderText))
-                                            Image(systemName: "chevron.right")
-                                                .foregroundStyle(Color(.xHeaderText))
-                                                .font(.system(size: 6, weight: .semibold, design: .rounded))
-                                        }
-                                    }
-                                    .buttonStyle(.plain)
-                                    
-                                    Divider()
-                                        .frame(height: 1)
-                                        .overlay(Color(.xOutline))
-                                    
-                                    LazyVStack(spacing: 0) {
-                                        if !globalVM.accountTrades.isEmpty {
-                                            ForEach(Array(globalVM.accountTrades.prefix(5))) { trade in
-                                                TradeTile(trade: trade)
-                                                if globalVM.accountTrades.last != trade {
-                                                    Divider()
-                                                        .frame(height: 1)
-                                                        .overlay(Color(.xOutline))
-                                                }
-                                            }
-                                        } else {
-                                            ContentUnavailableView {
-                                                Label("NO TRADES FOUND", systemImage: "exclamationmark.triangle")
                                                     .imageScale(.small)
                                                     .font(.system(size: 8, weight: .semibold, design: .monospaced))
                                                     .tracking(2)
