@@ -415,8 +415,8 @@ class GlobalViewModel: ObservableObject {
             try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.MNQ.H26")
             try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.EP.H26")
             try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.MES.H26")
-            try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.GCE.G26")
-            try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.MGC.G26")
+            try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.GCE.J26")
+            try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.MGC.J26")
             try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.SIE.H26")
             try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.SIL.H26")
         } catch {
