@@ -434,7 +434,6 @@ struct PerformanceView: View {
                     } // ScrollView
                 } // If-Else
             } // ZStack
-            .scrollIndicators(.never)
             .toolbarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -471,6 +470,14 @@ struct PerformanceView: View {
                 }
                 
                 if old.realizedDayPnl != new.realizedDayPnl || old.positions.count != new.positions.count {
+                    if globalVM.audioAlerts {
+                        if old.positions.count < new.positions.count {
+                            AudioViewModel.shared.speakText("ENTERED POSITION")
+                        } else if old.positions.count > new.positions.count {
+                            AudioViewModel.shared.speakText("EXITED POSITION")
+                        }
+                    }
+                    
                     Task {
                         await globalVM.loadDailyStats(account)
                         await globalVM.loadTrades(account)

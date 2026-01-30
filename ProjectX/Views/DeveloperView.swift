@@ -10,6 +10,7 @@ import SwiftUI
 
 struct DeveloperView: View {
     @ObservedObject var globalVM = GlobalViewModel.shared
+    @StateObject var audioVM = AudioViewModel.shared
     
     var body: some View {
         NavigationStack {
@@ -274,7 +275,7 @@ struct DeveloperView: View {
                         OriginCard {
                             VStack(spacing: 0) {
                                 OriginHeader {
-                                    Text("AUDIO")
+                                    Text("AUDIO TWEAKING")
                                         .font(.system(size: 8, weight: .semibold, design: .monospaced))
                                         .tracking(2)
                                         .foregroundStyle(Color(.xHeaderText))
@@ -284,9 +285,95 @@ struct DeveloperView: View {
                                     .frame(height: 1)
                                     .overlay(Color(.xOutline))
                                 
+                                GroupBox {
+                                    HStack {
+                                        Text("Voice Rate")
+                                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                                        Spacer()
+                                        Slider(value: $audioVM.speechRate, in: 0.0...1.0, step: 0.1)
+                                            .scaleEffect(0.6, anchor: .trailing)
+                                            .frame(maxWidth: 250)
+                                    }
+                                    .frame(height: 12)
+                                }
+                                .backgroundStyle(Color(.xCardBackground))
+//                                .onChange(of: audioVM.speechRate) {
+//                                    audioVM.speakText("VOICE UPDATED")
+//                                }
+                                
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                                
+                                GroupBox {
+                                    HStack {
+                                        Text("Voice Pitch")
+                                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                                        Spacer()
+                                        Slider(value: $audioVM.speechPitch, in: 0.5...2.0, step: 0.25)
+                                            .scaleEffect(0.6, anchor: .trailing)
+                                            .frame(maxWidth: 250)
+                                    }
+                                    .frame(height: 12)
+                                }
+                                .backgroundStyle(Color(.xCardBackground))
+//                                .onChange(of: audioVM.speechPitch) {
+//                                    audioVM.speakText("VOICE UPDATED")
+//                                }
+                                
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                                
+                                Button {
+                                    audioVM.speakText("Entered-Position")
+                                } label: {
+                                    GroupBox {
+                                        HStack {
+                                            Text("Entered Position")
+                                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            Spacer()
+                                            Image(systemName: "speaker.wave.2.fill")
+                                                .foregroundStyle(.secondary)
+                                                .fontDesign(.rounded)
+                                                .imageScale(.small)
+                                        }
+                                        .frame(height: 12)
+                                    }
+                                    .backgroundStyle(Color(.xCardBackground))
+                                }
+                                .buttonStyle(.plain)
+                                
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                                
+                                Button {
+                                    audioVM.speakText("Exited-Position")
+                                } label: {
+                                    GroupBox {
+                                        HStack {
+                                            Text("Exited Position")
+                                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            Spacer()
+                                            Image(systemName: "speaker.wave.2.fill")
+                                                .foregroundStyle(.secondary)
+                                                .fontDesign(.rounded)
+                                                .imageScale(.small)
+                                        }
+                                        .frame(height: 12)
+                                    }
+                                    .backgroundStyle(Color(.xCardBackground))
+                                }
+                                .buttonStyle(.plain)
+                                
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                                
                                 VStack(spacing: 0) {
                                     Button {
-                                        AudioViewModel.shared.playSound(fileName: "Entered-Short")
+                                        audioVM.speakText("Entered-Short")
                                     } label: {
                                         GroupBox {
                                             HStack {
@@ -309,7 +396,7 @@ struct DeveloperView: View {
                                         .overlay(Color(.xOutline))
                                     
                                     Button {
-                                        AudioViewModel.shared.playSound(fileName: "Exited-Short")
+                                        audioVM.speakText("Exited-Short")
                                     } label: {
                                         GroupBox {
                                             HStack {
@@ -334,7 +421,7 @@ struct DeveloperView: View {
                                     .overlay(Color(.xOutline))
                                 
                                 Button {
-                                    AudioViewModel.shared.playSound(fileName: "Entered-Long")
+                                    audioVM.speakText("Entered-Long")
                                 } label: {
                                     GroupBox {
                                         HStack {
@@ -357,7 +444,7 @@ struct DeveloperView: View {
                                     .overlay(Color(.xOutline))
                                 
                                 Button {
-                                    AudioViewModel.shared.playSound(fileName: "Exited-Long")
+                                    audioVM.speakText("Exited-Long")
                                 } label: {
                                     GroupBox {
                                         HStack {

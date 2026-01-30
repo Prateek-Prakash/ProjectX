@@ -28,7 +28,6 @@ struct SettingsView: View {
                     .padding(.bottom)
                 }
             }
-            .scrollIndicators(.never)
             .toolbarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
