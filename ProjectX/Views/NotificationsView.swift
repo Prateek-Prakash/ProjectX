@@ -56,6 +56,26 @@ struct NotificationsView: View {
                             }
                             .buttonStyle(.plain)
                         }
+                        
+                        OriginCard {
+                            Button {
+                                globalVM.audioAlerts.toggle()
+                            } label: {
+                                GroupBox {
+                                    HStack {
+                                        Text("Audio Alerts")
+                                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            .fontDesign(.rounded)
+                                        Spacer()
+                                        Toggle("", isOn: $globalVM.audioAlerts)
+                                            .scaleEffect(0.6, anchor: .trailing)
+                                    }
+                                    .frame(height: 12)
+                                }
+                                .backgroundStyle(Color(.xCardBackground))
+                            }
+                            .buttonStyle(.plain)
+                        }
                     }
                     .padding(.horizontal)
                     .padding(.bottom)

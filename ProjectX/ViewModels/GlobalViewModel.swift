@@ -28,6 +28,7 @@ class GlobalViewModel: ObservableObject {
     // Notifications
     @AppStorage("pushNotifications") var pushNotifications: Bool = false
     @AppStorage("liveActivities") var liveActivities: Bool = false
+    @AppStorage("audioAlerts") var audioAlerts: Bool = false
     
     // Customization
     @AppStorage("showEvaluationAccounts") var showEvaluationAccounts: Bool = true
