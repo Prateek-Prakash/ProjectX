@@ -274,6 +274,113 @@ struct DeveloperView: View {
                         OriginCard {
                             VStack(spacing: 0) {
                                 OriginHeader {
+                                    Text("AUDIO")
+                                        .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                        .tracking(2)
+                                        .foregroundStyle(Color(.xHeaderText))
+                                }
+                                
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                                
+                                VStack(spacing: 0) {
+                                    Button {
+                                        AudioViewModel.shared.playSound(fileName: "Entered-Short")
+                                    } label: {
+                                        GroupBox {
+                                            HStack {
+                                                Text("Entered Short")
+                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                Spacer()
+                                                Image(systemName: "speaker.wave.2.fill")
+                                                    .foregroundStyle(.secondary)
+                                                    .fontDesign(.rounded)
+                                                    .imageScale(.small)
+                                            }
+                                            .frame(height: 12)
+                                        }
+                                        .backgroundStyle(Color(.xCardBackground))
+                                    }
+                                    .buttonStyle(.plain)
+                                    
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    Button {
+                                        AudioViewModel.shared.playSound(fileName: "Exited-Short")
+                                    } label: {
+                                        GroupBox {
+                                            HStack {
+                                                Text("Exited Short")
+                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                Spacer()
+                                                Image(systemName: "speaker.wave.2.fill")
+                                                    .foregroundStyle(.secondary)
+                                                    .fontDesign(.rounded)
+                                                    .imageScale(.small)
+                                            }
+                                            .frame(height: 12)
+                                        }
+                                        .backgroundStyle(Color(.xCardBackground))
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                                .backgroundStyle(Color(.xCardBackground))
+                                
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                                
+                                Button {
+                                    AudioViewModel.shared.playSound(fileName: "Entered-Long")
+                                } label: {
+                                    GroupBox {
+                                        HStack {
+                                            Text("Entered Long")
+                                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            Spacer()
+                                            Image(systemName: "speaker.wave.2.fill")
+                                                .foregroundStyle(.secondary)
+                                                .fontDesign(.rounded)
+                                                .imageScale(.small)
+                                        }
+                                        .frame(height: 12)
+                                    }
+                                    .backgroundStyle(Color(.xCardBackground))
+                                }
+                                .buttonStyle(.plain)
+                                
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                                
+                                Button {
+                                    AudioViewModel.shared.playSound(fileName: "Exited-Long")
+                                } label: {
+                                    GroupBox {
+                                        HStack {
+                                            Text("Exited Long")
+                                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            Spacer()
+                                            Image(systemName: "speaker.wave.2.fill")
+                                                .foregroundStyle(.secondary)
+                                                .fontDesign(.rounded)
+                                                .imageScale(.small)
+                                        }
+                                        .frame(height: 12)
+                                    }
+                                    .backgroundStyle(Color(.xCardBackground))
+                                }
+                                .buttonStyle(.plain)
+                            }
+                            .backgroundStyle(Color(.xCardBackground))
+                        }
+                        
+                        OriginCard {
+                            VStack(spacing: 0) {
+                                OriginHeader {
                                     Text("ANIMATION DEBUGGING")
                                         .font(.system(size: 8, weight: .semibold, design: .monospaced))
                                         .tracking(2)
