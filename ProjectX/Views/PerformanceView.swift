@@ -446,6 +446,17 @@ struct PerformanceView: View {
                         .font(.system(size: 12, weight: .semibold, design: .monospaced))
                         .tracking(2)
                 }
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink {
+                        AnalyzerView()
+                    } label: {
+                        Image(systemName: "sparkles")
+                            .imageScale(.small)
+                    }
+                    .buttonStyle(.plain)
+                }
+                .sharedBackgroundVisibility(.hidden)
             }
             .sheet(isPresented: $showLockoutSheet) {
                 LockoutSheet(account: account)
