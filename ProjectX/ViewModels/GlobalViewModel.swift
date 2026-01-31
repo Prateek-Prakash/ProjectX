@@ -398,29 +398,33 @@ class GlobalViewModel: ObservableObject {
             }
             
             try await marketCtx?.start()
-            await invokeMarketSubscriptions()
+            await invokeWatchlistSubscriptions()
             await marketCtx?.onReconnecting { _ in
                 Helpers.debugLog("initMarketSignals: Disconnected")
             }
             await marketCtx?.onReconnected {
                 Helpers.debugLog("initMarketSignals: Reconnected")
-                await self.invokeMarketSubscriptions()
+                await self.invokeWatchlistSubscriptions()
             }
         } catch {
             Helpers.debugLog("initMarketSignals: \(error)")
         }
     }
     
-    func invokeMarketSubscriptions() async {
+    func invokeWatchlistSubscriptions() async {
+        await invokeMarketSubscription("CON.F.US.ENQ.H26")
+        await invokeMarketSubscription("CON.F.US.MNQ.H26")
+        await invokeMarketSubscription("CON.F.US.EP.H26")
+        await invokeMarketSubscription("CON.F.US.MES.H26")
+        await invokeMarketSubscription("CON.F.US.GCE.J26")
+        await invokeMarketSubscription("CON.F.US.MGC.J26")
+        await invokeMarketSubscription("CON.F.US.SIE.H26")
+        await invokeMarketSubscription("CON.F.US.SIL.H26")
+    }
+    
+    func invokeMarketSubscription(_ contract: String) async {
         do {
-            try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.ENQ.H26")
-            try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.MNQ.H26")
-            try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.EP.H26")
-            try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.MES.H26")
-            try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.GCE.J26")
-            try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.MGC.J26")
-            try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.SIE.H26")
-            try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: "CON.F.US.SIL.H26")
+            try await marketCtx?.invoke(method: "SubscribeContractQuotes", arguments: contract)
         } catch {
             Helpers.debugLog("invokeMarketSubscriptions: \(error)")
         }
