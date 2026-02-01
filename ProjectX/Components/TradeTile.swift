@@ -8,66 +8,82 @@
 import SwiftUI
 
 struct TradeTile: View {
+    @ObservedObject var globalVM = GlobalViewModel.shared
+    
     let trade: Trade
+    let tappable: Bool
+    
+    @State var showTradeInfoSheet: Bool = false
     
     var body: some View {
-        HStack {
+        Button {
+            if tappable {
+                showTradeInfoSheet.toggle()
+            }
+        } label: {
             HStack {
-                Image(systemName: trade.positionSize < 0 ? "arrowtriangle.up.fill" : trade.positionSize > 0 ? "arrowtriangle.down.fill" : "questionmark")
-                    .resizable()
-                    .frame(width: 8, height: 8)
-                    .foregroundStyle(trade.positionSize < 0 ? .green : trade.positionSize > 0 ? .red : .primary)
-                Text(contractMap[trade.symbolId] ?? "--")
-                    .font(.system(size: 10, weight: .bold, design: .rounded))
-                Spacer()
-            }
-            .frame(width: 50)
-        
-            
-            VStack {
-                Text(String(abs(trade.positionSize)))
-                    .font(.system(size: 10, design: .monospaced))
-            }
-            .frame(width: 20)
-            
-            VStack {
-                Text(trade.entryPrice.asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : 2))
-                    .font(.system(size: 8, weight: .semibold, design: .monospaced))
-                Text(trade.createdAt.asFractionalDate())
-                    .font(.system(size: 8, design: .monospaced))
-                    .foregroundStyle(.secondary)
-                Text(trade.createdAt.asFractionalTime())
-                    .font(.system(size: 8, design: .monospaced))
-                    .foregroundStyle(.secondary)
-            }
-            .frame(maxWidth: .infinity)
-            
-            VStack {
-                Text(trade.exitPrice.asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : 2))
-                    .font(.system(size: 8, weight: .semibold, design: .monospaced))
-                Text(trade.exitedAt.asFractionalDate())
-                    .font(.system(size: 8, design: .monospaced))
-                    .foregroundStyle(.secondary)
-                Text(trade.exitedAt.asFractionalTime())
-                    .font(.system(size: 8, design: .monospaced))
-                    .foregroundStyle(.secondary)
-            }
-            .frame(maxWidth: .infinity)
-            
-            HStack {
-                Spacer()
-                VStack(alignment: .trailing) {
-                    Text(abs(trade.pnL).asCurrency())
-                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                        .foregroundStyle(trade.pnL > 0 ? .green : trade.pnL < 0 ? .red : .gray)
-                    Text(trade.fees.asCurrency())
-                        .font(.system(size: 8, weight: .light, design: .monospaced))
-                        .foregroundStyle(.red)
+                HStack {
+                    Image(systemName: trade.positionSize < 0 ? "arrowtriangle.up.fill" : trade.positionSize > 0 ? "arrowtriangle.down.fill" : "questionmark")
+                        .resizable()
+                        .frame(width: 8, height: 8)
+                        .foregroundStyle(trade.positionSize < 0 ? .green : trade.positionSize > 0 ? .red : .primary)
+                    Text(contractMap[trade.symbolId] ?? "--")
+                        .font(.system(size: 10, weight: .bold, design: .rounded))
+                    Spacer()
                 }
+                .frame(width: 50)
+                
+                
+                VStack {
+                    Text(String(abs(trade.positionSize)))
+                        .font(.system(size: 10, design: .monospaced))
+                }
+                .frame(width: 20)
+                
+                VStack {
+                    Text(trade.entryPrice.asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : 2))
+                        .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                    Text(trade.createdAt.asFractionalDate())
+                        .font(.system(size: 8, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                    Text(trade.createdAt.asFractionalTime())
+                        .font(.system(size: 8, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity)
+                
+                VStack {
+                    Text(trade.exitPrice.asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : 2))
+                        .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                    Text(trade.exitedAt.asFractionalDate())
+                        .font(.system(size: 8, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                    Text(trade.exitedAt.asFractionalTime())
+                        .font(.system(size: 8, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity)
+                
+                HStack {
+                    Spacer()
+                    VStack(alignment: .trailing) {
+                        Text(abs(trade.pnL).asCurrency())
+                            .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                            .foregroundStyle(trade.pnL > 0 ? .green : trade.pnL < 0 ? .red : .gray)
+                        Text(trade.fees.asCurrency())
+                            .font(.system(size: 8, weight: .light, design: .monospaced))
+                            .foregroundStyle(.red)
+                    }
+                }
+                .frame(maxWidth: .infinity)
             }
-            .frame(maxWidth: .infinity)
+            .padding(.all, 14)
+            .contentShape(.rect)
         }
-        .padding(.all, 14)
+        .buttonStyle(.plain)
+        .sheet(isPresented: $showTradeInfoSheet) {
+            TradeInfoSheet(trade: trade)
+        }
     }
 }
 
@@ -90,7 +106,7 @@ struct TradeTile: View {
         tradeDurationDisplay: "00:00:58"
     )
     OriginCard {
-        TradeTile(trade: trade)
+        TradeTile(trade: trade, tappable: true)
     }
     .padding()
 }

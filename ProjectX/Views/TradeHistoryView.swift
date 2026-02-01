@@ -20,7 +20,7 @@ struct TradeHistoryView: View {
                         OriginCard {
                             LazyVStack(spacing: 0) {
                                 ForEach(globalVM.accountTrades) { trade in
-                                    TradeTile(trade: trade)
+                                    TradeTile(trade: trade, tappable: true)
                                     if globalVM.accountTrades.last != trade {
                                         Divider()
                                             .frame(height: 1)

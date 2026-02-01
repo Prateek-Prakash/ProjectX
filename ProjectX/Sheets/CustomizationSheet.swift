@@ -7,9 +7,7 @@
 
 import SwiftUI
 
-struct CustomizationSheet: View {
-    @Environment(\.dismiss) private var dismiss
-    
+struct CustomizationSheet: View {    
     @ObservedObject var globalVM = GlobalViewModel.shared
     
     @State var sheetHeight: CGFloat = 0

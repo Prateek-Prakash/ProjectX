@@ -244,7 +244,7 @@ struct PerformanceView: View {
                                     LazyVStack(spacing: 0) {
                                         if !globalVM.accountTrades.isEmpty {
                                             ForEach(Array(globalVM.accountTrades.prefix(5))) { trade in
-                                                TradeTile(trade: trade)
+                                                TradeTile(trade: trade, tappable: true)
                                                 if globalVM.accountTrades.last != trade {
                                                     Divider()
                                                         .frame(height: 1)
