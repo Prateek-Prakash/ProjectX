@@ -27,6 +27,21 @@ struct TradeInfoSheet: View {
                     }
                     
                     OriginCard {
+                        GroupBox {
+                            HStack {
+                                Text("Duration")
+                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                Spacer()
+                                Text(trade.tradeDurationDisplay)
+                                    .font(.system(size: 12, design: .rounded))
+                                    .foregroundStyle(.secondary)
+                            }
+                            .frame(height: 12)
+                        }
+                        .backgroundStyle(Color(.xCardBackground))
+                    }
+                    
+                    OriginCard {
                         VStack(spacing: 0) {
                             OriginHeader {
                                 Text("RUN-UP")
