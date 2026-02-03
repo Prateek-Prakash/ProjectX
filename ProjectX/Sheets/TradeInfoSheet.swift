@@ -34,7 +34,7 @@ struct TradeInfoSheet: View {
                                 Spacer()
                                 Text(abs(trade.exitPrice - trade.entryPrice).asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : 2))
                                     .font(.system(size: 12, design: .rounded))
-                                    .foregroundStyle((trade.exitPrice - trade.entryPrice) > 0 ? .green : (trade.exitPrice - trade.entryPrice) < 0 ? .red : .secondary)
+                                    .foregroundStyle((trade.exitPrice - trade.entryPrice) * (trade.positionSize < 0 ? 1 : -1) > 0 ? .green : (trade.exitPrice - trade.entryPrice) < 0 ? .red : .secondary)
                             }
                             .frame(height: 12)
                         }
