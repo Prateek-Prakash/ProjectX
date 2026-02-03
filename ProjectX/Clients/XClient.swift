@@ -169,6 +169,29 @@ class XClient {
         }
     }
     
+    func getBars(_ id: Int, _ start: String, _ end: String) async -> BarResponseDTO? {
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(gatewayToken!)"
+        ]
+        let params: [String: Any] = [
+            "contractId": id,
+            "live": false,
+            "startTime": start,
+            "endTime": end,
+            "unit": 1,
+            "unitNumber": 1,
+            "limit": 20000,
+            "includePartialBar": true
+        ]
+        do {
+            let value = try await AF.request("\(gatewayUrl)/api/History/retrieveBars", method: .post, parameters: params, encoding: JSONEncoding.default, headers: headers).serializingDecodable(BarResponseDTO.self).value
+            return value
+        } catch {
+            Helpers.debugLog("getBars: \(error)")
+            return nil
+        }
+    }
+    
     func setPersonalLimits(_ id: Int, _ pdpt: Int?, _ pdptAction: Int, _ pdll: Int?, _ pdllAction: Int, _ trailing: Bool) async -> Bool {
         let pdpt = pdpt == 0 ? nil : pdpt
         let pdll = pdll == 0 ? nil : pdll
