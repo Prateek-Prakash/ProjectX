@@ -38,6 +38,17 @@ struct TradeDurationView: View {
                     .font(.system(size: 12, weight: .semibold, design: .monospaced))
                     .tracking(2)
             }
+            
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    // TODO: Filter
+                } label: {
+                    Image(systemName: "line.3.horizontal.decrease")
+                        .imageScale(.small)
+                }
+                .buttonStyle(.plain)
+            }
+            .sharedBackgroundVisibility(.hidden)
         }
     }
 }

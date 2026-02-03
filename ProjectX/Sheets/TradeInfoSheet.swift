@@ -156,12 +156,12 @@ struct TradeInfoSheet: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .padding()
                 .padding(.vertical)
-                .onGeometryChange(for: CGSize.self) {
-                    $0.size
-                } action: { size in
-                    sheetHeight = size.height
-                    viewWidth = size.width
-                }
+            }
+            .onGeometryChange(for: CGSize.self) {
+                $0.size
+            } action: { size in
+                sheetHeight = size.height
+                viewWidth = size.width
             }
             .toolbarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
@@ -191,7 +191,7 @@ struct TradeInfoSheet: View {
         let imageRenderer = ImageRenderer(content: createScreenshot())
         imageRenderer.scale = displayScale
         imageRenderer.proposedSize = ProposedViewSize(width: viewWidth, height: nil)
-        return ExportableImage(uiImage: imageRenderer.uiImage ?? UIImage(), fileName: "Trade-\(Int(Date.now.timeIntervalSince1970))")
+        return ExportableImage(uiImage: imageRenderer.uiImage ?? UIImage(), fileName: "TradeInfo-\(Int(Date.now.timeIntervalSince1970))")
     }
     
     @MainActor

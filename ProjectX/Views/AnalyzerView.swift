@@ -8,6 +8,11 @@
 import SwiftUI
 
 struct AnalyzerView: View {
+    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
+    @Environment(\.displayScale) var displayScale
+    @State private var viewWidth: CGFloat = 0
+    
     @ObservedObject var globalVM = GlobalViewModel.shared
     
     var body: some View {
@@ -24,6 +29,11 @@ struct AnalyzerView: View {
                 }
                 .padding()
             }
+            .onGeometryChange(for: CGSize.self) {
+                $0.size
+            } action: { size in
+                viewWidth = size.width
+            }
             .toolbarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {
@@ -37,6 +47,16 @@ struct AnalyzerView: View {
                         .font(.system(size: 12, weight: .semibold, design: .monospaced))
                         .tracking(2)
                 }
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        // TODO: Select
+                    } label: {
+                        Image(systemName: "dot.scope")
+                            .imageScale(.small)
+                    }
+                }
+                .sharedBackgroundVisibility(.hidden)
             }
         }
     }

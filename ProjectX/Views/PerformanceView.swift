@@ -267,42 +267,6 @@ struct PerformanceView: View {
                             
                             OriginCard {
                                 VStack(spacing: 0) {
-                                    OriginHeader {
-                                        Text("WIN PERCENTAGE")
-                                            .font(.system(size: 8, weight: .semibold, design: .monospaced))
-                                            .tracking(2)
-                                            .foregroundStyle(Color(.xHeaderText))
-                                    }
-                                    
-                                    Divider()
-                                        .frame(height: 1)
-                                        .overlay(Color(.xOutline))
-                                    
-                                    ZStack {
-                                        Gauge(value: account.winRate, in: 0...1) {
-                                            // Gauge Label
-                                        } currentValueLabel: {
-                                            // Current Value
-                                        } minimumValueLabel: {
-                                            let winPercentage = account.winRate * 100
-                                            Text(String(format: "%.0f", winPercentage))
-                                                .font(.caption)
-                                                .fontDesign(.monospaced)
-                                        } maximumValueLabel: {
-                                            let lossPercentage = 100 - (account.winRate * 100)
-                                            Text(String(format: "%.0f", lossPercentage))
-                                                .font(.caption)
-                                                .fontDesign(.monospaced)
-                                        }
-                                        .gaugeStyle(.accessoryLinear)
-                                        .padding(.horizontal, 14)
-                                        .padding(.vertical, 14)
-                                    }
-                                }
-                            }
-                            
-                            OriginCard {
-                                VStack(spacing: 0) {
                                     NavigationLink {
                                         DailyStatsHistoryView()
                                     } label: {
@@ -342,6 +306,42 @@ struct PerformanceView: View {
                                             }
                                             .padding()
                                         }
+                                    }
+                                }
+                            }
+                            
+                            OriginCard {
+                                VStack(spacing: 0) {
+                                    OriginHeader {
+                                        Text("WIN PERCENTAGE")
+                                            .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                            .tracking(2)
+                                            .foregroundStyle(Color(.xHeaderText))
+                                    }
+                                    
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    ZStack {
+                                        Gauge(value: account.winRate, in: 0...1) {
+                                            // Gauge Label
+                                        } currentValueLabel: {
+                                            // Current Value
+                                        } minimumValueLabel: {
+                                            let winPercentage = account.winRate * 100
+                                            Text(String(format: "%.0f", winPercentage))
+                                                .font(.caption)
+                                                .fontDesign(.monospaced)
+                                        } maximumValueLabel: {
+                                            let lossPercentage = 100 - (account.winRate * 100)
+                                            Text(String(format: "%.0f", lossPercentage))
+                                                .font(.caption)
+                                                .fontDesign(.monospaced)
+                                        }
+                                        .gaugeStyle(.accessoryLinear)
+                                        .padding(.horizontal, 14)
+                                        .padding(.vertical, 14)
                                     }
                                 }
                             }

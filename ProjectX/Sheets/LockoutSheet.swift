@@ -159,11 +159,11 @@ struct LockoutSheet: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .padding()
                 .padding(.vertical)
-                .onGeometryChange(for: CGSize.self) {
-                    $0.size
-                } action: { size in
-                    sheetHeight = size.height
-                }
+            }
+            .onGeometryChange(for: CGSize.self) {
+                $0.size
+            } action: { size in
+                sheetHeight = size.height
             }
             .toolbarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true).toolbar {
