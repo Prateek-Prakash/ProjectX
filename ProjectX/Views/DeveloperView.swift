@@ -206,7 +206,7 @@ struct DeveloperView: View {
                                                 Text("GC")
                                                     .font(.system(size: 12, weight: .medium, design: .rounded))
                                                 Spacer()
-                                                Text(globalVM.gcPrice?.asPoints(2) ?? "--")
+                                                Text(globalVM.gcPrice?.asPoints(1) ?? "--")
                                                     .font(.system(size: 12, design: .monospaced))
                                                     .foregroundStyle(.secondary)
                                             }
@@ -224,7 +224,7 @@ struct DeveloperView: View {
                                                 Text("MGC")
                                                     .font(.system(size: 12, weight: .medium, design: .rounded))
                                                 Spacer()
-                                                Text(globalVM.mgcPrice?.asPoints(2) ?? "--")
+                                                Text(globalVM.mgcPrice?.asPoints(1) ?? "--")
                                                     .font(.system(size: 12, design: .monospaced))
                                                     .foregroundStyle(.secondary)
                                             }
@@ -509,6 +509,27 @@ struct DeveloperView: View {
                                                     .font(.system(size: 12, weight: .medium, design: .rounded))
                                                 Spacer()
                                                 Toggle("", isOn: $globalVM.delayLoadingTrades)
+                                                    .scaleEffect(0.6, anchor: .trailing)
+                                            }
+                                            .frame(height: 12)
+                                        }
+                                        .backgroundStyle(Color(.xCardBackground))
+                                    }
+                                    .buttonStyle(.plain)
+                                    
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    Button {
+                                        globalVM.delayTradeStats.toggle()
+                                    } label: {
+                                        GroupBox {
+                                            HStack {
+                                                Text("Delay Trade Stats")
+                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                Spacer()
+                                                Toggle("", isOn: $globalVM.delayTradeStats)
                                                     .scaleEffect(0.6, anchor: .trailing)
                                             }
                                             .frame(height: 12)

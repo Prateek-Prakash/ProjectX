@@ -46,6 +46,7 @@ class GlobalViewModel: ObservableObject {
     @AppStorage("priceStreaming") var priceStreaming: Bool = false
     @AppStorage("delayAuthentication") var delayAuthentication: Bool = false
     @AppStorage("delayLoadingTrades") var delayLoadingTrades: Bool = false
+    @AppStorage("delayTradeStats") var delayTradeStats: Bool = false
     @AppStorage("executeLockouts") var executeLockouts: Bool = true
     @AppStorage("blurBalances") var blurBalances: Bool = false
     
@@ -73,6 +74,11 @@ class GlobalViewModel: ObservableObject {
     @Published var mgcPrice: Double? = nil
     @Published var siPrice: Double? = nil
     @Published var silPrice: Double? = nil
+    
+    @Published var runUpPoints: Double? = nil
+    @Published var runUpDollars: Double? = nil
+    @Published var drawdownPoints: Double? = nil
+    @Published var drawdownDollars: Double? = nil
     
     @Published var isInitialized = false
     let continuousClock = ContinuousClock()
@@ -332,6 +338,29 @@ class GlobalViewModel: ObservableObject {
     func flattenAccount(_ account: Account) async {
         let success = await XClient.get(account.firm).flattenAccount(account.accountId)
         Helpers.debugLog("Flatten: \(account.accountId) \(success ? "Success" : "Failed")")
+    }
+    
+    func calculateTradeStats(_ trade: Trade) async {
+        runUpPoints = nil
+        runUpDollars = nil
+        drawdownPoints = nil
+        drawdownDollars = nil
+        
+        if delayTradeStats {
+            try! await Task.sleep(for: .seconds(5))
+        }
+        
+        if trade.underFiveHours() {
+            runUpPoints = 0
+            runUpDollars = -1
+            drawdownPoints = 0
+            drawdownDollars = -1
+        } else {
+            runUpPoints = -1
+            runUpDollars = -1
+            drawdownPoints = -1
+            drawdownDollars = -1
+        }
     }
     
     // MARK: Market Status

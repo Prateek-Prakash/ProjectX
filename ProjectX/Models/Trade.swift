@@ -43,4 +43,8 @@ struct Trade: Identifiable, Equatable, Codable {
             tradeDurationDisplay: dto.tradeDurationDisplay
         )
     }
+    
+    func underFiveHours() -> Bool {
+        return Int(tradeDuration.split(separator: ":")[0])! < 5
+    }
 }

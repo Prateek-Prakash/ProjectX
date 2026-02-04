@@ -37,7 +37,7 @@ struct TradeInfoSheet: View {
                                 Text("Points")
                                     .font(.system(size: 12, weight: .medium, design: .rounded))
                                 Spacer()
-                                Text(abs(trade.exitPrice - trade.entryPrice).asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : 2))
+                                Text(abs(trade.exitPrice - trade.entryPrice).asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : ["GC", "MGC"].contains(contractMap[trade.symbolId]) ? 1 : 2))
                                     .font(.system(size: 12, design: .rounded))
                                     .foregroundStyle((trade.exitPrice - trade.entryPrice) * (trade.positionSize < 0 ? 1 : -1) > 0 ? .green : (trade.exitPrice - trade.entryPrice) < 0 ? .red : .secondary)
                             }
@@ -80,9 +80,13 @@ struct TradeInfoSheet: View {
                                         Text("Points")
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
                                         Spacer()
-                                        Text(0.asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : 2))
-                                            .font(.system(size: 12, design: .rounded))
-                                            .foregroundStyle(.secondary)
+                                        if let runUpPoints = globalVM.runUpPoints {
+                                            Text(runUpPoints != -1 ? "+\(runUpPoints.asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : ["GC", "MGC"].contains(contractMap[trade.symbolId]) ? 1 : 2))" : "--")
+                                                .font(.system(size: 12, design: .rounded))
+                                                .foregroundStyle(.secondary)
+                                        } else {
+                                            ProgressView()
+                                        }
                                     }
                                     .frame(height: 12)
                                 }
@@ -96,9 +100,13 @@ struct TradeInfoSheet: View {
                                         Text("Dollars")
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
                                         Spacer()
-                                        Text(0.0.asCurrency())
-                                            .font(.system(size: 12, design: .rounded))
-                                            .foregroundStyle(.secondary)
+                                        if let runUpDollars = globalVM.runUpDollars {
+                                            Text(runUpDollars != -1 ? "-\(0.asCurrency())" : "--")
+                                                .font(.system(size: 12, design: .rounded))
+                                                .foregroundStyle(.secondary)
+                                        } else {
+                                            ProgressView()
+                                        }
                                     }
                                     .frame(height: 12)
                                 }
@@ -126,9 +134,13 @@ struct TradeInfoSheet: View {
                                         Text("Points")
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
                                         Spacer()
-                                        Text(0.asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : 2))
-                                            .font(.system(size: 12, design: .rounded))
-                                            .foregroundStyle(.secondary)
+                                        if let drawdownPoints = globalVM.drawdownPoints {
+                                            Text(drawdownPoints != -1 ? "-\(drawdownPoints.asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : ["GC", "MGC"].contains(contractMap[trade.symbolId]) ? 1 : 2))" : "--")
+                                                .font(.system(size: 12, design: .rounded))
+                                                .foregroundStyle(.secondary)
+                                        } else {
+                                            ProgressView()
+                                        }
                                     }
                                     .frame(height: 12)
                                 }
@@ -142,9 +154,13 @@ struct TradeInfoSheet: View {
                                         Text("Dollars")
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
                                         Spacer()
-                                        Text(0.0.asCurrency())
-                                            .font(.system(size: 12, design: .rounded))
-                                            .foregroundStyle(.secondary)
+                                        if let drawdownDollars = globalVM.drawdownDollars {
+                                            Text(drawdownDollars != -1 ? "-\(0.asCurrency())" : "--")
+                                                .font(.system(size: 12, design: .rounded))
+                                                .foregroundStyle(.secondary)
+                                        } else {
+                                            ProgressView()
+                                        }
                                     }
                                     .frame(height: 12)
                                 }
@@ -217,7 +233,7 @@ struct TradeInfoSheet: View {
                             Text("Points")
                                 .font(.system(size: 12, weight: .medium, design: .rounded))
                             Spacer()
-                            Text(abs(trade.exitPrice - trade.entryPrice).asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : 2))
+                            Text(abs(trade.exitPrice - trade.entryPrice).asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : ["GC", "MGC"].contains(contractMap[trade.symbolId]) ? 1 : 2))
                                 .font(.system(size: 12, design: .rounded))
                                 .foregroundStyle((trade.exitPrice - trade.entryPrice) * (trade.positionSize < 0 ? 1 : -1) > 0 ? .green : (trade.exitPrice - trade.entryPrice) < 0 ? .red : .secondary)
                         }
@@ -260,9 +276,13 @@ struct TradeInfoSheet: View {
                                     Text("Points")
                                         .font(.system(size: 12, weight: .medium, design: .rounded))
                                     Spacer()
-                                    Text(0.asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : 2))
-                                        .font(.system(size: 12, design: .rounded))
-                                        .foregroundStyle(.secondary)
+                                    if let runUpPoints = globalVM.runUpPoints {
+                                        Text(runUpPoints != -1 ? "+\(runUpPoints.asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : ["GC", "MGC"].contains(contractMap[trade.symbolId]) ? 1 : 2))" : "--")
+                                            .font(.system(size: 12, design: .rounded))
+                                            .foregroundStyle(.secondary)
+                                    } else {
+                                        ProgressView()
+                                    }
                                 }
                                 .frame(height: 12)
                             }
@@ -276,9 +296,13 @@ struct TradeInfoSheet: View {
                                     Text("Dollars")
                                         .font(.system(size: 12, weight: .medium, design: .rounded))
                                     Spacer()
-                                    Text(0.0.asCurrency())
-                                        .font(.system(size: 12, design: .rounded))
-                                        .foregroundStyle(.secondary)
+                                    if let runUpDollars = globalVM.runUpDollars {
+                                        Text(runUpDollars != -1 ? "-\(0.asCurrency())" : "--")
+                                            .font(.system(size: 12, design: .rounded))
+                                            .foregroundStyle(.secondary)
+                                    } else {
+                                        ProgressView()
+                                    }
                                 }
                                 .frame(height: 12)
                             }
@@ -306,9 +330,13 @@ struct TradeInfoSheet: View {
                                     Text("Points")
                                         .font(.system(size: 12, weight: .medium, design: .rounded))
                                     Spacer()
-                                    Text(0.asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : 2))
-                                        .font(.system(size: 12, design: .rounded))
-                                        .foregroundStyle(.secondary)
+                                    if let drawdownPoints = globalVM.drawdownPoints {
+                                        Text(drawdownPoints != -1 ? "-\(drawdownPoints.asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : ["GC", "MGC"].contains(contractMap[trade.symbolId]) ? 1 : 2))" : "--")
+                                            .font(.system(size: 12, design: .rounded))
+                                            .foregroundStyle(.secondary)
+                                    } else {
+                                        ProgressView()
+                                    }
                                 }
                                 .frame(height: 12)
                             }
@@ -322,9 +350,13 @@ struct TradeInfoSheet: View {
                                     Text("Dollars")
                                         .font(.system(size: 12, weight: .medium, design: .rounded))
                                     Spacer()
-                                    Text(0.0.asCurrency())
-                                        .font(.system(size: 12, design: .rounded))
-                                        .foregroundStyle(.secondary)
+                                    if let drawdownDollars = globalVM.drawdownDollars {
+                                        Text(drawdownDollars != -1 ? "-\(0.asCurrency())" : "--")
+                                            .font(.system(size: 12, design: .rounded))
+                                            .foregroundStyle(.secondary)
+                                    } else {
+                                        ProgressView()
+                                    }
                                 }
                                 .frame(height: 12)
                             }
