@@ -35,8 +35,8 @@ struct PositionTile: View {
             HStack {
                 Spacer()
                 VStack(alignment: .trailing) {
-                    Text(position.averagePrice.asCurrency())
-                        .font(.system(size: 10, weight: .bold, design: .rounded))
+                    Text(position.averagePrice.asPoints(["SI", "SIL"].contains(contractMap[position.symbolId]) ? 3 : ["GC", "MGC"].contains(contractMap[position.symbolId]) ? 1 : 2))
+                        .font(.system(size: 10, weight: .bold, design: .monospaced))
                 }
             }
             .frame(maxWidth: .infinity)
