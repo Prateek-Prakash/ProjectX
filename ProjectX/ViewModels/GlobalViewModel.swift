@@ -350,62 +350,41 @@ class GlobalViewModel: ObservableObject {
             try! await Task.sleep(for: .seconds(5))
         }
         
+        // TODO: Calculate 5+ Hours
         // TODO: FUCKING SIMPLIFY THIS SHIT
         if trade.underFiveHours() {
             if let response = await XClient.get(firm).getBars(trade.contractId!, trade.createdAt, trade.exitedAt) {
                 if !response.bars.isEmpty {
+                    var high = trade.entryPrice
+                    var low = trade.entryPrice
+                    for bar in response.bars {
+                        if (bar.h > high) {
+                            high = bar.h
+                        }
+                        if (bar.l < low) {
+                            low = bar.l
+                        }
+                    }
+                    
                     if trade.positionSize < 0 {
                         // Long
-                        var high = trade.entryPrice
-                        var low = trade.entryPrice
-                        for bar in response.bars {
-                            if (bar.h > high) {
-                                high = bar.h
-                            }
-                            if (bar.l < low) {
-                                low = bar.l
-                            }
-                        }
                         runUpPoints = high - trade.entryPrice
                         drawdownPoints = trade.entryPrice - low
+                        // TODO: Calculate Dollars
                     } else if trade.positionSize > 0 {
                         // Short
-                        var low = trade.entryPrice
-                        var high = trade.entryPrice
-                        for bar in response.bars {
-                            if (bar.l < low) {
-                                low = bar.l
-                            }
-                            if (bar.h > high) {
-                                high = bar.h
-                            }
-                        }
                         runUpPoints = low - trade.entryPrice
                         drawdownPoints = trade.entryPrice - high
-                    } else {
-                        runUpPoints = -1
-                        drawdownPoints = -1
+                        // TODO: Calculate Dollars
                     }
-                } else {
-                    runUpPoints = -1
-                    drawdownPoints = -1
                 }
-            } else {
-                runUpPoints = -1
-                drawdownPoints = -1
             }
-            
-            // TODO: Calculate Dollars
-            runUpDollars = -1
-            drawdownDollars = -1
-        } else {
-            // TODO: Calculate 5+ Hours
-            
-            runUpPoints = -1
-            runUpDollars = -1
-            drawdownPoints = -1
-            drawdownDollars = -1
         }
+        
+        if runUpPoints == nil { runUpPoints = -1 }
+        if runUpDollars == nil { runUpDollars = -1 }
+        if drawdownPoints == nil { drawdownPoints = -1 }
+        if drawdownDollars == nil { drawdownDollars = -1 }
     }
     
     // MARK: Market Status
