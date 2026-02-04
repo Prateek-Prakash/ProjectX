@@ -54,6 +54,7 @@ struct AnalyzerView: View {
                     } label: {
                         Image(systemName: "dot.scope")
                             .imageScale(.small)
+                            .increaseTapArea(by: 12)
                     }
                 }
                 .sharedBackgroundVisibility(.hidden)

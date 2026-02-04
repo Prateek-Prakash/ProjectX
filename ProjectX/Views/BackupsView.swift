@@ -98,6 +98,7 @@ struct BackupsView: View {
                     } label: {
                         Image(systemName: "clock.arrow.trianglehead.2.counterclockwise.rotate.90")
                             .imageScale(.small)
+                            .increaseTapArea(by: 12)
                     }
                     .buttonStyle(.plain)
                 }

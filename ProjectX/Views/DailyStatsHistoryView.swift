@@ -63,6 +63,7 @@ struct DailyStatsHistoryView: View {
                     } label: {
                         Image(systemName: "line.3.horizontal.decrease")
                             .imageScale(.small)
+                            .increaseTapArea(by: 12)
                     }
                     .buttonStyle(.plain)
                 }

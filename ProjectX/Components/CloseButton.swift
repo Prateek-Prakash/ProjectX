@@ -22,6 +22,7 @@ struct CloseButton: View {
         } label: {
             Image(systemName: "xmark")
                 .imageScale(.small)
+                .increaseTapArea(by: 12)
         }
         .buttonStyle(.plain)
     }

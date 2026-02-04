@@ -16,6 +16,7 @@ struct BackButton: View {
         } label: {
             Image(systemName: "arrow.left")
                 .imageScale(.small)
+                .increaseTapArea(by: 12)
         }
         .buttonStyle(.plain)
     }

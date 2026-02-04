@@ -453,6 +453,7 @@ struct PerformanceView: View {
                     } label: {
                         Image(systemName: "sparkles")
                             .imageScale(.small)
+                            .increaseTapArea(by: 12)
                     }
                     .buttonStyle(.plain)
                 }
