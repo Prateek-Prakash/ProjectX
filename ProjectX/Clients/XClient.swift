@@ -169,7 +169,7 @@ class XClient {
         }
     }
     
-    func getBars(_ id: Int, _ start: String, _ end: String) async -> BarResponseDTO? {
+    func getBars(_ id: String, _ start: String, _ end: String) async -> BarResponseDTO? {
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(gatewayToken!)"
         ]

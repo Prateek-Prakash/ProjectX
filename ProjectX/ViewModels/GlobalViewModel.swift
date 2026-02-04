@@ -340,7 +340,7 @@ class GlobalViewModel: ObservableObject {
         Helpers.debugLog("Flatten: \(account.accountId) \(success ? "Success" : "Failed")")
     }
     
-    func calculateTradeStats(_ trade: Trade) async {
+    func calculateTradeStats(_ firm: Firm, _ trade: Trade) async {
         runUpPoints = nil
         runUpDollars = nil
         drawdownPoints = nil
@@ -350,12 +350,57 @@ class GlobalViewModel: ObservableObject {
             try! await Task.sleep(for: .seconds(5))
         }
         
+        // TODO: FUCKING SIMPLIFY THIS SHIT
         if trade.underFiveHours() {
-            runUpPoints = 0
+            if let response = await XClient.get(firm).getBars(trade.contractId!, trade.createdAt, trade.exitedAt) {
+                if !response.bars.isEmpty {
+                    if trade.positionSize < 0 {
+                        // Long
+                        var high = trade.entryPrice
+                        var low = trade.entryPrice
+                        for bar in response.bars {
+                            if (bar.h > high) {
+                                high = bar.h
+                            }
+                            if (bar.l < low) {
+                                low = bar.l
+                            }
+                        }
+                        runUpPoints = high - trade.entryPrice
+                        drawdownPoints = trade.entryPrice - low
+                    } else if trade.positionSize > 0 {
+                        // Short
+                        var low = trade.entryPrice
+                        var high = trade.entryPrice
+                        for bar in response.bars {
+                            if (bar.l < low) {
+                                low = bar.l
+                            }
+                            if (bar.h > high) {
+                                high = bar.h
+                            }
+                        }
+                        runUpPoints = low - trade.entryPrice
+                        drawdownPoints = trade.entryPrice - high
+                    } else {
+                        runUpPoints = -1
+                        drawdownPoints = -1
+                    }
+                } else {
+                    runUpPoints = -1
+                    drawdownPoints = -1
+                }
+            } else {
+                runUpPoints = -1
+                drawdownPoints = -1
+            }
+            
+            // TODO: Calculate Dollars
             runUpDollars = -1
-            drawdownPoints = 0
             drawdownDollars = -1
         } else {
+            // TODO: Calculate 5+ Hours
+            
             runUpPoints = -1
             runUpDollars = -1
             drawdownPoints = -1

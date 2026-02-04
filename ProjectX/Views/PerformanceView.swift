@@ -223,7 +223,7 @@ struct PerformanceView: View {
                             OriginCard {
                                 VStack(spacing: 0) {
                                     NavigationLink {
-                                        TradeHistoryView()
+                                        TradeHistoryView(firm: account.firm)
                                     } label: {
                                         OriginHeader {
                                             Text("LATEST TRADES")
@@ -244,7 +244,7 @@ struct PerformanceView: View {
                                     LazyVStack(spacing: 0) {
                                         if !globalVM.accountTrades.isEmpty {
                                             ForEach(Array(globalVM.accountTrades.prefix(5))) { trade in
-                                                TradeTile(trade: trade, tappable: true)
+                                                TradeTile(firm: account.firm, trade: trade, tappable: true)
                                                 if globalVM.accountTrades.last != trade {
                                                     Divider()
                                                         .frame(height: 1)

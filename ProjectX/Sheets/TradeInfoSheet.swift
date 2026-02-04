@@ -15,6 +15,7 @@ struct TradeInfoSheet: View {
     
     @ObservedObject var globalVM = GlobalViewModel.shared
     
+    let firm: Firm
     let trade: Trade
     
     @State var sheetHeight: CGFloat = 0
@@ -28,7 +29,7 @@ struct TradeInfoSheet: View {
                 }
                 VStack {
                     OriginCard {
-                        TradeTile(trade: trade, tappable: false)
+                        TradeTile(firm: firm, trade: trade, tappable: false)
                     }
                     
                     OriginCard {
@@ -81,7 +82,7 @@ struct TradeInfoSheet: View {
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
                                         Spacer()
                                         if let runUpPoints = globalVM.runUpPoints {
-                                            Text(runUpPoints != -1 ? "+\(runUpPoints.asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : ["GC", "MGC"].contains(contractMap[trade.symbolId]) ? 1 : 2))" : "--")
+                                            Text(runUpPoints != -1 ? "+\(abs(runUpPoints).asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : ["GC", "MGC"].contains(contractMap[trade.symbolId]) ? 1 : 2))" : "--")
                                                 .font(.system(size: 12, design: .rounded))
                                                 .foregroundStyle(.secondary)
                                         } else {
@@ -101,7 +102,7 @@ struct TradeInfoSheet: View {
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
                                         Spacer()
                                         if let runUpDollars = globalVM.runUpDollars {
-                                            Text(runUpDollars != -1 ? "-\(0.asCurrency())" : "--")
+                                            Text(runUpDollars != -1 ? "-\(abs(0).asCurrency())" : "--")
                                                 .font(.system(size: 12, design: .rounded))
                                                 .foregroundStyle(.secondary)
                                         } else {
@@ -135,7 +136,7 @@ struct TradeInfoSheet: View {
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
                                         Spacer()
                                         if let drawdownPoints = globalVM.drawdownPoints {
-                                            Text(drawdownPoints != -1 ? "-\(drawdownPoints.asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : ["GC", "MGC"].contains(contractMap[trade.symbolId]) ? 1 : 2))" : "--")
+                                            Text(drawdownPoints != -1 ? "-\(abs(drawdownPoints).asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : ["GC", "MGC"].contains(contractMap[trade.symbolId]) ? 1 : 2))" : "--")
                                                 .font(.system(size: 12, design: .rounded))
                                                 .foregroundStyle(.secondary)
                                         } else {
@@ -155,7 +156,7 @@ struct TradeInfoSheet: View {
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
                                         Spacer()
                                         if let drawdownDollars = globalVM.drawdownDollars {
-                                            Text(drawdownDollars != -1 ? "-\(0.asCurrency())" : "--")
+                                            Text(drawdownDollars != -1 ? "-\(abs(0).asCurrency())" : "--")
                                                 .font(.system(size: 12, design: .rounded))
                                                 .foregroundStyle(.secondary)
                                         } else {
@@ -224,7 +225,7 @@ struct TradeInfoSheet: View {
                 .edgesIgnoringSafeArea(.all)
             VStack {
                 OriginCard {
-                    TradeTile(trade: trade, tappable: false)
+                    TradeTile(firm: firm, trade: trade, tappable: false)
                 }
                 
                 OriginCard {
@@ -277,7 +278,7 @@ struct TradeInfoSheet: View {
                                         .font(.system(size: 12, weight: .medium, design: .rounded))
                                     Spacer()
                                     if let runUpPoints = globalVM.runUpPoints {
-                                        Text(runUpPoints != -1 ? "+\(runUpPoints.asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : ["GC", "MGC"].contains(contractMap[trade.symbolId]) ? 1 : 2))" : "--")
+                                        Text(runUpPoints != -1 ? "+\(abs(runUpPoints).asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : ["GC", "MGC"].contains(contractMap[trade.symbolId]) ? 1 : 2))" : "--")
                                             .font(.system(size: 12, design: .rounded))
                                             .foregroundStyle(.secondary)
                                     } else {
@@ -297,7 +298,7 @@ struct TradeInfoSheet: View {
                                         .font(.system(size: 12, weight: .medium, design: .rounded))
                                     Spacer()
                                     if let runUpDollars = globalVM.runUpDollars {
-                                        Text(runUpDollars != -1 ? "-\(0.asCurrency())" : "--")
+                                        Text(runUpDollars != -1 ? "-\(abs(0).asCurrency())" : "--")
                                             .font(.system(size: 12, design: .rounded))
                                             .foregroundStyle(.secondary)
                                     } else {
@@ -331,7 +332,7 @@ struct TradeInfoSheet: View {
                                         .font(.system(size: 12, weight: .medium, design: .rounded))
                                     Spacer()
                                     if let drawdownPoints = globalVM.drawdownPoints {
-                                        Text(drawdownPoints != -1 ? "-\(drawdownPoints.asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : ["GC", "MGC"].contains(contractMap[trade.symbolId]) ? 1 : 2))" : "--")
+                                        Text(drawdownPoints != -1 ? "-\(abs(drawdownPoints).asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : ["GC", "MGC"].contains(contractMap[trade.symbolId]) ? 1 : 2))" : "--")
                                             .font(.system(size: 12, design: .rounded))
                                             .foregroundStyle(.secondary)
                                     } else {
@@ -351,7 +352,7 @@ struct TradeInfoSheet: View {
                                         .font(.system(size: 12, weight: .medium, design: .rounded))
                                     Spacer()
                                     if let drawdownDollars = globalVM.drawdownDollars {
-                                        Text(drawdownDollars != -1 ? "-\(0.asCurrency())" : "--")
+                                        Text(drawdownDollars != -1 ? "-\(abs(0).asCurrency())" : "--")
                                             .font(.system(size: 12, design: .rounded))
                                             .foregroundStyle(.secondary)
                                     } else {

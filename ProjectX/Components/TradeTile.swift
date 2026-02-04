@@ -10,6 +10,7 @@ import SwiftUI
 struct TradeTile: View {
     @ObservedObject var globalVM = GlobalViewModel.shared
     
+    let firm: Firm
     let trade: Trade
     let tappable: Bool
     
@@ -19,7 +20,7 @@ struct TradeTile: View {
         Button {
             if tappable {
                 Task {
-                    await globalVM.calculateTradeStats(trade)
+                    await globalVM.calculateTradeStats(firm, trade)
                 }
                 showTradeInfoSheet.toggle()
             }
@@ -85,7 +86,7 @@ struct TradeTile: View {
         }
         .buttonStyle(.plain)
         .sheet(isPresented: $showTradeInfoSheet) {
-            TradeInfoSheet(trade: trade)
+            TradeInfoSheet(firm: firm, trade: trade)
         }
     }
 }
@@ -109,7 +110,7 @@ struct TradeTile: View {
         tradeDurationDisplay: "00:00:58"
     )
     OriginCard {
-        TradeTile(trade: trade, tappable: true)
+        TradeTile(firm: .topstep, trade: trade, tappable: true)
     }
     .padding()
 }

@@ -10,6 +10,8 @@ import SwiftUI
 struct TradeHistoryView: View {
     @ObservedObject var globalVM = GlobalViewModel.shared
     
+    let firm: Firm
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -20,7 +22,7 @@ struct TradeHistoryView: View {
                         OriginCard {
                             LazyVStack(spacing: 0) {
                                 ForEach(globalVM.accountTrades) { trade in
-                                    TradeTile(trade: trade, tappable: true)
+                                    TradeTile(firm: firm, trade: trade, tappable: true)
                                     if globalVM.accountTrades.last != trade {
                                         Divider()
                                             .frame(height: 1)
