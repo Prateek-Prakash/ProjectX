@@ -31,7 +31,7 @@ struct TradeTile: View {
                         .resizable()
                         .frame(width: 8, height: 8)
                         .foregroundStyle(trade.positionSize < 0 ? .green : trade.positionSize > 0 ? .red : .primary)
-                    Text(contractMap[trade.symbolId] ?? "--")
+                    Text(globalVM.getTickerId(firm, trade.symbolId))
                         .font(.system(size: 10, weight: .bold, design: .rounded))
                     Spacer()
                 }
@@ -45,7 +45,7 @@ struct TradeTile: View {
                 .frame(width: 20)
                 
                 VStack {
-                    Text(trade.entryPrice.asPoints(globalVM.getTickerDigits(trade.symbolId)))
+                    Text(trade.entryPrice.asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))
                         .font(.system(size: 8, weight: .semibold, design: .monospaced))
                     Text(trade.createdAt.asFractionalDate())
                         .font(.system(size: 8, design: .monospaced))
@@ -57,7 +57,7 @@ struct TradeTile: View {
                 .frame(maxWidth: .infinity)
                 
                 VStack {
-                    Text(trade.exitPrice.asPoints(globalVM.getTickerDigits(trade.symbolId)))
+                    Text(trade.exitPrice.asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))
                         .font(.system(size: 8, weight: .semibold, design: .monospaced))
                     Text(trade.exitedAt.asFractionalDate())
                         .font(.system(size: 8, design: .monospaced))

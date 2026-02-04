@@ -10,6 +10,7 @@ import SwiftUI
 struct PositionTile: View {
     @ObservedObject var globalVM = GlobalViewModel.shared
     
+    let firm: Firm
     let position: Position
     
     var body: some View {
@@ -19,7 +20,7 @@ struct PositionTile: View {
                     .resizable()
                     .frame(width: 8, height: 8)
                     .foregroundStyle(position.type == 1 ? .green : position.type == 2 ? .red : .primary)
-                Text(contractMap[position.symbolId] ?? "--")
+                Text(globalVM.getTickerId(firm, position.symbolId))
                     .font(.system(size: 10, weight: .bold, design: .rounded))
                 Spacer()
             }
@@ -37,7 +38,7 @@ struct PositionTile: View {
             HStack {
                 Spacer()
                 VStack(alignment: .trailing) {
-                    Text(position.averagePrice.asPoints(globalVM.getTickerDigits(position.symbolId)))
+                    Text(position.averagePrice.asPoints(globalVM.getTickerDigits(firm, position.symbolId)))
                         .font(.system(size: 10, weight: .bold, design: .monospaced))
                 }
             }
@@ -59,7 +60,7 @@ struct PositionTile: View {
         averagePrice: 25441.250000000
     )
     OriginCard {
-        PositionTile(position: position)
+        PositionTile(firm: .topstep, position: position)
     }
     .padding()
 }

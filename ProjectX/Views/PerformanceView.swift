@@ -199,7 +199,7 @@ struct PerformanceView: View {
                                     LazyVStack(spacing: 0) {
                                         if !account.positions.isEmpty {
                                             ForEach(account.positions) { position in
-                                                PositionTile(position: position)
+                                                PositionTile(firm: account.firm, position: position)
                                                 if account.positions.last != position {
                                                     Divider()
                                                         .frame(height: 1)

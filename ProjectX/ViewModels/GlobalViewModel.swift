@@ -409,13 +409,23 @@ class GlobalViewModel: ObservableObject {
         if drawdownDollars == nil { drawdownDollars = -1 }
     }
     
-//    func getTickerId(_ id: String) -> String {
-//        
-//    }
+    // MARK: Contract Helpers
     
-    func getTickerDigits(_ id: String) -> Int {
-        // TODO: Use getTickerId
-        return ["SI", "SIL"].contains(contractMap[id]) ? 3 : ["GC", "MGC"].contains(contractMap[id]) ? 1 : 2
+    func getTickerId(_ firm: Firm, _ id: String) -> String {
+        if let contract = allContracts[firm]?.first(where: { $0.productId == id }) {
+            return contract.productName.replacingOccurrences(of: "/", with: "")
+        }
+        return "--"
+    }
+    
+    func getTickerDigits(_ firm: Firm, _ id: String) -> Int {
+        let ticker = getTickerId(firm, id)
+        if ticker != "--" {
+            if let contract = allContracts[firm]?.first(where: { $0.productId == id }) {
+                return contract.tickSize.decimalCount
+            }
+        }
+        return 7 // Largest Decimal (Japanese Yen)
     }
     
     // MARK: Market Status
