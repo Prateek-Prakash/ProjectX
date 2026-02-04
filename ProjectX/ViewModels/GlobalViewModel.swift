@@ -75,6 +75,11 @@ class GlobalViewModel: ObservableObject {
     @Published var siPrice: Double? = nil
     @Published var silPrice: Double? = nil
     
+    @Published var allContracts: [Firm:[Contract]] = [
+        .theFuturesDesk: [],
+        .topstep: []
+    ]
+    
     @Published var runUpPoints: Double? = nil
     @Published var runUpDollars: Double? = nil
     @Published var drawdownPoints: Double? = nil
@@ -103,9 +108,9 @@ class GlobalViewModel: ObservableObject {
                     await self.initMarketSignals()
                 }
             }
+            
             Helpers.debugLog("initTime: \(initTime.description.split(separator: " ")[0])")
             self.isInitialized = true
-            
         }
     }
     
@@ -116,8 +121,10 @@ class GlobalViewModel: ObservableObject {
             switch firm {
             case .theFuturesDesk:
                 await signIn(firm, theFuturesDeskUsername, theFuturesDeskKey)
+                await loadContracts(firm)
             case .topstep:
                 await signIn(firm, topstepUsername, topstepKey)
+                await loadContracts(firm)
             }
         } else {
             authenticatingStates[firm] = false
@@ -201,6 +208,14 @@ class GlobalViewModel: ObservableObject {
             }
             let ids = accounts.map({ $0.accountId })
             allAccounts.removeAll(where: { $0.firm == firm && !ids.contains($0.accountId) })
+        }
+    }
+    
+    func loadContracts(_ firm: Firm) async {
+        let dtos = await XClient.get(firm).getContracts()
+        for dto in dtos {
+            let contract = Contract.fromDto(dto)
+            allContracts[firm]?.append(contract)
         }
     }
     
@@ -351,7 +366,6 @@ class GlobalViewModel: ObservableObject {
         }
         
         // TODO: Calculate 5+ Hours
-        // TODO: FUCKING SIMPLIFY THIS SHIT
         if trade.underFiveHours() {
             if let response = await XClient.get(firm).getBars(trade.contractId!, trade.createdAt, trade.exitedAt) {
                 if !response.bars.isEmpty {
@@ -366,16 +380,24 @@ class GlobalViewModel: ObservableObject {
                         }
                     }
                     
-                    if trade.positionSize < 0 {
-                        // Long
-                        runUpPoints = high - trade.entryPrice
-                        drawdownPoints = trade.entryPrice - low
-                        // TODO: Calculate Dollars
-                    } else if trade.positionSize > 0 {
-                        // Short
-                        runUpPoints = low - trade.entryPrice
-                        drawdownPoints = trade.entryPrice - high
-                        // TODO: Calculate Dollars
+                    if trade.positionSize != 0 {
+                        // Long: positionSize < 0
+                        // Short: positionSize > 0
+                        
+                        runUpPoints = trade.positionSize < 0 ? high - trade.entryPrice : trade.entryPrice - low
+                        drawdownPoints = trade.positionSize < 0 ? low - trade.entryPrice : trade.entryPrice - high
+                        
+                        if let contract = allContracts[firm]?.first(where: { $0.productId == trade.symbolId }) {
+                            runUpDollars = runUpPoints! / contract.tickSize * contract.tickValue * Double(abs(trade.positionSize))
+                            drawdownDollars = drawdownPoints! / contract.tickSize * contract.tickValue * Double(abs(trade.positionSize))
+                            
+                            Helpers.debugLog("runUpPoints: \(runUpPoints!)")
+                            Helpers.debugLog("drawdownPoints: \(drawdownPoints!)")
+                            Helpers.debugLog("tickSize: \(contract.tickSize)")
+                            Helpers.debugLog("tickValue: \(contract.tickValue)")
+                            Helpers.debugLog("runUpDollars: \(runUpDollars!)")
+                            Helpers.debugLog("drawdownDollars: \(drawdownDollars!)")
+                        }
                     }
                 }
             }

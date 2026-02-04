@@ -102,7 +102,7 @@ struct TradeInfoSheet: View {
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
                                         Spacer()
                                         if let runUpDollars = globalVM.runUpDollars {
-                                            Text(runUpDollars != -1 ? "-\(abs(0).asCurrency())" : "--")
+                                            Text(runUpDollars != -1 ? "+\(abs(runUpDollars).asCurrency())" : "--")
                                                 .font(.system(size: 12, design: .rounded))
                                                 .foregroundStyle(.secondary)
                                         } else {
@@ -156,7 +156,7 @@ struct TradeInfoSheet: View {
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
                                         Spacer()
                                         if let drawdownDollars = globalVM.drawdownDollars {
-                                            Text(drawdownDollars != -1 ? "-\(abs(0).asCurrency())" : "--")
+                                            Text(drawdownDollars != -1 ? "-\(abs(drawdownDollars).asCurrency())" : "--")
                                                 .font(.system(size: 12, design: .rounded))
                                                 .foregroundStyle(.secondary)
                                         } else {
@@ -298,7 +298,7 @@ struct TradeInfoSheet: View {
                                         .font(.system(size: 12, weight: .medium, design: .rounded))
                                     Spacer()
                                     if let runUpDollars = globalVM.runUpDollars {
-                                        Text(runUpDollars != -1 ? "-\(abs(0).asCurrency())" : "--")
+                                        Text(runUpDollars != -1 ? "+\(abs(runUpDollars).asCurrency())" : "--")
                                             .font(.system(size: 12, design: .rounded))
                                             .foregroundStyle(.secondary)
                                     } else {
@@ -352,7 +352,7 @@ struct TradeInfoSheet: View {
                                         .font(.system(size: 12, weight: .medium, design: .rounded))
                                     Spacer()
                                     if let drawdownDollars = globalVM.drawdownDollars {
-                                        Text(drawdownDollars != -1 ? "-\(abs(0).asCurrency())" : "--")
+                                        Text(drawdownDollars != -1 ? "-\(abs(drawdownDollars).asCurrency())" : "--")
                                             .font(.system(size: 12, design: .rounded))
                                             .foregroundStyle(.secondary)
                                     } else {
