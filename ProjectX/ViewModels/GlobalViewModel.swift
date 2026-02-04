@@ -409,6 +409,15 @@ class GlobalViewModel: ObservableObject {
         if drawdownDollars == nil { drawdownDollars = -1 }
     }
     
+//    func getTickerId(_ id: String) -> String {
+//        
+//    }
+    
+    func getTickerDigits(_ id: String) -> Int {
+        // TODO: Use getTickerId
+        return ["SI", "SIL"].contains(contractMap[id]) ? 3 : ["GC", "MGC"].contains(contractMap[id]) ? 1 : 2
+    }
+    
     // MARK: Market Status
     
     func isMarketClosed() -> Bool {

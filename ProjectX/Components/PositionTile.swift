@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct PositionTile: View {
+    @ObservedObject var globalVM = GlobalViewModel.shared
+    
     let position: Position
     
     var body: some View {
@@ -35,7 +37,7 @@ struct PositionTile: View {
             HStack {
                 Spacer()
                 VStack(alignment: .trailing) {
-                    Text(position.averagePrice.asPoints(["SI", "SIL"].contains(contractMap[position.symbolId]) ? 3 : ["GC", "MGC"].contains(contractMap[position.symbolId]) ? 1 : 2))
+                    Text(position.averagePrice.asPoints(globalVM.getTickerDigits(position.symbolId)))
                         .font(.system(size: 10, weight: .bold, design: .monospaced))
                 }
             }

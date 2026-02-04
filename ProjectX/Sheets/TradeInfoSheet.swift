@@ -38,7 +38,7 @@ struct TradeInfoSheet: View {
                                 Text("Points")
                                     .font(.system(size: 12, weight: .medium, design: .rounded))
                                 Spacer()
-                                Text(abs(trade.exitPrice - trade.entryPrice).asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : ["GC", "MGC"].contains(contractMap[trade.symbolId]) ? 1 : 2))
+                                Text(abs(trade.exitPrice - trade.entryPrice).asPoints(globalVM.getTickerDigits(trade.symbolId)))
                                     .font(.system(size: 12, design: .rounded))
                                     .foregroundStyle((trade.exitPrice - trade.entryPrice) * (trade.positionSize < 0 ? 1 : -1) > 0 ? .green : (trade.exitPrice - trade.entryPrice) < 0 ? .red : .secondary)
                             }
@@ -82,7 +82,7 @@ struct TradeInfoSheet: View {
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
                                         Spacer()
                                         if let runUpPoints = globalVM.runUpPoints {
-                                            Text(runUpPoints != -1 ? "+\(abs(runUpPoints).asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : ["GC", "MGC"].contains(contractMap[trade.symbolId]) ? 1 : 2))" : "--")
+                                            Text(runUpPoints != -1 ? "+\(abs(runUpPoints).asPoints(globalVM.getTickerDigits(trade.symbolId)))" : "--")
                                                 .font(.system(size: 12, design: .rounded))
                                                 .foregroundStyle(.secondary)
                                         } else {
@@ -136,7 +136,7 @@ struct TradeInfoSheet: View {
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
                                         Spacer()
                                         if let drawdownPoints = globalVM.drawdownPoints {
-                                            Text(drawdownPoints != -1 ? "-\(abs(drawdownPoints).asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : ["GC", "MGC"].contains(contractMap[trade.symbolId]) ? 1 : 2))" : "--")
+                                            Text(drawdownPoints != -1 ? "-\(abs(drawdownPoints).asPoints(globalVM.getTickerDigits(trade.symbolId)))" : "--")
                                                 .font(.system(size: 12, design: .rounded))
                                                 .foregroundStyle(.secondary)
                                         } else {
@@ -234,7 +234,7 @@ struct TradeInfoSheet: View {
                             Text("Points")
                                 .font(.system(size: 12, weight: .medium, design: .rounded))
                             Spacer()
-                            Text(abs(trade.exitPrice - trade.entryPrice).asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : ["GC", "MGC"].contains(contractMap[trade.symbolId]) ? 1 : 2))
+                            Text(abs(trade.exitPrice - trade.entryPrice).asPoints(globalVM.getTickerDigits(trade.symbolId)))
                                 .font(.system(size: 12, design: .rounded))
                                 .foregroundStyle((trade.exitPrice - trade.entryPrice) * (trade.positionSize < 0 ? 1 : -1) > 0 ? .green : (trade.exitPrice - trade.entryPrice) < 0 ? .red : .secondary)
                         }
@@ -278,7 +278,7 @@ struct TradeInfoSheet: View {
                                         .font(.system(size: 12, weight: .medium, design: .rounded))
                                     Spacer()
                                     if let runUpPoints = globalVM.runUpPoints {
-                                        Text(runUpPoints != -1 ? "+\(abs(runUpPoints).asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : ["GC", "MGC"].contains(contractMap[trade.symbolId]) ? 1 : 2))" : "--")
+                                        Text(runUpPoints != -1 ? "+\(abs(runUpPoints).asPoints(globalVM.getTickerDigits(trade.symbolId)))" : "--")
                                             .font(.system(size: 12, design: .rounded))
                                             .foregroundStyle(.secondary)
                                     } else {
@@ -332,7 +332,7 @@ struct TradeInfoSheet: View {
                                         .font(.system(size: 12, weight: .medium, design: .rounded))
                                     Spacer()
                                     if let drawdownPoints = globalVM.drawdownPoints {
-                                        Text(drawdownPoints != -1 ? "-\(abs(drawdownPoints).asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : ["GC", "MGC"].contains(contractMap[trade.symbolId]) ? 1 : 2))" : "--")
+                                        Text(drawdownPoints != -1 ? "-\(abs(drawdownPoints).asPoints(globalVM.getTickerDigits(trade.symbolId)))" : "--")
                                             .font(.system(size: 12, design: .rounded))
                                             .foregroundStyle(.secondary)
                                     } else {

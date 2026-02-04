@@ -45,7 +45,7 @@ struct TradeTile: View {
                 .frame(width: 20)
                 
                 VStack {
-                    Text(trade.entryPrice.asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : ["GC", "MGC"].contains(contractMap[trade.symbolId]) ? 1 : 2))
+                    Text(trade.entryPrice.asPoints(globalVM.getTickerDigits(trade.symbolId)))
                         .font(.system(size: 8, weight: .semibold, design: .monospaced))
                     Text(trade.createdAt.asFractionalDate())
                         .font(.system(size: 8, design: .monospaced))
@@ -57,7 +57,7 @@ struct TradeTile: View {
                 .frame(maxWidth: .infinity)
                 
                 VStack {
-                    Text(trade.exitPrice.asPoints(["SI", "SIL"].contains(contractMap[trade.symbolId]) ? 3 : ["GC", "MGC"].contains(contractMap[trade.symbolId]) ? 1 : 2))
+                    Text(trade.exitPrice.asPoints(globalVM.getTickerDigits(trade.symbolId)))
                         .font(.system(size: 8, weight: .semibold, design: .monospaced))
                     Text(trade.exitedAt.asFractionalDate())
                         .font(.system(size: 8, design: .monospaced))
