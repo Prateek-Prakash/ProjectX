@@ -14,6 +14,7 @@ struct PerformanceView: View {
     @State var showDailyProfitTargetSheet: Bool = false
     @State var showDailyLossLimitSheet: Bool = false
     @State var isTrailing: Bool = false
+    @State var autoBrackets: Bool = false
     
     let account: Account
     
@@ -171,6 +172,27 @@ struct PerformanceView: View {
                                                         .font(.system(size: 12, weight: .medium, design: .rounded))
                                                     Spacer()
                                                     Toggle("", isOn: $isTrailing)
+                                                        .scaleEffect(0.6, anchor: .trailing)
+                                                }
+                                                .frame(height: 12)
+                                            }
+                                            .backgroundStyle(Color(.xCardBackground))
+                                        }
+                                        .buttonStyle(.plain)
+                                        
+                                        Divider()
+                                            .frame(height: 1)
+                                            .overlay(Color(.xOutline))
+                                        
+                                        Button {
+                                            autoBrackets.toggle()
+                                        } label: {
+                                            GroupBox {
+                                                HStack {
+                                                    Text("Auto Brackets")
+                                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                    Spacer()
+                                                    Toggle("", isOn: $autoBrackets)
                                                         .scaleEffect(0.6, anchor: .trailing)
                                                 }
                                                 .frame(height: 12)
@@ -476,9 +498,21 @@ struct PerformanceView: View {
                     let _ = await XClient.get(account.firm).setPersonalLimits(account.accountId, account.personalDailyProfitTarget, account.personalDailyProfitTargetAction, account.personalDailyLossLimit, account.personalDailyLossLimitAction, isTrailing)
                 }
             }
+            .onAppear {
+                autoBrackets = account.autoOcoBrackets
+            }
+            .onChange(of: autoBrackets) {
+                Task {
+                    let _ = await XClient.get(account.firm).setAutoBrackets(account.accountId, autoBrackets)
+                }
+            }
             .onChange(of: account) { old, new in
                 if isTrailing != new.personalDailyLossLimitTrailing {
                     isTrailing = new.personalDailyLossLimitTrailing
+                }
+                
+                if autoBrackets != new.autoOcoBrackets {
+                    autoBrackets = new.autoOcoBrackets
                 }
                 
                 if old.realizedDayPnl != new.realizedDayPnl || old.positions.count != new.positions.count {

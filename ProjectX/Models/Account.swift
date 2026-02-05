@@ -35,6 +35,7 @@ struct Account: Identifiable, Equatable {
     var personalDailyLossLimitAction: Int
     var personalDailyLossLimitTrailing: Bool
     var pdllTrailingType: Int
+    var autoOcoBrackets: Bool
     var winRate: Double
     
     var accountType: AccountType = .evaluation
@@ -66,6 +67,7 @@ struct Account: Identifiable, Equatable {
             personalDailyLossLimitAction: dto.personalDailyLossLimitAction,
             personalDailyLossLimitTrailing: dto.personalDailyLossLimitTrailing,
             pdllTrailingType: dto.pdllTrailingType,
+            autoOcoBrackets: dto.autoOcoBrackets,
             winRate: dto.winRate,
             accountType: type
         )

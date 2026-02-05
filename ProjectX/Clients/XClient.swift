@@ -216,6 +216,23 @@ class XClient {
         }
     }
     
+    func setAutoBrackets(_ id: Int, _ oco: Bool) async -> Bool {
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(userToken!)"
+        ]
+        let params: [String: Any?] = [
+            "tradingAccountId": id,
+            "autoOcoBrackets": oco
+        ]
+        do {
+            let value = try await AF.request("\(userUrl)/TradingAccount/setAutoOcoBrackets", method: .post, parameters: params, encoding: JSONEncoding.default, headers: headers).serializingDecodable(BracketsResponseDTO.self).value
+            return value.success
+        } catch {
+            Helpers.debugLog("setAutoBrackets: \(error)")
+            return false
+        }
+    }
+    
     func getDailyStats(_ id: Int) async -> [DailyStatsDTO] {
         do {
             let headers: HTTPHeaders = [

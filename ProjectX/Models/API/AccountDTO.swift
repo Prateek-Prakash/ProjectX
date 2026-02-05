@@ -32,5 +32,6 @@ nonisolated struct AccountDTO: Identifiable, Codable {
     var personalDailyLossLimitAction: Int
     var personalDailyLossLimitTrailing: Bool
     var pdllTrailingType: Int
+    var autoOcoBrackets: Bool
     var winRate: Double
 }
