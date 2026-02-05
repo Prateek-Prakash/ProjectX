@@ -15,6 +15,7 @@ struct PerformanceView: View {
     @State var showDailyLossLimitSheet: Bool = false
     @State var isTrailing: Bool = false
     @State var autoBrackets: Bool = false
+    @State var positionBrackets: Bool = true
     
     let account: Account
     
@@ -102,7 +103,7 @@ struct PerformanceView: View {
                             OriginCard {
                                 VStack(spacing: 0) {
                                     OriginHeader {
-                                        Text("PERSONAL LIMITS")
+                                        Text("RISK SETTINGS")
                                             .font(.system(size: 8, weight: .semibold, design: .monospaced))
                                             .tracking(2)
                                             .foregroundStyle(Color(.xHeaderText))
@@ -179,11 +180,25 @@ struct PerformanceView: View {
                                             .backgroundStyle(Color(.xCardBackground))
                                         }
                                         .buttonStyle(.plain)
-                                        
-                                        Divider()
-                                            .frame(height: 1)
-                                            .overlay(Color(.xOutline))
-                                        
+                                    }
+                                    .backgroundStyle(Color(.xCardBackground))
+                                }
+                            }
+                            
+                            OriginCard {
+                                VStack(spacing: 0) {
+                                    OriginHeader {
+                                        Text("BRACKETS")
+                                            .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                            .tracking(2)
+                                            .foregroundStyle(Color(.xHeaderText))
+                                    }
+                                    
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    VStack(spacing: 0) {
                                         Button {
                                             autoBrackets.toggle()
                                         } label: {
@@ -202,6 +217,27 @@ struct PerformanceView: View {
                                         .buttonStyle(.plain)
                                     }
                                     .backgroundStyle(Color(.xCardBackground))
+                                    
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    Button {
+                                        positionBrackets.toggle()
+                                    } label: {
+                                        GroupBox {
+                                            HStack {
+                                                Text("Position Brackets")
+                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                Spacer()
+                                                Toggle("", isOn: $positionBrackets)
+                                                    .scaleEffect(0.6, anchor: .trailing)
+                                            }
+                                            .frame(height: 12)
+                                        }
+                                        .backgroundStyle(Color(.xCardBackground))
+                                    }
+                                    .buttonStyle(.plain)
                                 }
                             }
                             
@@ -500,10 +536,18 @@ struct PerformanceView: View {
             }
             .onAppear {
                 autoBrackets = account.autoOcoBrackets
+                positionBrackets = !autoBrackets
             }
             .onChange(of: autoBrackets) {
+                positionBrackets = !autoBrackets
                 Task {
                     let _ = await XClient.get(account.firm).setAutoBrackets(account.accountId, autoBrackets)
+                }
+            }
+            .onChange(of: positionBrackets) {
+                autoBrackets = !positionBrackets
+                Task {
+                    let _ = await XClient.get(account.firm).setAutoBrackets(account.accountId, !positionBrackets)
                 }
             }
             .onChange(of: account) { old, new in
@@ -513,6 +557,7 @@ struct PerformanceView: View {
                 
                 if autoBrackets != new.autoOcoBrackets {
                     autoBrackets = new.autoOcoBrackets
+                    positionBrackets = !autoBrackets
                 }
                 
                 if old.realizedDayPnl != new.realizedDayPnl || old.positions.count != new.positions.count {

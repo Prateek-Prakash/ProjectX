@@ -169,6 +169,22 @@ class XClient {
         }
     }
     
+    func getOrders(_ id: Int) async -> OrderResponseDTO? {
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(gatewayToken!)"
+        ]
+        let params: [String: Int] = [
+            "accountId": id
+        ]
+        do {
+            let value = try await AF.request("\(gatewayUrl)/api/Order/searchOpen", method: .post, parameters: params, encoding: JSONEncoding.default, headers: headers).serializingDecodable(OrderResponseDTO.self).value
+            return value
+        } catch {
+            Helpers.debugLog("getOrders: \(error)")
+            return nil
+        }
+    }
+    
     func getBars(_ id: String, _ start: String, _ end: String, _ unit: BarUnit) async -> BarResponseDTO? {
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(gatewayToken!)"
