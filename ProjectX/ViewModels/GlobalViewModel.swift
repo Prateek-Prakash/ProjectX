@@ -177,7 +177,7 @@ class GlobalViewModel: ObservableObject {
     
     func loadAccounts(_ firm: Firm) async {
         let dtos = await XClient.get(firm).getAccounts()
-        let searches = await XClient.get(firm).searchAccounts()
+        let searches = await XClient.get(firm).searchAccounts() // Identifying Firm DLLs
         let actives = dtos.filter({ !$0.ineligible })
         var accounts: [Account] = []
         for active in actives {
@@ -367,7 +367,7 @@ class GlobalViewModel: ObservableObject {
         
         // TODO: Calculate 5+ Hours
         if trade.underFiveHours() {
-            if let response = await XClient.get(firm).getBars(trade.contractId!, trade.createdAt, trade.exitedAt) {
+            if let response = await XClient.get(firm).getBars(trade.contractId!, trade.createdAt, trade.exitedAt, .second) {
                 if !response.bars.isEmpty {
                     var high = trade.entryPrice
                     var low = trade.entryPrice

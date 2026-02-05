@@ -169,7 +169,7 @@ class XClient {
         }
     }
     
-    func getBars(_ id: String, _ start: String, _ end: String) async -> BarResponseDTO? {
+    func getBars(_ id: String, _ start: String, _ end: String, _ unit: BarUnit) async -> BarResponseDTO? {
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(gatewayToken!)"
         ]
@@ -178,7 +178,7 @@ class XClient {
             "live": false,
             "startTime": start,
             "endTime": end,
-            "unit": 1,
+            "unit": unit.rawValue,
             "unitNumber": 1,
             "limit": 20000,
             "includePartialBar": true
