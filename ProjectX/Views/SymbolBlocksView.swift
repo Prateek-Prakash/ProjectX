@@ -21,11 +21,17 @@ struct SymbolBlocksView: View {
                     ScrollView {
                         VStack(spacing: 10) {
                             ForEach(globalVM.symbolBlocks, id: \.symbolId) { block in
+                                let contract = globalVM.getContract(block.symbolId)
+                                let ticker = contract != nil ? contract!.productName.replacingOccurrences(of: "/", with: "") : "--"
+                                let description = contract != nil ? "(\(contract!.description))" : "(--)"
                                 OriginCard {
                                     GroupBox {
                                         HStack {
-                                            Text(block.symbolId)
+                                            Text(ticker)
                                                 .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            Text(description)
+                                                .font(.system(size: 12, weight: .thin, design: .rounded))
+                                                .foregroundStyle(.secondary)
                                             Spacer()
                                             Image(systemName: "nosign")
                                                 .foregroundStyle(.red)

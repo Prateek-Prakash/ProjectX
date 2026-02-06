@@ -431,6 +431,10 @@ class GlobalViewModel: ObservableObject {
     
     // MARK: Contract Helpers
     
+    func getContract(_ id: String) -> Contract? {
+        return allContracts[selectedAccount!.firm]?.first(where: { $0.productId == id })
+    }
+    
     func getTickerId(_ firm: Firm, _ id: String) -> String {
         if let contract = allContracts[firm]?.first(where: { $0.productId == id }) {
             return contract.productName.replacingOccurrences(of: "/", with: "")
