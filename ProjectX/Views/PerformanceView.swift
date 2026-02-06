@@ -180,6 +180,29 @@ struct PerformanceView: View {
                                             .backgroundStyle(Color(.xCardBackground))
                                         }
                                         .buttonStyle(.plain)
+                                        
+                                        Divider()
+                                            .frame(height: 1)
+                                            .overlay(Color(.xOutline))
+                                        
+                                        NavigationLink {
+                                            SymbolBlocksView()
+                                        }  label: {
+                                            GroupBox {
+                                                HStack {
+                                                    Text("Symbol Blocks")
+                                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                    Spacer()
+                                                    Image(systemName: "chevron.right")
+                                                        .foregroundStyle(.secondary)
+                                                        .fontDesign(.rounded)
+                                                        .imageScale(.small)
+                                                }
+                                                .frame(height: 12)
+                                            }
+                                            .backgroundStyle(Color(.xCardBackground))
+                                        }
+                                        .buttonStyle(.plain)
                                     }
                                     .backgroundStyle(Color(.xCardBackground))
                                 }

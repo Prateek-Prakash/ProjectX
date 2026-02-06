@@ -47,6 +47,7 @@ class GlobalViewModel: ObservableObject {
     @AppStorage("delayAuthentication") var delayAuthentication: Bool = false
     @AppStorage("delayLoadingTrades") var delayLoadingTrades: Bool = false
     @AppStorage("delayTradeStats") var delayTradeStats: Bool = false
+    @AppStorage("delaySymbolBlocks") var delaySymbolBlocks: Bool = false
     @AppStorage("executeLockouts") var executeLockouts: Bool = true
     @AppStorage("blurBalances") var blurBalances: Bool = false
     
@@ -84,6 +85,9 @@ class GlobalViewModel: ObservableObject {
     @Published var runUpDollars: Double? = nil
     @Published var drawdownPoints: Double? = nil
     @Published var drawdownDollars: Double? = nil
+    
+    @Published var loadingSymbolBlocks: Bool = false
+    @Published var symbolBlocks: [SymbolBlock] = []
     
     @Published var isInitialized = false
     let continuousClock = ContinuousClock()
@@ -407,6 +411,22 @@ class GlobalViewModel: ObservableObject {
         if runUpDollars == nil { runUpDollars = -1 }
         if drawdownPoints == nil { drawdownPoints = -1 }
         if drawdownDollars == nil { drawdownDollars = -1 }
+    }
+    
+    // MARK: Symbol Blocks
+    
+    func loadSymbolBlocks() async {
+        loadingSymbolBlocks = true
+        
+        if delaySymbolBlocks {
+            try! await Task.sleep(for: .seconds(5))
+        }
+        
+        symbolBlocks.removeAll()
+        let dtos = await XClient.get(selectedAccount!.firm).getSymbolBlocks(selectedAccount!.accountId)
+        symbolBlocks = dtos.map({ SymbolBlock.fromDto($0) })
+        
+        loadingSymbolBlocks = false
     }
     
     // MARK: Contract Helpers

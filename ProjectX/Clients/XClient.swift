@@ -124,6 +124,19 @@ class XClient {
         }
     }
     
+    func getSymbolBlocks(_ id: Int) async -> [SymbolBlockDTO] {
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(userToken!)"
+        ]
+        do {
+            let value = try await AF.request("\(userUrl)/SymbolBlock/all/\(id)", method: .get, headers: headers).serializingDecodable([SymbolBlockDTO].self).value
+            return value
+        } catch {
+            Helpers.debugLog("getSymbolBlocks: \(error)")
+            return []
+        }
+    }
+    
     func getAccounts() async -> [AccountDTO] {
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(userToken!)"

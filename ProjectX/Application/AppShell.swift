@@ -56,7 +56,6 @@ struct AppShell: View {
                         .padding(.bottom)
                     }
                 } else {
-                    
                     ContentUnavailableView {
                         Label("NO ACCOUNTS FOUND", systemImage: "exclamationmark.triangle")
                             .imageScale(.small)
@@ -158,24 +157,38 @@ struct AppShell: View {
         ZStack {
             Color(.xBackground)
                 .edgesIgnoringSafeArea(.all)
-            VStack(spacing: 10) {
-                ForEach(Firm.allCases) { firm in
-                    if globalVM.isLinked(firm) && globalVM.isConnected(firm) {
-                        let accounts = globalVM.allAccounts.filter({
-                            $0.firm == firm
-                            && ((globalVM.showEvaluationAccounts && $0.accountType == .evaluation) || (globalVM.showFundedAccounts && $0.accountType == .funded) || (globalVM.showPracticeAccounts && $0.accountType == .practice))
-                            && ((globalVM.hideLockedAccounts && $0.canTrade) || !globalVM.hideLockedAccounts)
-                        })
-                        if !globalVM.hideEmptyFirms || !accounts.isEmpty {
-                            FirmCard(
-                                firm: firm,
-                                accounts: accounts
-                            )
+            if !globalVM.isInitialized {
+                ProgressView()
+                    .padding()
+            } else if !globalVM.allAccounts.isEmpty {
+                VStack(spacing: 10) {
+                    ForEach(Firm.allCases) { firm in
+                        if globalVM.isLinked(firm) && globalVM.isConnected(firm) {
+                            let accounts = globalVM.allAccounts.filter({
+                                $0.firm == firm
+                                && ((globalVM.showEvaluationAccounts && $0.accountType == .evaluation) || (globalVM.showFundedAccounts && $0.accountType == .funded) || (globalVM.showPracticeAccounts && $0.accountType == .practice))
+                                && ((globalVM.hideLockedAccounts && $0.canTrade) || !globalVM.hideLockedAccounts)
+                            })
+                            if !globalVM.hideEmptyFirms || !accounts.isEmpty {
+                                FirmCard(
+                                    firm: firm,
+                                    accounts: accounts
+                                )
+                            }
                         }
                     }
                 }
+                .padding()
+            } else {
+                ContentUnavailableView {
+                    Label("NO ACCOUNTS FOUND", systemImage: "exclamationmark.triangle")
+                        .imageScale(.small)
+                        .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                        .tracking(2)
+                        .foregroundStyle(.secondary)
+                }
+                .padding()
             }
-            .padding()
         }
         .environment(\.colorScheme, colorScheme)
         .environment(\.dynamicTypeSize, dynamicTypeSize)

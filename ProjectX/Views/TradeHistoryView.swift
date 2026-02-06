@@ -36,7 +36,7 @@ struct TradeHistoryView: View {
                     }
                 } else {
                     ContentUnavailableView {
-                        Label("NO TRADES", systemImage: "exclamationmark.triangle")
+                        Label("NO TRADES FOUND", systemImage: "exclamationmark.triangle")
                             .imageScale(.small)
                             .font(.system(size: 8, weight: .semibold, design: .monospaced))
                             .tracking(2)

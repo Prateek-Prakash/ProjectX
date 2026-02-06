@@ -537,6 +537,27 @@ struct DeveloperView: View {
                                         .backgroundStyle(Color(.xCardBackground))
                                     }
                                     .buttonStyle(.plain)
+                                    
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    Button {
+                                        globalVM.delaySymbolBlocks.toggle()
+                                    } label: {
+                                        GroupBox {
+                                            HStack {
+                                                Text("Delay Symbol Blocks")
+                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                Spacer()
+                                                Toggle("", isOn: $globalVM.delaySymbolBlocks)
+                                                    .scaleEffect(0.6, anchor: .trailing)
+                                            }
+                                            .frame(height: 12)
+                                        }
+                                        .backgroundStyle(Color(.xCardBackground))
+                                    }
+                                    .buttonStyle(.plain)
                                 }
                                 .backgroundStyle(Color(.xCardBackground))
                             }
