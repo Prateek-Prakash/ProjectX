@@ -186,7 +186,7 @@ struct PerformanceView: View {
                                             .overlay(Color(.xOutline))
                                         
                                         NavigationLink {
-                                            SymbolBlocksView()
+                                            SymbolBlocksView(account: account)
                                         }  label: {
                                             GroupBox {
                                                 HStack {
@@ -537,6 +537,7 @@ struct PerformanceView: View {
                             .increaseTapArea(by: 12)
                     }
                     .buttonStyle(.plain)
+                    .disabled(globalVM.loadingTrades)
                 }
                 .sharedBackgroundVisibility(.hidden)
             }

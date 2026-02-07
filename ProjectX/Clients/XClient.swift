@@ -137,6 +137,23 @@ class XClient {
         }
     }
     
+    func setSymbolBlocks(_ id: Int, _ blocks: [String]) async -> Bool {
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(userToken!)"
+        ]
+        let params: [String: Any] = [
+            "accountId": id,
+            "symbolBlocks": blocks
+        ]
+        do {
+            let value = try await AF.request("\(userUrl)/SymbolBlock/set", method: .post, parameters: params, encoding: JSONEncoding.default, headers: headers).serializingDecodable(SetResponseDTO.self).value
+            return value.success
+        } catch {
+            Helpers.debugLog("setSymbolBlocks: \(error)")
+            return false
+        }
+    }
+    
     func getAccounts() async -> [AccountDTO] {
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(userToken!)"
@@ -237,7 +254,7 @@ class XClient {
             "pdllTrailingType": trailing ? 1 : 0
         ]
         do {
-            let value = try await AF.request("\(userUrl)/TradingAccount/personalLimits", method: .post, parameters: params, encoding: JSONEncoding.default, headers: headers).serializingDecodable(LimitResponseDTO.self).value
+            let value = try await AF.request("\(userUrl)/TradingAccount/personalLimits", method: .post, parameters: params, encoding: JSONEncoding.default, headers: headers).serializingDecodable(SetResponseDTO.self).value
             return value.success
         } catch {
             Helpers.debugLog("setPersonalLimits: \(error)")
@@ -254,7 +271,7 @@ class XClient {
             "autoOcoBrackets": oco
         ]
         do {
-            let value = try await AF.request("\(userUrl)/TradingAccount/setAutoOcoBrackets", method: .post, parameters: params, encoding: JSONEncoding.default, headers: headers).serializingDecodable(BracketsResponseDTO.self).value
+            let value = try await AF.request("\(userUrl)/TradingAccount/setAutoOcoBrackets", method: .post, parameters: params, encoding: JSONEncoding.default, headers: headers).serializingDecodable(SetResponseDTO.self).value
             return value.success
         } catch {
             Helpers.debugLog("setAutoBrackets: \(error)")

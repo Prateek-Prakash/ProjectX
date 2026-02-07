@@ -133,6 +133,7 @@ struct AppShell: View {
         }
         .sensoryFeedback(.success, trigger: HapticViewModel.shared.success)
         .sensoryFeedback(.error, trigger: HapticViewModel.shared.error)
+        .sensoryFeedback(.selection, trigger: HapticViewModel.shared.selection)
     }
     
     // MARK: Export

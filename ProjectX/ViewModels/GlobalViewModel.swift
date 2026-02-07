@@ -163,7 +163,7 @@ class GlobalViewModel: ObservableObject {
     func signIn(_ firm: Firm, _ username: String, _ key: String) async {
         authenticatingStates[firm] = true
         if delayAuthentication {
-            try! await Task.sleep(for: .seconds(5))
+            try! await Task.sleep(for: .seconds(3))
         }
         let isConnected = await XClient.get(firm).signIn(username, key)
         if isConnected {
@@ -217,10 +217,12 @@ class GlobalViewModel: ObservableObject {
     
     func loadContracts(_ firm: Firm) async {
         let dtos = await XClient.get(firm).getContracts()
+        var contracts: [Contract] = []
         for dto in dtos {
             let contract = Contract.fromDto(dto)
-            allContracts[firm]?.append(contract)
+            contracts.append(contract)
         }
+        allContracts[firm] = contracts.sorted(by: { $0.productName < $1.productName })
     }
     
     func clearOldIds() {
@@ -366,7 +368,7 @@ class GlobalViewModel: ObservableObject {
         drawdownDollars = nil
         
         if delayTradeStats {
-            try! await Task.sleep(for: .seconds(5))
+            try! await Task.sleep(for: .seconds(3))
         }
         
         // TODO: Calculate 5+ Hours
@@ -419,12 +421,12 @@ class GlobalViewModel: ObservableObject {
         loadingSymbolBlocks = true
         
         if delaySymbolBlocks {
-            try! await Task.sleep(for: .seconds(5))
+            try! await Task.sleep(for: .seconds(3))
         }
         
         symbolBlocks.removeAll()
         let dtos = await XClient.get(selectedAccount!.firm).getSymbolBlocks(selectedAccount!.accountId)
-        symbolBlocks = dtos.map({ SymbolBlock.fromDto($0) })
+        symbolBlocks = dtos.map({ SymbolBlock.fromDto($0) }).sorted(by: { $0.symbolId < $1.symbolId })
         
         loadingSymbolBlocks = false
     }

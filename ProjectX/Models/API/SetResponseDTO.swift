@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-nonisolated struct LimitResponseDTO: Codable {
+nonisolated struct SetResponseDTO: Codable {
     var success: Bool
     var errorMessage: String?
 }

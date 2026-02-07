@@ -14,6 +14,7 @@ class HapticViewModel: ObservableObject {
     
     @Published var success: Bool = false
     @Published var error: Bool = false
+    @Published var selection: Bool = false
     
     func successHaptic() {
         success.toggle()
@@ -21,5 +22,9 @@ class HapticViewModel: ObservableObject {
     
     func errorHaptic() {
         error.toggle()
+    }
+    
+    func selectionHaptic() {
+        selection.toggle()
     }
 }
