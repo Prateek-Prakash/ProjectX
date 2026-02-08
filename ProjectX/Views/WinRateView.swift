@@ -15,14 +15,186 @@ struct WinRateView: View {
             ZStack {
                 Color(.xBackground)
                     .edgesIgnoringSafeArea(.all)
-                ContentUnavailableView {
-                    Label("WORK-IN-PROGRESS", systemImage: "wrench.and.screwdriver")
-                        .imageScale(.small)
-                        .font(.system(size: 8, weight: .semibold, design: .monospaced))
-                        .tracking(2)
-                        .foregroundStyle(.secondary)
+                ScrollView {
+                    OriginCard {
+                        VStack(spacing: 0) {
+                            GroupBox {
+                                HStack {
+                                    Text("Under 15 Seconds")
+                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                                    Spacer()
+                                    Text("--")
+                                        .font(.system(size: 12, design: .rounded))
+                                        .foregroundStyle(.secondary)
+                                }
+                                .frame(height: 12)
+                            }
+                            
+                            Divider()
+                                .frame(height: 1)
+                                .overlay(Color(.xOutline))
+                            
+                            GroupBox {
+                                HStack {
+                                    Text("15 Seconds - 45 Seconds")
+                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                                    Spacer()
+                                    Text("--")
+                                        .font(.system(size: 12, design: .rounded))
+                                        .foregroundStyle(.secondary)
+                                }
+                                .frame(height: 12)
+                            }
+                            
+                            Divider()
+                                .frame(height: 1)
+                                .overlay(Color(.xOutline))
+                            
+                            GroupBox {
+                                HStack {
+                                    Text("45 Seconds - 1 Minute")
+                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                                    Spacer()
+                                    Text("--")
+                                        .font(.system(size: 12, design: .rounded))
+                                        .foregroundStyle(.secondary)
+                                }
+                                .frame(height: 12)
+                            }
+                            
+                            Divider()
+                                .frame(height: 1)
+                                .overlay(Color(.xOutline))
+                            
+                            GroupBox {
+                                HStack {
+                                    Text("1 Minute - 2 Minutes")
+                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                                    Spacer()
+                                    Text("--")
+                                        .font(.system(size: 12, design: .rounded))
+                                        .foregroundStyle(.secondary)
+                                }
+                                .frame(height: 12)
+                            }
+                            
+                            Divider()
+                                .frame(height: 1)
+                                .overlay(Color(.xOutline))
+                            
+                            GroupBox {
+                                HStack {
+                                    Text("2 Minutes - 5 Minutes")
+                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                                    Spacer()
+                                    Text("--")
+                                        .font(.system(size: 12, design: .rounded))
+                                        .foregroundStyle(.secondary)
+                                }
+                                .frame(height: 12)
+                            }
+                            
+                            Divider()
+                                .frame(height: 1)
+                                .overlay(Color(.xOutline))
+                            
+                            GroupBox {
+                                HStack {
+                                    Text("5 Minutes - 10 Minutes")
+                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                                    Spacer()
+                                    Text("--")
+                                        .font(.system(size: 12, design: .rounded))
+                                        .foregroundStyle(.secondary)
+                                }
+                                .frame(height: 12)
+                            }
+                            
+                            Divider()
+                                .frame(height: 1)
+                                .overlay(Color(.xOutline))
+                            
+                            GroupBox {
+                                HStack {
+                                    Text("10 Minutes - 30 Minutes")
+                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                                    Spacer()
+                                    Text("--")
+                                        .font(.system(size: 12, design: .rounded))
+                                        .foregroundStyle(.secondary)
+                                }
+                                .frame(height: 12)
+                            }
+                            
+                            Divider()
+                                .frame(height: 1)
+                                .overlay(Color(.xOutline))
+                            
+                            GroupBox {
+                                HStack {
+                                    Text("30 Minutes - 1 Hour")
+                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                                    Spacer()
+                                    Text("--")
+                                        .font(.system(size: 12, design: .rounded))
+                                        .foregroundStyle(.secondary)
+                                }
+                                .frame(height: 12)
+                            }
+                            
+                            Divider()
+                                .frame(height: 1)
+                                .overlay(Color(.xOutline))
+                            
+                            GroupBox {
+                                HStack {
+                                    Text("1 Hour - 2 Hours")
+                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                                    Spacer()
+                                    Text("--")
+                                        .font(.system(size: 12, design: .rounded))
+                                        .foregroundStyle(.secondary)
+                                }
+                                .frame(height: 12)
+                            }
+                            
+                            Divider()
+                                .frame(height: 1)
+                                .overlay(Color(.xOutline))
+                            
+                            GroupBox {
+                                HStack {
+                                    Text("2 Hours - 4 Hours")
+                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                                    Spacer()
+                                    Text("--")
+                                        .font(.system(size: 12, design: .rounded))
+                                        .foregroundStyle(.secondary)
+                                }
+                                .frame(height: 12)
+                            }
+                            
+                            Divider()
+                                .frame(height: 1)
+                                .overlay(Color(.xOutline))
+                            
+                            GroupBox {
+                                HStack {
+                                    Text("Over 4 Hours")
+                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                                    Spacer()
+                                    Text("--")
+                                        .font(.system(size: 12, design: .rounded))
+                                        .foregroundStyle(.secondary)
+                                }
+                                .frame(height: 12)
+                            }
+                        }
+                        .backgroundStyle(Color(.xCardBackground))
+                    }
+                    .padding(.horizontal)
+                    .padding(.bottom)
                 }
-                .padding()
             }
         }
         .toolbarTitleDisplayMode(.inline)
