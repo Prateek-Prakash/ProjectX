@@ -449,7 +449,7 @@ class GlobalViewModel: ObservableObject {
         let ticker = getTickerId(firm, id)
         if ticker != "--" {
             if let contract = allContracts[firm]?.first(where: { $0.productId == id }) {
-                return contract.tickSize.decimalCount
+                return contract.decimalPlaces
             }
         }
         return 7 // Largest Decimal (Japanese Yen)
