@@ -195,60 +195,7 @@ class GlobalViewModel: ObservableObject {
                 type = topstepFunded.contains(id) ? .funded : topstepPractice.contains(id) ? .practice : .evaluation
             }
             let positions: [Position] = await XClient.get(firm).getPositions(id)?.positions.map({ Position.fromDto($0) }) ?? []
-//            let orders: [Order] = await XClient.get(firm).getOrders(id)?.orders.map({ Order.fromDto($0) }).sorted(by: { $0.id < $1.id }) ?? []
-            let orders: [Order] = [
-                Order(
-                    id: 2394078100,
-                    accountId: 17276119,
-                    contractId: "CON.F.US.MNQ.H26",
-                    symbolId: "F.US.MNQ",
-                    creationTimestamp: "2026-02-05T16:19:32.529445+00:00",
-                    updateTimestamp: "2026-02-05T16:19:32.558441+00:00",
-                    status: 1,
-                    type: 4,
-                    side: 0,
-                    size: 1,
-                    limitPrice: nil,
-                    stopPrice: 24803.250000000,
-                    fillVolumed: 0,
-                    filledPriced: nil,
-                    customTag: "AutoBracket50f20cc7-7a70-4383-8bb9-dbb27f0c40b3-SL"
-                ),
-                Order(
-                    id: 2394078101,
-                    accountId: 17276119,
-                    contractId: "CON.F.US.MNQ.H26",
-                    symbolId: "F.US.MNQ",
-                    creationTimestamp: "2026-02-05T16:19:32.529445+00:00",
-                    updateTimestamp: "2026-02-05T16:19:32.558441+00:00",
-                    status: 1,
-                    type: 1,
-                    side: 0,
-                    size: 1,
-                    limitPrice: 24553.250000000,
-                    stopPrice: nil,
-                    fillVolumed: 0,
-                    filledPriced: nil,
-                    customTag: "AutoBracket50f20cc7-7a70-4383-8bb9-dbb27f0c40b3-TP"
-                ),
-                Order(
-                    id: 2394078102,
-                    accountId: 17276119,
-                    contractId: "CON.F.US.MNQ.H26",
-                    symbolId: "F.US.MNQ",
-                    creationTimestamp: "2026-02-05T16:19:32.529445+00:00",
-                    updateTimestamp: "2026-02-05T16:19:32.558441+00:00",
-                    status: 1,
-                    type: 5,
-                    side: 0,
-                    size: 1,
-                    limitPrice: 24553.250000000,
-                    stopPrice: nil,
-                    fillVolumed: 0,
-                    filledPriced: nil,
-                    customTag: nil
-                )
-            ].sorted(by: { $0.id < $1.id })
+            let orders: [Order] = await XClient.get(firm).getOrders(id)?.orders.map({ Order.fromDto($0) }).sorted(by: { $0.id < $1.id }) ?? []
             let account = Account.fromDto(active, firm, type, tradable, positions, orders)
             accounts.append(account)
         }
