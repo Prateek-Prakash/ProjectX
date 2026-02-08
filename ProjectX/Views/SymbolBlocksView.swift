@@ -75,7 +75,6 @@ struct SymbolBlocksView: View {
                                                 )
                                                 blocks.append(block)
                                                 globalVM.symbolBlocks = blocks.sorted(by: { $0.symbolId < $1.symbolId })
-                                                
                                             }
                                         } label: {
                                             OriginCard {
