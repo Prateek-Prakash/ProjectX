@@ -215,6 +215,23 @@ class XClient {
         }
     }
     
+    func cancelOrder(_ account: Int, _ order: Int) async -> Bool {
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(gatewayToken!)"
+        ]
+        let params: [String: Int] = [
+            "accountId": account,
+            "orderId": order
+        ]
+        do {
+            let value = try await AF.request("\(gatewayUrl)/api/Order/cancel", method: .post, parameters: params, encoding: JSONEncoding.default, headers: headers).serializingDecodable(SetResponseDTO.self).value
+            return value.success
+        } catch {
+            Helpers.debugLog("cancelOrder: \(error)")
+            return false
+        }
+    }
+    
     func getBars(_ id: String, _ start: String, _ end: String, _ unit: BarUnit) async -> BarResponseDTO? {
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(gatewayToken!)"

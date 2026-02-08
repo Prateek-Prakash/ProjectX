@@ -20,7 +20,7 @@ struct TradeHistoryView: View {
                 if !globalVM.accountTrades.isEmpty {
                     ScrollView {
                         OriginCard {
-                            LazyVStack(spacing: 0) {
+                            VStack(spacing: 0) {
                                 ForEach(globalVM.accountTrades) { trade in
                                     TradeTile(firm: firm, trade: trade, tappable: true)
                                     if globalVM.accountTrades.last != trade {

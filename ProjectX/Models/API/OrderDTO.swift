@@ -21,6 +21,7 @@ nonisolated struct OrderDTO: Identifiable, Codable {
     var size: Int
     var limitPrice: Double?
     var stopPrice: Double?
+    var trailPrice: Double?
     var fillVolumed: Int
     var filledPriced: Double?
     var customTag: String?

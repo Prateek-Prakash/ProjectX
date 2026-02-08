@@ -18,7 +18,7 @@ struct DailyStatsHistoryView: View {
                 if !globalVM.accountDailyStats.isEmpty {
                     ScrollView {
                         OriginCard {
-                            LazyVStack(spacing: 0) {
+                            VStack(spacing: 0) {
                                 ForEach(Array(globalVM.accountDailyStats)) { stats in
                                     DailyStatsTile(stats: stats)
                                     if globalVM.accountDailyStats.last != stats {

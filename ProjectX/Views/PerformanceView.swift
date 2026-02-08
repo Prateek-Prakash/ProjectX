@@ -303,6 +303,43 @@ struct PerformanceView: View {
                             
                             OriginCard {
                                 VStack(spacing: 0) {
+                                    OriginHeader {
+                                        Text("ORDERS")
+                                            .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                            .tracking(2)
+                                            .foregroundStyle(Color(.xHeaderText))
+                                    }
+                                    
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    LazyVStack(spacing: 0) {
+                                        if !account.orders.isEmpty {
+                                            ForEach(account.orders) { order in
+                                                OrderTile(account: account, order: order)
+                                                if account.orders.last != order {
+                                                    Divider()
+                                                        .frame(height: 1)
+                                                        .overlay(Color(.xOutline))
+                                                }
+                                            }
+                                        } else {
+                                            ContentUnavailableView {
+                                                Label("NO ORDERS FOUND", systemImage: "exclamationmark.triangle")
+                                                    .imageScale(.small)
+                                                    .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                                    .tracking(2)
+                                                    .foregroundStyle(.secondary)
+                                            }
+                                            .padding()
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            OriginCard {
+                                VStack(spacing: 0) {
                                     NavigationLink {
                                         TradeHistoryView(firm: account.firm)
                                     } label: {

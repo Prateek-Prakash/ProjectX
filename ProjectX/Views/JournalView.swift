@@ -37,6 +37,18 @@ struct JournalView: View {
                         .font(.system(size: 12, weight: .semibold, design: .monospaced))
                         .tracking(2)
                 }
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        // TODO: Add Journal Entry
+                    } label: {
+                        Image(systemName: "plus")
+                            .imageScale(.small)
+                            .increaseTapArea(by: 12)
+                    }
+                    .buttonStyle(.plain)
+                }
+                .sharedBackgroundVisibility(.hidden)
             }
         }
     }
