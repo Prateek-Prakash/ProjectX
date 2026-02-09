@@ -18,7 +18,7 @@ struct OrderTile: View {
             HStack {
                 Image(systemName: order.tagString != nil ? "circle.fill" : "circle")
                     .resizable()
-                    .frame(width: 6, height: 6)
+                    .frame(width: 8, height: 8)
                     .foregroundStyle(Color.fromString(order.tagString))
                 Text(globalVM.getTickerId(account.firm, order.symbolId))
                     .font(.system(size: 10, weight: .bold, design: .rounded))

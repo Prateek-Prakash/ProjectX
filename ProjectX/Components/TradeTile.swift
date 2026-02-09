@@ -29,7 +29,7 @@ struct TradeTile: View {
                 HStack {
                     Image(systemName: trade.positionSize < 0 ? "arrowtriangle.up.fill" : trade.positionSize > 0 ? "arrowtriangle.down.fill" : "questionmark")
                         .resizable()
-                        .frame(width: 6, height: 6)
+                        .frame(width: 8, height: 8)
                         .foregroundStyle(trade.positionSize < 0 ? .green : trade.positionSize > 0 ? .red : .primary)
                     Text(globalVM.getTickerId(firm, trade.symbolId))
                         .font(.system(size: 10, weight: .bold, design: .rounded))
