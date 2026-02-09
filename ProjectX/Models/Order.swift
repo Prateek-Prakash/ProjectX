@@ -22,7 +22,7 @@ nonisolated struct Order: Identifiable, Equatable, Codable {
     var limitPrice: Double?
     var stopPrice: Double?
     var trailPrice: Double?
-    var fillVolumed: Int
+    var fillVolume: Int
     var filledPriced: Double?
     var customTag: String?
     
@@ -41,7 +41,7 @@ nonisolated struct Order: Identifiable, Equatable, Codable {
             limitPrice: dto.limitPrice,
             stopPrice: dto.stopPrice,
             trailPrice: dto.trailPrice,
-            fillVolumed: dto.fillVolumed,
+            fillVolume: dto.fillVolume,
             filledPriced: dto.filledPriced,
             customTag: dto.customTag
         )
