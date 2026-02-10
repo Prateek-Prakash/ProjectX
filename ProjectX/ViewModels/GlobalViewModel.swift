@@ -46,7 +46,7 @@ class GlobalViewModel: ObservableObject {
     @AppStorage("priceStreaming") var priceStreaming: Bool = false
     @AppStorage("delayAuthentication") var delayAuthentication: Bool = false
     @AppStorage("delayLoadingTrades") var delayLoadingTrades: Bool = false
-    @AppStorage("delayTradeStats") var delayTradeStats: Bool = false
+    @AppStorage("delayTradeInfo") var delayTradeInfo: Bool = false
     @AppStorage("delaySymbolBlocks") var delaySymbolBlocks: Bool = false
     @AppStorage("executeLockouts") var executeLockouts: Bool = true
     @AppStorage("blurBalances") var blurBalances: Bool = false
@@ -368,7 +368,7 @@ class GlobalViewModel: ObservableObject {
         drawdownPoints = nil
         drawdownDollars = nil
         
-        if delayTradeStats {
+        if delayTradeInfo {
             try! await Task.sleep(for: .seconds(3))
         }
         

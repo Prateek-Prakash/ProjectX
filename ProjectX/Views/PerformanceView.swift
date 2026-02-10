@@ -261,6 +261,60 @@ struct PerformanceView: View {
                                         .backgroundStyle(Color(.xCardBackground))
                                     }
                                     .buttonStyle(.plain)
+                                    
+                                    if positionBrackets {
+                                        Divider()
+                                            .frame(height: 1)
+                                            .overlay(Color(.xOutline))
+                                        
+                                        Button {
+                                            // TODO: Edit Risk
+                                        } label: {
+                                            GroupBox {
+                                                HStack {
+                                                    Text("Risk Bracket")
+                                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                    Spacer()
+                                                    Text(account.bracketAmountToRisk?.asCurrency() ?? "--")
+                                                        .font(.system(size: 12, design: .rounded))
+                                                        .foregroundStyle(.secondary)
+                                                    Image(systemName: "chevron.right")
+                                                        .foregroundStyle(.secondary)
+                                                        .fontDesign(.rounded)
+                                                        .imageScale(.small)
+                                                }
+                                                .frame(height: 12)
+                                            }
+                                            .backgroundStyle(Color(.xCardBackground))
+                                        }
+                                        .buttonStyle(.plain)
+                                        
+                                        Divider()
+                                            .frame(height: 1)
+                                            .overlay(Color(.xOutline))
+                                        
+                                        Button {
+                                            // TODO: Edit Profit
+                                        } label: {
+                                            GroupBox {
+                                                HStack {
+                                                    Text("Profit Bracket")
+                                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                    Spacer()
+                                                    Text(account.bracketAmountToMake?.asCurrency() ?? "--")
+                                                        .font(.system(size: 12, design: .rounded))
+                                                        .foregroundStyle(.secondary)
+                                                    Image(systemName: "chevron.right")
+                                                        .foregroundStyle(.secondary)
+                                                        .fontDesign(.rounded)
+                                                        .imageScale(.small)
+                                                }
+                                                .frame(height: 12)
+                                            }
+                                            .backgroundStyle(Color(.xCardBackground))
+                                        }
+                                        .buttonStyle(.plain)
+                                    }
                                 }
                             }
                             

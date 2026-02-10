@@ -522,14 +522,14 @@ struct DeveloperView: View {
                                         .overlay(Color(.xOutline))
                                     
                                     Button {
-                                        globalVM.delayTradeStats.toggle()
+                                        globalVM.delayTradeInfo.toggle()
                                     } label: {
                                         GroupBox {
                                             HStack {
-                                                Text("Delay Trade Stats")
+                                                Text("Delay Trade Info")
                                                     .font(.system(size: 12, weight: .medium, design: .rounded))
                                                 Spacer()
-                                                Toggle("", isOn: $globalVM.delayTradeStats)
+                                                Toggle("", isOn: $globalVM.delayTradeInfo)
                                                     .scaleEffect(0.6, anchor: .trailing)
                                             }
                                             .frame(height: 12)
