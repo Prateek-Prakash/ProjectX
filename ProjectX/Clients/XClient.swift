@@ -279,7 +279,7 @@ class XClient {
         }
     }
     
-    func setAutoBrackets(_ id: Int, _ oco: Bool) async -> Bool {
+    func setOcoBrackets(_ id: Int, _ oco: Bool) async -> Bool {
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(userToken!)"
         ]
@@ -292,6 +292,25 @@ class XClient {
             return value.success
         } catch {
             Helpers.debugLog("setAutoBrackets: \(error)")
+            return false
+        }
+    }
+    
+    func setPositionBrackets(_ id: Int, _ auto: Bool, _ risk: Double?, _ make: Double?) async -> Bool {
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(userToken!)"
+        ]
+        let params: [String: Any?] = [
+            "accountId": id,
+            "autoApply": auto,
+            "risk": risk,
+            "toMake": make
+        ]
+        do {
+            let value = try await AF.request("\(userUrl)/TradingAccount/setPositionBrackets", method: .post, parameters: params, encoding: JSONEncoding.default, headers: headers).serializingDecodable(SetResponseDTO.self).value
+            return value.success
+        } catch {
+            Helpers.debugLog("setPositionBrackets: \(error)")
             return false
         }
     }

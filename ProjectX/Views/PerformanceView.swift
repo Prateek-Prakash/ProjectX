@@ -14,8 +14,9 @@ struct PerformanceView: View {
     @State var showDailyProfitTargetSheet: Bool = false
     @State var showDailyLossLimitSheet: Bool = false
     @State var isTrailing: Bool = false
-    @State var autoBrackets: Bool = false
+    @State var ocoBrackets: Bool = false
     @State var positionBrackets: Bool = true
+    @State var autoApplyBrackets: Bool = false
     
     let account: Account
     
@@ -223,14 +224,14 @@ struct PerformanceView: View {
                                     
                                     VStack(spacing: 0) {
                                         Button {
-                                            autoBrackets.toggle()
+                                            ocoBrackets.toggle()
                                         } label: {
                                             GroupBox {
                                                 HStack {
-                                                    Text("Auto Brackets")
+                                                    Text("OCO Brackets")
                                                         .font(.system(size: 12, weight: .medium, design: .rounded))
                                                     Spacer()
-                                                    Toggle("", isOn: $autoBrackets)
+                                                    Toggle("", isOn: $ocoBrackets)
                                                         .scaleEffect(0.6, anchor: .trailing)
                                                 }
                                                 .frame(height: 12)
@@ -275,7 +276,7 @@ struct PerformanceView: View {
                                                     Text("Risk Bracket")
                                                         .font(.system(size: 12, weight: .medium, design: .rounded))
                                                     Spacer()
-                                                    Text(account.bracketAmountToRisk?.asCurrency() ?? "--")
+                                                    Text(account.bracketAmountToRisk != 0.0 ? account.bracketAmountToRisk?.asCurrency() ?? "--" : "--")
                                                         .font(.system(size: 12, design: .rounded))
                                                         .foregroundStyle(.secondary)
                                                     Image(systemName: "chevron.right")
@@ -301,13 +302,34 @@ struct PerformanceView: View {
                                                     Text("Profit Bracket")
                                                         .font(.system(size: 12, weight: .medium, design: .rounded))
                                                     Spacer()
-                                                    Text(account.bracketAmountToMake?.asCurrency() ?? "--")
+                                                    Text(account.bracketAmountToMake != 0.0 ? account.bracketAmountToMake?.asCurrency() ?? "--" : "--")
                                                         .font(.system(size: 12, design: .rounded))
                                                         .foregroundStyle(.secondary)
                                                     Image(systemName: "chevron.right")
                                                         .foregroundStyle(.secondary)
                                                         .fontDesign(.rounded)
                                                         .imageScale(.small)
+                                                }
+                                                .frame(height: 12)
+                                            }
+                                            .backgroundStyle(Color(.xCardBackground))
+                                        }
+                                        .buttonStyle(.plain)
+                                        
+                                        Divider()
+                                            .frame(height: 1)
+                                            .overlay(Color(.xOutline))
+                                        
+                                        Button {
+                                            autoApplyBrackets.toggle()
+                                        } label: {
+                                            GroupBox {
+                                                HStack {
+                                                    Text("Auto Apply Brackets")
+                                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                    Spacer()
+                                                    Toggle("", isOn: $autoApplyBrackets)
+                                                        .scaleEffect(0.6, anchor: .trailing)
                                                 }
                                                 .frame(height: 12)
                                             }
@@ -650,19 +672,25 @@ struct PerformanceView: View {
                 }
             }
             .onAppear {
-                autoBrackets = account.autoOcoBrackets
-                positionBrackets = !autoBrackets
+                ocoBrackets = account.autoOcoBrackets
+                positionBrackets = !ocoBrackets
+                autoApplyBrackets = account.bracketAutoApply ?? false
             }
-            .onChange(of: autoBrackets) {
-                positionBrackets = !autoBrackets
+            .onChange(of: ocoBrackets) {
+                positionBrackets = !ocoBrackets
                 Task {
-                    let _ = await XClient.get(account.firm).setAutoBrackets(account.accountId, autoBrackets)
+                    let _ = await XClient.get(account.firm).setOcoBrackets(account.accountId, ocoBrackets)
                 }
             }
             .onChange(of: positionBrackets) {
-                autoBrackets = !positionBrackets
+                ocoBrackets = !positionBrackets
                 Task {
-                    let _ = await XClient.get(account.firm).setAutoBrackets(account.accountId, !positionBrackets)
+                    let _ = await XClient.get(account.firm).setOcoBrackets(account.accountId, !positionBrackets)
+                }
+            }
+            .onChange(of: autoApplyBrackets) {
+                Task {
+                    let _ = await XClient.get(account.firm).setPositionBrackets(account.accountId, autoApplyBrackets, account.bracketAmountToRisk, account.bracketAmountToMake)
                 }
             }
             .onChange(of: account) { old, new in
@@ -670,9 +698,13 @@ struct PerformanceView: View {
                     isTrailing = new.personalDailyLossLimitTrailing
                 }
                 
-                if autoBrackets != new.autoOcoBrackets {
-                    autoBrackets = new.autoOcoBrackets
-                    positionBrackets = !autoBrackets
+                if ocoBrackets != new.autoOcoBrackets {
+                    ocoBrackets = new.autoOcoBrackets
+                    positionBrackets = !ocoBrackets
+                }
+                
+                if autoApplyBrackets != new.bracketAutoApply {
+                    autoApplyBrackets = new.bracketAutoApply ?? false
                 }
                 
                 if old.realizedDayPnl != new.realizedDayPnl || old.positions.count != new.positions.count {
