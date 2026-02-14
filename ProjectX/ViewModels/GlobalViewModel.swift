@@ -86,6 +86,10 @@ class GlobalViewModel: ObservableObject {
     @Published var drawdownPoints: Double? = nil
     @Published var drawdownDollars: Double? = nil
     
+    @Published var statsDrawdown: Double = 0.0
+    @Published var statsWinner: Double = 0.0
+    @Published var statsLoser: Double = 0.0
+    
     @Published var loadingSymbolBlocks: Bool = false
     @Published var symbolBlocks: [SymbolBlock] = []
     
@@ -414,6 +418,21 @@ class GlobalViewModel: ObservableObject {
         if runUpDollars == nil { runUpDollars = -1 }
         if drawdownPoints == nil { drawdownPoints = -1 }
         if drawdownDollars == nil { drawdownDollars = -1 }
+    }
+    
+    func calculateDailyStatsInfo(_ day: String) async {
+        statsDrawdown = 0.0
+        statsWinner = 0.0
+        statsLoser = 0.0
+        
+        for trade in accountTrades.filter({ $0.tradeDay == day }).reversed() {
+            await calculateTradeStats(selectedAccount!.firm, trade) // TODO: Handle Rate Limit
+            
+            // TODO: Finish Implementing
+            
+            statsWinner < trade.pnL ? (statsWinner = trade.pnL) : ()
+            statsLoser > trade.pnL ? (statsLoser = trade.pnL) : ()
+        }
     }
     
     // MARK: Symbol Blocks

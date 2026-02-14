@@ -38,9 +38,10 @@ struct TradeInfoSheet: View {
                                 Text("Points")
                                     .font(.system(size: 12, weight: .medium, design: .rounded))
                                 Spacer()
-                                Text(abs(trade.exitPrice - trade.entryPrice).asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))
+                                let direction = (trade.exitPrice - trade.entryPrice) * (trade.positionSize < 0 ? 1 : -1) >= 0 ? "+" : "-"
+                                Text("\(direction)\(abs(trade.exitPrice - trade.entryPrice).asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))")
                                     .font(.system(size: 12, design: .rounded))
-                                    .foregroundStyle((trade.exitPrice - trade.entryPrice) * (trade.positionSize < 0 ? 1 : -1) > 0 ? .green : (trade.exitPrice - trade.entryPrice) < 0 ? .red : .secondary)
+                                    .foregroundStyle(.secondary)
                             }
                             .frame(height: 12)
                         }
