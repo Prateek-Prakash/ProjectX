@@ -73,8 +73,8 @@ struct TradeInfoSheet: View {
                         Text("Points")
                             .font(.system(size: 12, weight: .medium, design: .rounded))
                         Spacer()
-                        let direction = (trade.exitPrice - trade.entryPrice) * (trade.positionSize < 0 ? 1 : -1) >= 0 ? "+" : "-"
-                        Text("\(direction)\(abs(trade.exitPrice - trade.entryPrice).asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))")
+                        let prefix = trade.positionSize < 0 ? "+" : "-"
+                        Text("\(prefix)\(abs(trade.exitPrice - trade.entryPrice).asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))")
                             .font(.system(size: 12, design: .rounded))
                             .foregroundStyle(.secondary)
                     }

@@ -114,7 +114,7 @@ struct BackupsView: View {
             let trades = await XClient.get(account.firm).getTrades(account.accountId)
             if !trades.isEmpty {
                 let encoder = JSONEncoder()
-                encoder.outputFormatting = .prettyPrinted
+                encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
                 let data = try! encoder.encode(trades)
                 let json = String(data: data, encoding: .utf8)!
                 

@@ -432,12 +432,12 @@ class GlobalViewModel: ObservableObject {
                             
                             let points = abs(trade.exitPrice - trade.entryPrice)
                             if trade.pnL < 0.0 {
-                                if points > drawdownPoints! {
-                                    drawdownPoints = points
+                                if abs(points) > abs(drawdownPoints!) {
+                                    drawdownPoints = abs(points)
                                 }
                             } else {
-                                if points > runUpPoints! {
-                                    runUpPoints = points
+                                if abs(points) > abs(runUpPoints!) {
+                                    runUpPoints = abs(points)
                                 }
                             }
                             
@@ -449,12 +449,12 @@ class GlobalViewModel: ObservableObject {
                                 drawdownDollars = drawdownPoints! / contract.tickSize * contract.tickValue * Double(abs(trade.positionSize))
                                 
                                 if trade.pnL < 0.0 {
-                                    if trade.pnL > drawdownDollars! {
-                                        drawdownDollars = trade.pnL
+                                    if abs(trade.pnL) > abs(drawdownDollars!) {
+                                        drawdownDollars = abs(trade.pnL)
                                     }
                                 } else {
-                                    if trade.pnL > runUpDollars! {
-                                        runUpDollars = trade.pnL
+                                    if abs(trade.pnL) > abs(runUpDollars!) {
+                                        runUpDollars = abs(trade.pnL)
                                     }
                                 }
                                 
@@ -546,10 +546,31 @@ class GlobalViewModel: ObservableObject {
     }
     
     func exportTradesJson(_ day: String) -> String {
-        // TODO: Finish Implement
-        let trades: [Trade] = accountTrades.filter({ $0.tradeDay == day }).reversed()
+        let trades: [TradeExport] = accountTrades.filter({ $0.tradeDay == day }).reversed().map({
+            let multiplier =  $0.positionSize < 0 ? 1.0 : -1.0
+            let points = abs($0.exitPrice - $0.entryPrice) * multiplier
+            return TradeExport(
+                id: $0.id,
+                tradeDate: $0.tradeDay,
+                side: $0.positionSize < 0 ? "Long" : "Short",
+                ticker: getTickerId(selectedAccount!.firm, $0.symbolId),
+                size: abs($0.positionSize),
+                pnl: $0.pnL,
+                points: points,
+                fees: $0.fees,
+                runUpPoints: runUpPointsMap[selectedAccount!.firm]![$0.ref],
+                runUpDollars: runUpDollarsMap[selectedAccount!.firm]![$0.ref],
+                drawdownPoints: drawdownPointsMap[selectedAccount!.firm]![$0.ref],
+                drawdownDollars: drawdownDollarsMap[selectedAccount!.firm]![$0.ref],
+                entryPrice: $0.entryPrice,
+                exitPrice: $0.exitPrice,
+                entryAt: $0.createdAt,
+                exitAt: $0.exitedAt,
+                duration: $0.tradeDurationDisplay
+            )
+        })
         let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
         let data = try! encoder.encode(trades)
         let json = String(data: data, encoding: .utf8)!
         return json

@@ -100,8 +100,8 @@ struct DailyStatsInfoSheet: View {
                                 Text("Realized P&L")
                                     .font(.system(size: 12, weight: .medium, design: .rounded))
                                 Spacer()
-                                let direction = (stats.totalPnL - stats.totalFees) >= 0 ? "+" : "-"
-                                Text(stats.totalTrades > 0 ? "\(direction)\(abs(stats.totalPnL - stats.totalFees).asCurrency())" : "--")
+                                let prefix = (stats.totalPnL - stats.totalFees) >= 0 ? "+" : "-"
+                                Text(stats.totalTrades > 0 ? "\(prefix)\(abs(stats.totalPnL - stats.totalFees).asCurrency())" : "--")
                                     .font(.system(size: 12, design: .rounded))
                                     .foregroundStyle(.secondary)
                             }
