@@ -11,11 +11,15 @@ struct PerformanceView: View {
     @ObservedObject var globalVM = GlobalViewModel.shared
     
     @State var showLockoutSheet: Bool = false
+    
     @State var showDailyProfitTargetSheet: Bool = false
     @State var showDailyLossLimitSheet: Bool = false
     @State var isTrailing: Bool = false
+    
     @State var ocoBrackets: Bool = false
     @State var positionBrackets: Bool = true
+    @State var showRiskBracketSheet: Bool = false
+    @State var showProfitBracketSheet: Bool = false
     @State var autoApplyBrackets: Bool = false
     
     let account: Account
@@ -269,7 +273,7 @@ struct PerformanceView: View {
                                             .overlay(Color(.xOutline))
                                         
                                         Button {
-                                            // TODO: Edit Risk
+                                            showRiskBracketSheet.toggle()
                                         } label: {
                                             GroupBox {
                                                 HStack {
@@ -295,7 +299,7 @@ struct PerformanceView: View {
                                             .overlay(Color(.xOutline))
                                         
                                         Button {
-                                            // TODO: Edit Profit
+                                            showProfitBracketSheet.toggle()
                                         } label: {
                                             GroupBox {
                                                 HStack {
@@ -689,6 +693,12 @@ struct PerformanceView: View {
                 Task {
                     let _ = await XClient.get(account.firm).setOcoBrackets(account.accountId, !positionBrackets)
                 }
+            }
+            .sheet(isPresented: $showRiskBracketSheet) {
+                RiskBracketSheet(account: account)
+            }
+            .sheet(isPresented: $showProfitBracketSheet) {
+                ProfitBracketSheet(account: account)
             }
             .onChange(of: autoApplyBrackets) {
                 Task {
