@@ -35,35 +35,13 @@ struct AppShell: View {
                     ProgressView()
                 } else if !globalVM.allAccounts.isEmpty {
                     ScrollView {
-                        VStack(spacing: 10) {
-                            ForEach(Firm.allCases) { firm in
-                                if globalVM.isLinked(firm) && globalVM.isConnected(firm) {
-                                    let accounts = globalVM.allAccounts.filter({
-                                        $0.firm == firm
-                                        && ((globalVM.showEvaluationAccounts && $0.accountType == .evaluation) || (globalVM.showFundedAccounts && $0.accountType == .funded) || (globalVM.showPracticeAccounts && $0.accountType == .practice))
-                                        && ((globalVM.hideLockedAccounts && $0.canTrade) || !globalVM.hideLockedAccounts)
-                                    })
-                                    if !globalVM.hideEmptyFirms || !accounts.isEmpty {
-                                        FirmCard(
-                                            firm: firm,
-                                            accounts: accounts
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                        .padding(.horizontal)
-                        .padding(.bottom)
+                        mainContent()
+                            .padding(.horizontal)
+                            .padding(.bottom)
                     }
                 } else {
-                    ContentUnavailableView {
-                        Label("NO ACCOUNTS FOUND", systemImage: "exclamationmark.triangle")
-                            .imageScale(.small)
-                            .font(.system(size: 8, weight: .semibold, design: .monospaced))
-                            .tracking(2)
-                            .foregroundStyle(.secondary)
-                    }
-                    .padding()
+                    emptyContent()
+                        .padding()
                 }
             }
             .toolbarTitleDisplayMode(.inline)
@@ -136,6 +114,38 @@ struct AppShell: View {
         .sensoryFeedback(.selection, trigger: HapticViewModel.shared.selection)
     }
     
+    // MARK: Main Content
+    
+    func mainContent() -> some View {
+        VStack(spacing: 10) {
+            ForEach(Firm.allCases) { firm in
+                if globalVM.isLinked(firm) && globalVM.isConnected(firm) {
+                    let accounts = globalVM.allAccounts.filter({
+                        $0.firm == firm
+                        && ((globalVM.showEvaluationAccounts && $0.accountType == .evaluation) || (globalVM.showFundedAccounts && $0.accountType == .funded) || (globalVM.showPracticeAccounts && $0.accountType == .practice))
+                        && ((globalVM.hideLockedAccounts && $0.canTrade) || !globalVM.hideLockedAccounts)
+                    })
+                    if !globalVM.hideEmptyFirms || !accounts.isEmpty {
+                        FirmCard(
+                            firm: firm,
+                            accounts: accounts
+                        )
+                    }
+                }
+            }
+        }
+    }
+    
+    func emptyContent() -> some View {
+        ContentUnavailableView {
+            Label("NO ACCOUNTS FOUND", systemImage: "exclamationmark.triangle")
+                .imageScale(.small)
+                .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                .tracking(2)
+                .foregroundStyle(.secondary)
+        }
+    }
+    
     // MARK: Export
     
     @MainActor
@@ -162,33 +172,11 @@ struct AppShell: View {
                 ProgressView()
                     .padding()
             } else if !globalVM.allAccounts.isEmpty {
-                VStack(spacing: 10) {
-                    ForEach(Firm.allCases) { firm in
-                        if globalVM.isLinked(firm) && globalVM.isConnected(firm) {
-                            let accounts = globalVM.allAccounts.filter({
-                                $0.firm == firm
-                                && ((globalVM.showEvaluationAccounts && $0.accountType == .evaluation) || (globalVM.showFundedAccounts && $0.accountType == .funded) || (globalVM.showPracticeAccounts && $0.accountType == .practice))
-                                && ((globalVM.hideLockedAccounts && $0.canTrade) || !globalVM.hideLockedAccounts)
-                            })
-                            if !globalVM.hideEmptyFirms || !accounts.isEmpty {
-                                FirmCard(
-                                    firm: firm,
-                                    accounts: accounts
-                                )
-                            }
-                        }
-                    }
-                }
-                .padding()
+                mainContent()
+                    .padding()
             } else {
-                ContentUnavailableView {
-                    Label("NO ACCOUNTS FOUND", systemImage: "exclamationmark.triangle")
-                        .imageScale(.small)
-                        .font(.system(size: 8, weight: .semibold, design: .monospaced))
-                        .tracking(2)
-                        .foregroundStyle(.secondary)
-                }
-                .padding()
+                emptyContent()
+                    .padding()
             }
         }
         .environment(\.colorScheme, colorScheme)

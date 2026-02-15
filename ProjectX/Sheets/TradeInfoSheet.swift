@@ -27,153 +27,10 @@ struct TradeInfoSheet: View {
                     Color(.xCardBackground)
                         .edgesIgnoringSafeArea(.all)
                 }
-                VStack {
-                    OriginCard {
-                        TradeTile(firm: firm, trade: trade, tappable: false)
-                    }
-                    
-                    OriginCard {
-                        GroupBox {
-                            HStack {
-                                Text("Points")
-                                    .font(.system(size: 12, weight: .medium, design: .rounded))
-                                Spacer()
-                                let direction = (trade.exitPrice - trade.entryPrice) * (trade.positionSize < 0 ? 1 : -1) >= 0 ? "+" : "-"
-                                Text("\(direction)\(abs(trade.exitPrice - trade.entryPrice).asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))")
-                                    .font(.system(size: 12, design: .rounded))
-                                    .foregroundStyle(.secondary)
-                            }
-                            .frame(height: 12)
-                        }
-                        .backgroundStyle(Color(.xCardBackground))
-                    }
-                    
-                    OriginCard {
-                        GroupBox {
-                            HStack {
-                                Text("Duration")
-                                    .font(.system(size: 12, weight: .medium, design: .rounded))
-                                Spacer()
-                                Text(trade.tradeDurationDisplay)
-                                    .font(.system(size: 12, design: .rounded))
-                                    .foregroundStyle(.secondary)
-                            }
-                            .frame(height: 12)
-                        }
-                        .backgroundStyle(Color(.xCardBackground))
-                    }
-                    
-                    OriginCard {
-                        VStack(spacing: 0) {
-                            OriginHeader {
-                                Text("RUN-UP")
-                                    .font(.system(size: 8, weight: .semibold, design: .monospaced))
-                                    .tracking(2)
-                                    .foregroundStyle(Color(.xHeaderText))
-                            }
-                            
-                            Divider()
-                                .frame(height: 1)
-                                .overlay(Color(.xOutline))
-                            
-                            VStack(spacing: 0) {
-                                GroupBox {
-                                    HStack {
-                                        Text("Points")
-                                            .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        Spacer()
-                                        if !globalVM.loadingTradeInfo {
-                                            Text(globalVM.runUpPoints != nil ? "+\(abs(globalVM.runUpPoints!).asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))" : "--")
-                                                .font(.system(size: 12, design: .rounded))
-                                                .foregroundStyle(.secondary)
-                                        } else {
-                                            ProgressView()
-                                        }
-                                    }
-                                    .frame(height: 12)
-                                }
-                                
-                                Divider()
-                                    .frame(height: 1)
-                                    .overlay(Color(.xOutline))
-                                
-                                GroupBox {
-                                    HStack {
-                                        Text("Dollars")
-                                            .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        Spacer()
-                                        if !globalVM.loadingTradeInfo {
-                                            Text(globalVM.runUpDollars != nil ? "+\(abs(globalVM.runUpDollars!).asCurrency())" : "--")
-                                                .font(.system(size: 12, design: .rounded))
-                                                .foregroundStyle(.secondary)
-                                        } else {
-                                            ProgressView()
-                                        }
-                                    }
-                                    .frame(height: 12)
-                                }
-                            }
-                            .backgroundStyle(Color(.xCardBackground))
-                        }
-                    }
-                    
-                    OriginCard {
-                        VStack(spacing: 0) {
-                            OriginHeader {
-                                Text("DRAWDOWN")
-                                    .font(.system(size: 8, weight: .semibold, design: .monospaced))
-                                    .tracking(2)
-                                    .foregroundStyle(Color(.xHeaderText))
-                            }
-                            
-                            Divider()
-                                .frame(height: 1)
-                                .overlay(Color(.xOutline))
-                            
-                            VStack(spacing: 0) {
-                                GroupBox {
-                                    HStack {
-                                        Text("Points")
-                                            .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        Spacer()
-                                        if !globalVM.loadingTradeInfo {
-                                            Text(globalVM.drawdownPoints != nil ? "-\(abs(globalVM.drawdownPoints!).asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))" : "--")
-                                                .font(.system(size: 12, design: .rounded))
-                                                .foregroundStyle(.secondary)
-                                        } else {
-                                            ProgressView()
-                                        }
-                                    }
-                                    .frame(height: 12)
-                                }
-                                
-                                Divider()
-                                    .frame(height: 1)
-                                    .overlay(Color(.xOutline))
-                                
-                                GroupBox {
-                                    HStack {
-                                        Text("Dollars")
-                                            .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        Spacer()
-                                        if !globalVM.loadingTradeInfo {
-                                            Text(globalVM.drawdownDollars != nil ? "-\(abs(globalVM.drawdownDollars!).asCurrency())" : "--")
-                                                .font(.system(size: 12, design: .rounded))
-                                                .foregroundStyle(.secondary)
-                                        } else {
-                                            ProgressView()
-                                        }
-                                    }
-                                    .frame(height: 12)
-                                }
-                            }
-                            .backgroundStyle(Color(.xCardBackground))
-                        }
-                    }
-                }
-                .fixedSize(horizontal: false, vertical: true)
-                .padding()
-                .padding(.vertical)
+                mainContent()
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding()
+                    .padding(.vertical)
             }
             .onGeometryChange(for: CGSize.self) {
                 $0.size
@@ -202,6 +59,155 @@ struct TradeInfoSheet: View {
         .presentationDetents([.height(sheetHeight)])
     }
     
+    // MARK: Main Content
+    
+    func mainContent() -> some View {
+        VStack {
+            OriginCard {
+                TradeTile(firm: firm, trade: trade, tappable: false)
+            }
+            
+            OriginCard {
+                GroupBox {
+                    HStack {
+                        Text("Points")
+                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                        Spacer()
+                        let direction = (trade.exitPrice - trade.entryPrice) * (trade.positionSize < 0 ? 1 : -1) >= 0 ? "+" : "-"
+                        Text("\(direction)\(abs(trade.exitPrice - trade.entryPrice).asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))")
+                            .font(.system(size: 12, design: .rounded))
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(height: 12)
+                }
+                .backgroundStyle(Color(.xCardBackground))
+            }
+            
+            OriginCard {
+                GroupBox {
+                    HStack {
+                        Text("Duration")
+                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                        Spacer()
+                        Text(trade.tradeDurationDisplay)
+                            .font(.system(size: 12, design: .rounded))
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(height: 12)
+                }
+                .backgroundStyle(Color(.xCardBackground))
+            }
+            
+            OriginCard {
+                VStack(spacing: 0) {
+                    OriginHeader {
+                        Text("RUN-UP")
+                            .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                            .tracking(2)
+                            .foregroundStyle(Color(.xHeaderText))
+                    }
+                    
+                    Divider()
+                        .frame(height: 1)
+                        .overlay(Color(.xOutline))
+                    
+                    VStack(spacing: 0) {
+                        GroupBox {
+                            HStack {
+                                Text("Points")
+                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                Spacer()
+                                if !globalVM.loadingTradeInfo {
+                                    Text(globalVM.runUpPoints != nil ? "+\(abs(globalVM.runUpPoints!).asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))" : "--")
+                                        .font(.system(size: 12, design: .rounded))
+                                        .foregroundStyle(.secondary)
+                                } else {
+                                    ProgressView()
+                                }
+                            }
+                            .frame(height: 12)
+                        }
+                        
+                        Divider()
+                            .frame(height: 1)
+                            .overlay(Color(.xOutline))
+                        
+                        GroupBox {
+                            HStack {
+                                Text("Dollars")
+                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                Spacer()
+                                if !globalVM.loadingTradeInfo {
+                                    Text(globalVM.runUpDollars != nil ? "+\(abs(globalVM.runUpDollars!).asCurrency())" : "--")
+                                        .font(.system(size: 12, design: .rounded))
+                                        .foregroundStyle(.secondary)
+                                } else {
+                                    ProgressView()
+                                }
+                            }
+                            .frame(height: 12)
+                        }
+                    }
+                    .backgroundStyle(Color(.xCardBackground))
+                }
+            }
+            
+            OriginCard {
+                VStack(spacing: 0) {
+                    OriginHeader {
+                        Text("DRAWDOWN")
+                            .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                            .tracking(2)
+                            .foregroundStyle(Color(.xHeaderText))
+                    }
+                    
+                    Divider()
+                        .frame(height: 1)
+                        .overlay(Color(.xOutline))
+                    
+                    VStack(spacing: 0) {
+                        GroupBox {
+                            HStack {
+                                Text("Points")
+                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                Spacer()
+                                if !globalVM.loadingTradeInfo {
+                                    Text(globalVM.drawdownPoints != nil ? "-\(abs(globalVM.drawdownPoints!).asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))" : "--")
+                                        .font(.system(size: 12, design: .rounded))
+                                        .foregroundStyle(.secondary)
+                                } else {
+                                    ProgressView()
+                                }
+                            }
+                            .frame(height: 12)
+                        }
+                        
+                        Divider()
+                            .frame(height: 1)
+                            .overlay(Color(.xOutline))
+                        
+                        GroupBox {
+                            HStack {
+                                Text("Dollars")
+                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                Spacer()
+                                if !globalVM.loadingTradeInfo {
+                                    Text(globalVM.drawdownDollars != nil ? "-\(abs(globalVM.drawdownDollars!).asCurrency())" : "--")
+                                        .font(.system(size: 12, design: .rounded))
+                                        .foregroundStyle(.secondary)
+                                } else {
+                                    ProgressView()
+                                }
+                            }
+                            .frame(height: 12)
+                        }
+                    }
+                    .backgroundStyle(Color(.xCardBackground))
+                }
+            }
+        }
+    }
+    
     // MARK: Export
     
     @MainActor
@@ -224,151 +230,8 @@ struct TradeInfoSheet: View {
         ZStack {
             Color(.xBackground)
                 .edgesIgnoringSafeArea(.all)
-            VStack {
-                OriginCard {
-                    TradeTile(firm: firm, trade: trade, tappable: false)
-                }
-                
-                OriginCard {
-                    GroupBox {
-                        HStack {
-                            Text("Points")
-                                .font(.system(size: 12, weight: .medium, design: .rounded))
-                            Spacer()
-                            let direction = (trade.exitPrice - trade.entryPrice) * (trade.positionSize < 0 ? 1 : -1) >= 0 ? "+" : "-"
-                            Text("\(direction)\(abs(trade.exitPrice - trade.entryPrice).asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))")
-                                .font(.system(size: 12, design: .rounded))
-                                .foregroundStyle(.secondary)
-                        }
-                        .frame(height: 12)
-                    }
-                    .backgroundStyle(Color(.xCardBackground))
-                }
-                
-                OriginCard {
-                    GroupBox {
-                        HStack {
-                            Text("Duration")
-                                .font(.system(size: 12, weight: .medium, design: .rounded))
-                            Spacer()
-                            Text(trade.tradeDurationDisplay)
-                                .font(.system(size: 12, design: .rounded))
-                                .foregroundStyle(.secondary)
-                        }
-                        .frame(height: 12)
-                    }
-                    .backgroundStyle(Color(.xCardBackground))
-                }
-                
-                OriginCard {
-                    VStack(spacing: 0) {
-                        OriginHeader {
-                            Text("RUN-UP")
-                                .font(.system(size: 8, weight: .semibold, design: .monospaced))
-                                .tracking(2)
-                                .foregroundStyle(Color(.xHeaderText))
-                        }
-                        
-                        Divider()
-                            .frame(height: 1)
-                            .overlay(Color(.xOutline))
-                        
-                        VStack(spacing: 0) {
-                            GroupBox {
-                                HStack {
-                                    Text("Points")
-                                        .font(.system(size: 12, weight: .medium, design: .rounded))
-                                    Spacer()
-                                    if !globalVM.loadingTradeInfo {
-                                        Text(globalVM.runUpPoints != nil ? "+\(abs(globalVM.runUpPoints!).asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))" : "--")
-                                            .font(.system(size: 12, design: .rounded))
-                                            .foregroundStyle(.secondary)
-                                    } else {
-                                        ProgressView()
-                                    }
-                                }
-                                .frame(height: 12)
-                            }
-                            
-                            Divider()
-                                .frame(height: 1)
-                                .overlay(Color(.xOutline))
-                            
-                            GroupBox {
-                                HStack {
-                                    Text("Dollars")
-                                        .font(.system(size: 12, weight: .medium, design: .rounded))
-                                    Spacer()
-                                    if !globalVM.loadingTradeInfo {
-                                        Text(globalVM.runUpDollars != nil ? "+\(abs(globalVM.runUpDollars!).asCurrency())" : "--")
-                                            .font(.system(size: 12, design: .rounded))
-                                            .foregroundStyle(.secondary)
-                                    } else {
-                                        ProgressView()
-                                    }
-                                }
-                                .frame(height: 12)
-                            }
-                        }
-                        .backgroundStyle(Color(.xCardBackground))
-                    }
-                }
-                
-                OriginCard {
-                    VStack(spacing: 0) {
-                        OriginHeader {
-                            Text("DRAWDOWN")
-                                .font(.system(size: 8, weight: .semibold, design: .monospaced))
-                                .tracking(2)
-                                .foregroundStyle(Color(.xHeaderText))
-                        }
-                        
-                        Divider()
-                            .frame(height: 1)
-                            .overlay(Color(.xOutline))
-                        
-                        VStack(spacing: 0) {
-                            GroupBox {
-                                HStack {
-                                    Text("Points")
-                                        .font(.system(size: 12, weight: .medium, design: .rounded))
-                                    Spacer()
-                                    if !globalVM.loadingTradeInfo {
-                                        Text(globalVM.drawdownPoints != nil ? "-\(abs(globalVM.drawdownPoints!).asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))" : "--")
-                                            .font(.system(size: 12, design: .rounded))
-                                            .foregroundStyle(.secondary)
-                                    } else {
-                                        ProgressView()
-                                    }
-                                }
-                                .frame(height: 12)
-                            }
-                            
-                            Divider()
-                                .frame(height: 1)
-                                .overlay(Color(.xOutline))
-                            
-                            GroupBox {
-                                HStack {
-                                    Text("Dollars")
-                                        .font(.system(size: 12, weight: .medium, design: .rounded))
-                                    Spacer()
-                                    if !globalVM.loadingTradeInfo {
-                                        Text(globalVM.drawdownDollars != nil ? "-\(abs(globalVM.drawdownDollars!).asCurrency())" : "--")
-                                            .font(.system(size: 12, design: .rounded))
-                                            .foregroundStyle(.secondary)
-                                    } else {
-                                        ProgressView()
-                                    }
-                                }
-                                .frame(height: 12)
-                            }
-                        }
-                        .backgroundStyle(Color(.xCardBackground))
-                    }
-                }
-            }
-            .padding()
+            mainContent()
+                .padding()
         }
         .environment(\.colorScheme, colorScheme)
         .environment(\.dynamicTypeSize, dynamicTypeSize)
