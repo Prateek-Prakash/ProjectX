@@ -67,7 +67,7 @@ struct DailyStatsInfoSheet: View {
                                         Text("Total Fees")
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
                                         Spacer()
-                                        Text(stats.totalTrades > 0 ? "-\(stats.totalFees.asCurrency())" : "--")
+                                        Text(stats.totalTrades > 0 ? "-\(abs(stats.totalFees).asCurrency())" : "--")
                                             .font(.system(size: 12, design: .rounded))
                                             .foregroundStyle(.secondary)
                                     }
@@ -83,7 +83,7 @@ struct DailyStatsInfoSheet: View {
                                         Text("Max Drawdown")
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
                                         Spacer()
-                                        Text("--")
+                                        Text(stats.totalTrades > 0 ? "-\(abs(globalVM.statsDrawdown).asCurrency())" : "--")
                                             .font(.system(size: 12, design: .rounded))
                                             .foregroundStyle(.secondary)
                                     }
@@ -274,7 +274,7 @@ struct DailyStatsInfoSheet: View {
                                     Text("Total Fees")
                                         .font(.system(size: 12, weight: .medium, design: .rounded))
                                     Spacer()
-                                    Text(stats.totalTrades > 0 ? "-\(stats.totalFees.asCurrency())" : "--")
+                                    Text(stats.totalTrades > 0 ? "-\(abs(stats.totalFees).asCurrency())" : "--")
                                         .font(.system(size: 12, design: .rounded))
                                         .foregroundStyle(.secondary)
                                 }
@@ -290,7 +290,7 @@ struct DailyStatsInfoSheet: View {
                                     Text("Max Drawdown")
                                         .font(.system(size: 12, weight: .medium, design: .rounded))
                                     Spacer()
-                                    Text("--")
+                                    Text(stats.totalTrades > 0 ? "-\(abs(globalVM.statsDrawdown).asCurrency())" : "--")
                                         .font(.system(size: 12, design: .rounded))
                                         .foregroundStyle(.secondary)
                                 }

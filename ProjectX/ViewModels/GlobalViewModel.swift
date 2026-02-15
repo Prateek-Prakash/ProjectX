@@ -425,14 +425,39 @@ class GlobalViewModel: ObservableObject {
         statsWinner = 0.0
         statsLoser = 0.0
         
+        var streak: Bool = false
+        var running: Double = 0.0
+        var drawdown: Double = 0.0
+        
         for trade in accountTrades.filter({ $0.tradeDay == day }).reversed() {
-            await calculateTradeStats(selectedAccount!.firm, trade) // TODO: Handle Rate Limit
+            // TODO: Handle Rate Limit
+            await calculateTradeStats(selectedAccount!.firm, trade)
             
-            // TODO: Finish Implementing
+            Helpers.debugLog("P&L: \(trade.pnL)")
+            Helpers.debugLog("Drawdown: \(drawdownDollars ?? 0.0)")
+            
+            if trade.pnL >= 0.0 {
+                // Winning Trade
+                if drawdownDollars != nil && abs(drawdownDollars!) > 0.0 {
+                    running = running + abs(drawdownDollars!)
+                } else {
+                    Helpers.debugLog("SOMETHING WENT WRONG")
+                }
+                streak = false
+            } else {
+                // Losing tradee
+                running = abs(trade.pnL)
+                streak = true
+            }
+            drawdown < running ? (drawdown = running) : ()
+            !streak ? (running = 0.0) : ()
+            
             
             statsWinner < trade.pnL ? (statsWinner = trade.pnL) : ()
             statsLoser > trade.pnL ? (statsLoser = trade.pnL) : ()
         }
+        
+        statsDrawdown = drawdown * -1
     }
     
     // MARK: Symbol Blocks
