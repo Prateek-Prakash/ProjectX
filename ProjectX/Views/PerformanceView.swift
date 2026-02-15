@@ -437,9 +437,10 @@ struct PerformanceView: View {
                                     
                                     LazyVStack(spacing: 0) {
                                         if !globalVM.accountTrades.isEmpty {
-                                            ForEach(Array(globalVM.accountTrades.prefix(5))) { trade in
+                                            let latest = Array(globalVM.accountTrades.prefix(5))
+                                            ForEach(latest) { trade in
                                                 TradeTile(firm: account.firm, trade: trade, tappable: true)
-                                                if globalVM.accountTrades.last != trade {
+                                                if latest.last != trade {
                                                     Divider()
                                                         .frame(height: 1)
                                                         .overlay(Color(.xOutline))
@@ -482,9 +483,10 @@ struct PerformanceView: View {
                                     
                                     LazyVStack(spacing: 0) {
                                         if !globalVM.accountDailyStats.isEmpty {
-                                            ForEach(Array(globalVM.accountDailyStats.prefix(5))) { stats in
+                                            let latest = Array(globalVM.accountDailyStats.prefix(5))
+                                            ForEach(latest) { stats in
                                                 DailyStatsTile(stats: stats)
-                                                if globalVM.accountDailyStats.last != stats {
+                                                if latest.last != stats {
                                                     Divider()
                                                         .frame(height: 1)
                                                         .overlay(Color(.xOutline))
