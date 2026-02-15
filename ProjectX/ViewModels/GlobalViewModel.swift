@@ -545,9 +545,14 @@ class GlobalViewModel: ObservableObject {
         loadingStatsInfo = false
     }
     
-    func getTradesJson(_ day: String) -> String {
-        // TODO: Implement
-        return "Work-In-Progress"
+    func exportTradesJson(_ day: String) -> String {
+        // TODO: Finish Implement
+        let trades: [Trade] = accountTrades.filter({ $0.tradeDay == day }).reversed()
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let data = try! encoder.encode(trades)
+        let json = String(data: data, encoding: .utf8)!
+        return json
     }
     
     // MARK: Symbol Blocks

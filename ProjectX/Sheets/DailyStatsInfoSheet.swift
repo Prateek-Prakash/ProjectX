@@ -58,7 +58,7 @@ struct DailyStatsInfoSheet: View {
                         
                         Button {
                             HapticViewModel.shared.successHaptic()
-                            UIPasteboard.general.string = globalVM.getTradesJson(stats.tradeDate)
+                            UIPasteboard.general.string = globalVM.exportTradesJson(stats.tradeDate)
                         } label: {
                             Label("Export Trades", systemImage: "document.on.document")
                         }
