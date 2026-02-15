@@ -90,7 +90,23 @@ class GlobalViewModel: ObservableObject {
     @Published var statsWinner: Double = 0.0
     @Published var statsLoser: Double = 0.0
     
-    @Published var tradeStatsMap: [Int:Double] = [:]
+    
+    @Published var runUpPointsMap: [Firm:[String:Double]] = [
+        .theFuturesDesk: [:],
+        .topstep: [:]
+    ]
+    @Published var runUpDollarsMap: [Firm:[String:Double]] = [
+        .theFuturesDesk: [:],
+        .topstep: [:]
+    ]
+    @Published var drawdownPointsMap: [Firm:[String:Double]] = [
+        .theFuturesDesk: [:],
+        .topstep: [:]
+    ]
+    @Published var drawdownDollarsMap: [Firm:[String:Double]] = [
+        .theFuturesDesk: [:],
+        .topstep: [:]
+    ]
     
     @Published var loadingSymbolBlocks: Bool = false
     @Published var symbolBlocks: [SymbolBlock] = []
@@ -383,36 +399,50 @@ class GlobalViewModel: ObservableObject {
         // TODO: Calculate 5+ Hours
         // TODO: Sub-Second Bar Data?
         if trade.underFiveHours() {
-            if let response = await XClient.get(firm).getBars(trade.contractId!, trade.createdAt, trade.exitedAt, .second) {
-                if !response.bars.isEmpty {
-                    var high = trade.entryPrice
-                    var low = trade.entryPrice
-                    for bar in response.bars {
-                        if (bar.h > high) {
-                            high = bar.h
+            if runUpPointsMap[firm]![trade.ref] != nil && runUpDollarsMap[firm]![trade.ref] != nil &&  drawdownPointsMap[firm]![trade.ref] != nil && drawdownDollarsMap[firm]![trade.ref] != nil {
+                Helpers.debugLog("\(trade.ref): USING CACHED TRADE - calculateTradeStats")
+                runUpPoints = runUpPointsMap[selectedAccount!.firm]![trade.ref]
+                runUpDollars = runUpDollarsMap[selectedAccount!.firm]![trade.ref]
+                drawdownPoints = drawdownPointsMap[selectedAccount!.firm]![trade.ref]
+                drawdownDollars = drawdownDollarsMap[selectedAccount!.firm]![trade.ref]
+            } else {
+                if let response = await XClient.get(firm).getBars(trade.contractId!, trade.createdAt, trade.exitedAt, .second) {
+                    if !response.bars.isEmpty {
+                        var high = trade.entryPrice
+                        var low = trade.entryPrice
+                        for bar in response.bars {
+                            if (bar.h > high) {
+                                high = bar.h
+                            }
+                            if (bar.l < low) {
+                                low = bar.l
+                            }
                         }
-                        if (bar.l < low) {
-                            low = bar.l
-                        }
-                    }
-                    
-                    if trade.positionSize != 0 {
-                        // Long: positionSize < 0
-                        // Short: positionSize > 0
                         
-                        runUpPoints = trade.positionSize < 0 ? high - trade.entryPrice : trade.entryPrice - low
-                        drawdownPoints = trade.positionSize < 0 ? low - trade.entryPrice : trade.entryPrice - high
-                        
-                        if let contract = allContracts[firm]?.first(where: { $0.productId == trade.symbolId }) {
-                            runUpDollars = runUpPoints! / contract.tickSize * contract.tickValue * Double(abs(trade.positionSize))
-                            drawdownDollars = drawdownPoints! / contract.tickSize * contract.tickValue * Double(abs(trade.positionSize))
+                        if trade.positionSize != 0 {
+                            // Long: positionSize < 0
+                            // Short: positionSize > 0
                             
-                            Helpers.debugLog("runUpPoints: \(runUpPoints!)")
-                            Helpers.debugLog("drawdownPoints: \(drawdownPoints!)")
-                            Helpers.debugLog("tickSize: \(contract.tickSize)")
-                            Helpers.debugLog("tickValue: \(contract.tickValue)")
-                            Helpers.debugLog("runUpDollars: \(runUpDollars!)")
-                            Helpers.debugLog("drawdownDollars: \(drawdownDollars!)")
+                            runUpPoints = trade.positionSize < 0 ? high - trade.entryPrice : trade.entryPrice - low
+                            drawdownPoints = trade.positionSize < 0 ? low - trade.entryPrice : trade.entryPrice - high
+                            
+                            runUpPointsMap[firm]![trade.ref] = runUpPoints
+                            drawdownPointsMap[firm]![trade.ref] = drawdownPoints
+                            
+                            if let contract = allContracts[firm]?.first(where: { $0.productId == trade.symbolId }) {
+                                runUpDollars = runUpPoints! / contract.tickSize * contract.tickValue * Double(abs(trade.positionSize))
+                                drawdownDollars = drawdownPoints! / contract.tickSize * contract.tickValue * Double(abs(trade.positionSize))
+                                
+                                runUpDollarsMap[firm]![trade.ref] = runUpDollars
+                                drawdownDollarsMap[firm]![trade.ref] = drawdownDollars
+                                
+                                Helpers.debugLog("\(trade.ref): runUpPoints: \(runUpPoints!)")
+                                Helpers.debugLog("\(trade.ref): drawdownPoints: \(drawdownPoints!)")
+                                Helpers.debugLog("\(trade.ref): tickSize: \(contract.tickSize)")
+                                Helpers.debugLog("\(trade.ref): tickValue: \(contract.tickValue)")
+                                Helpers.debugLog("\(trade.ref): runUpDollars: \(runUpDollars!)")
+                                Helpers.debugLog("\(trade.ref): drawdownDollars: \(drawdownDollars!)")
+                            }
                         }
                     }
                 }
@@ -436,18 +466,23 @@ class GlobalViewModel: ObservableObject {
         var drawdown: Double = 0.0
         
         for trade in accountTrades.filter({ $0.tradeDay == day }).reversed() {
-            // TODO: Handle Rate Limit
-            await calculateTradeStats(selectedAccount!.firm, trade)
+            if drawdownDollarsMap[selectedAccount!.firm]![trade.ref] != nil {
+                Helpers.debugLog("\(trade.ref): USING CACHED TRADE - calculateDailyStatsInfo")
+                drawdownDollars = drawdownDollarsMap[selectedAccount!.firm]![trade.ref]
+            } else {
+                // TODO: Handle Rate Limit
+                await calculateTradeStats(selectedAccount!.firm, trade)
+            }
             
             Helpers.debugLog("P&L: \(trade.pnL)")
             Helpers.debugLog("Drawdown: \(drawdownDollars ?? 0.0)")
             
-            if drawdownDollars != nil && abs(drawdownDollars!) > 0.0 {
+            if drawdownDollars != nil && abs(drawdownDollars!) >= 0.0 {
                 running = running + abs(drawdownDollars!)
             } else {
                 // TODO: Probably Rate Limit
                 // TODO: Display Alert + Exit Calculation || Delay + Retry
-                Helpers.debugLog("SOMETHING WENT WRONG")
+                Helpers.debugLog("\(trade.ref): SOMETHING WENT WRONG")
             }
             if trade.pnL >= 0.0 {
                 // Winning Trade
@@ -458,7 +493,6 @@ class GlobalViewModel: ObservableObject {
             }
             drawdown < running ? (drawdown = running) : ()
             !streak ? (running = 0.0) : ()
-            
             
             statsWinner < trade.pnL ? (statsWinner = trade.pnL) : ()
             statsLoser > trade.pnL ? (statsLoser = trade.pnL) : ()

@@ -47,4 +47,8 @@ struct Trade: Identifiable, Equatable, Codable {
     func underFiveHours() -> Bool {
         return Int(tradeDuration.split(separator: ":")[0])! < 5
     }
+    
+    var ref: String {
+        return "\(accountId):\(id)"
+    }
 }
