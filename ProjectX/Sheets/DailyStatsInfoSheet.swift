@@ -200,9 +200,18 @@ struct DailyStatsInfoSheet: View {
                 }
                 
                 ToolbarItem(placement: .topBarTrailing) {
-                    ShareLink(item: prepareExport(), preview: SharePreview("", image: renderAsImage())) {
+                    Menu {
+                        ShareLink(item: prepareExport(), preview: SharePreview("", image: renderAsImage())) {
+                            Label("Share Stats", systemImage: "waveform.path.ecg.text.clipboard")
+                        }
+                        
+                        ShareLink(item: prepareExport(), preview: SharePreview("", image: renderAsImage())) {
+                            Label("Share Trades", systemImage: "list.bullet.clipboard")
+                        }
+                        .disabled(true)
+                    } label: {
                         Image(systemName: "square.and.arrow.up")
-                            .imageScale(.small)
+                            .imageScale(.medium)
                     }
                 }
                 .sharedBackgroundVisibility(.hidden)

@@ -90,6 +90,8 @@ class GlobalViewModel: ObservableObject {
     @Published var statsWinner: Double = 0.0
     @Published var statsLoser: Double = 0.0
     
+    @Published var tradeStatsMap: [Int:Double] = [:]
+    
     @Published var loadingSymbolBlocks: Bool = false
     @Published var symbolBlocks: [SymbolBlock] = []
     
@@ -366,6 +368,8 @@ class GlobalViewModel: ObservableObject {
         Helpers.debugLog("Flatten: \(account.accountId) \(success ? "Success" : "Failed")")
     }
     
+    // MARK: Caclulate Stats
+    
     func calculateTradeStats(_ firm: Firm, _ trade: Trade) async {
         runUpPoints = nil
         runUpDollars = nil
@@ -377,6 +381,7 @@ class GlobalViewModel: ObservableObject {
         }
         
         // TODO: Calculate 5+ Hours
+        // TODO: Sub-Second Bar Data?
         if trade.underFiveHours() {
             if let response = await XClient.get(firm).getBars(trade.contractId!, trade.createdAt, trade.exitedAt, .second) {
                 if !response.bars.isEmpty {
@@ -420,6 +425,7 @@ class GlobalViewModel: ObservableObject {
         if drawdownDollars == nil { drawdownDollars = -1 }
     }
     
+    // Might Be Off Sometimes Until Sub-Second Bar Data Above
     func calculateDailyStatsInfo(_ day: String) async {
         statsDrawdown = 0.0
         statsWinner = 0.0
@@ -436,17 +442,18 @@ class GlobalViewModel: ObservableObject {
             Helpers.debugLog("P&L: \(trade.pnL)")
             Helpers.debugLog("Drawdown: \(drawdownDollars ?? 0.0)")
             
+            if drawdownDollars != nil && abs(drawdownDollars!) > 0.0 {
+                running = running + abs(drawdownDollars!)
+            } else {
+                // TODO: Probably Rate Limit
+                // TODO: Display Alert + Exit Calculation || Delay + Retry
+                Helpers.debugLog("SOMETHING WENT WRONG")
+            }
             if trade.pnL >= 0.0 {
                 // Winning Trade
-                if drawdownDollars != nil && abs(drawdownDollars!) > 0.0 {
-                    running = running + abs(drawdownDollars!)
-                } else {
-                    Helpers.debugLog("SOMETHING WENT WRONG")
-                }
                 streak = false
             } else {
                 // Losing tradee
-                running = abs(trade.pnL)
                 streak = true
             }
             drawdown < running ? (drawdown = running) : ()
