@@ -55,6 +55,13 @@ struct DailyStatsInfoSheet: View {
                         ShareLink(item: prepareExport(forTrades: true), preview: SharePreview("", image: renderAsImage(forTrades: true))) {
                             Label("Share Trades", systemImage: "list.bullet.clipboard")
                         }
+                        
+                        Button {
+                            HapticViewModel.shared.successHaptic()
+                            UIPasteboard.general.string = "Work-In-Progress" // TODO: Implement
+                        } label: {
+                            Label("Copy Trades", systemImage: "document.on.document")
+                        }
                     } label: {
                         Image(systemName: "square.and.arrow.up")
                             .imageScale(.medium)
@@ -271,7 +278,7 @@ struct DailyStatsInfoSheet: View {
                                         .font(.system(size: 10, weight: .semibold, design: .monospaced))
                                         .foregroundStyle(trade.pnL > 0.0 ? .green : trade.pnL < 0.0 ? .red : .secondary)
                                     Text("P&L")
-                                        .font(.system(size: 6, design: .monospaced))
+                                        .font(.system(size: 8, design: .monospaced))
                                         .foregroundStyle(.secondary)
                                 }
                                 .frame(maxWidth: .infinity)
@@ -281,7 +288,18 @@ struct DailyStatsInfoSheet: View {
                                         .font(.system(size: 10, weight: .semibold, design: .monospaced))
                                         .foregroundStyle(.red)
                                     Text("FEES")
-                                        .font(.system(size: 6, design: .monospaced))
+                                        .font(.system(size: 8, design: .monospaced))
+                                        .foregroundStyle(.secondary)
+                                }
+                                .frame(maxWidth: .infinity)
+                                
+                                VStack(alignment: .center) {
+                                    let runUp = globalVM.runUpDollarsMap[globalVM.selectedAccount!.firm]![trade.ref]
+                                    Text(runUp != nil ? abs(runUp!).asCurrency() : "--")
+                                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                                        .foregroundStyle(.green)
+                                    Text("RUN-UP")
+                                        .font(.system(size: 8, design: .monospaced))
                                         .foregroundStyle(.secondary)
                                 }
                                 .frame(maxWidth: .infinity)
@@ -292,7 +310,7 @@ struct DailyStatsInfoSheet: View {
                                         .font(.system(size: 10, weight: .semibold, design: .monospaced))
                                         .foregroundStyle(drawdown != nil ? drawdown != 0.0 ? .red : .secondary : .secondary)
                                     Text("DRAWDOWN")
-                                        .font(.system(size: 6, design: .monospaced))
+                                        .font(.system(size: 8, design: .monospaced))
                                         .foregroundStyle(.secondary)
                                 }
                                 .frame(maxWidth: .infinity)
