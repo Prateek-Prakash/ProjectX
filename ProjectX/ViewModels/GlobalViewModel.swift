@@ -90,7 +90,6 @@ class GlobalViewModel: ObservableObject {
     @Published var statsWinner: Double = 0.0
     @Published var statsLoser: Double = 0.0
     
-    
     @Published var runUpPointsMap: [Firm:[String:Double]] = [
         .theFuturesDesk: [:],
         .topstep: [:]
@@ -426,12 +425,33 @@ class GlobalViewModel: ObservableObject {
                             runUpPoints = trade.positionSize < 0 ? high - trade.entryPrice : trade.entryPrice - low
                             drawdownPoints = trade.positionSize < 0 ? low - trade.entryPrice : trade.entryPrice - high
                             
+                            let points = abs(trade.exitPrice - trade.entryPrice)
+                            if trade.pnL < 0.0 {
+                                if points > drawdownPoints! {
+                                    drawdownPoints = points
+                                }
+                            } else {
+                                if points > runUpPoints! {
+                                    runUpPoints = points
+                                }
+                            }
+                            
                             runUpPointsMap[firm]![trade.ref] = runUpPoints
                             drawdownPointsMap[firm]![trade.ref] = drawdownPoints
                             
                             if let contract = allContracts[firm]?.first(where: { $0.productId == trade.symbolId }) {
                                 runUpDollars = runUpPoints! / contract.tickSize * contract.tickValue * Double(abs(trade.positionSize))
                                 drawdownDollars = drawdownPoints! / contract.tickSize * contract.tickValue * Double(abs(trade.positionSize))
+                                
+                                if trade.pnL < 0.0 {
+                                    if trade.pnL > drawdownDollars! {
+                                        drawdownDollars = trade.pnL
+                                    }
+                                } else {
+                                    if trade.pnL > runUpDollars! {
+                                        runUpDollars = trade.pnL
+                                    }
+                                }
                                 
                                 runUpDollarsMap[firm]![trade.ref] = runUpDollars
                                 drawdownDollarsMap[firm]![trade.ref] = drawdownDollars

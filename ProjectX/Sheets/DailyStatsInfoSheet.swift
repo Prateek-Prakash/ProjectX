@@ -201,14 +201,13 @@ struct DailyStatsInfoSheet: View {
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
-                        ShareLink(item: prepareExport(), preview: SharePreview("", image: renderAsImage())) {
+                        ShareLink(item: prepareExport(forTrades: false), preview: SharePreview("", image: renderAsImage(forTrades: false))) {
                             Label("Share Stats", systemImage: "waveform.path.ecg.text.clipboard")
                         }
                         
-                        ShareLink(item: prepareExport(), preview: SharePreview("", image: renderAsImage())) {
+                        ShareLink(item: prepareExport(forTrades: true), preview: SharePreview("", image: renderAsImage(forTrades: true))) {
                             Label("Share Trades", systemImage: "list.bullet.clipboard")
                         }
-                        .disabled(true)
                     } label: {
                         Image(systemName: "square.and.arrow.up")
                             .imageScale(.medium)
@@ -223,180 +222,229 @@ struct DailyStatsInfoSheet: View {
     // MARK: Export
     
     @MainActor
-    private func prepareExport() -> ExportableImage {
-        let imageRenderer = ImageRenderer(content: createScreenshot())
+    private func prepareExport(forTrades: Bool) -> ExportableImage {
+        let imageRenderer = ImageRenderer(content: createScreenshot(forTrades: forTrades))
         imageRenderer.scale = displayScale
         imageRenderer.proposedSize = ProposedViewSize(width: viewWidth, height: nil)
-        return ExportableImage(uiImage: imageRenderer.uiImage ?? UIImage(), fileName: "DailyStatsInfo-\(Int(Date.now.timeIntervalSince1970))")
+        return ExportableImage(uiImage: imageRenderer.uiImage ?? UIImage(), fileName: "TradeInfo-\(Int(Date.now.timeIntervalSince1970))")
     }
     
     @MainActor
-    private func renderAsImage() -> Image {
-        let imageRenderer = ImageRenderer(content: createScreenshot())
+    private func renderAsImage(forTrades: Bool) -> Image {
+        let imageRenderer = ImageRenderer(content: createScreenshot(forTrades: forTrades))
         imageRenderer.scale = displayScale
         imageRenderer.proposedSize = ProposedViewSize(width: viewWidth, height: nil)
         return Image(uiImage: imageRenderer.uiImage ?? UIImage())
     }
     
-    func createScreenshot() -> some View {
+    func createScreenshot(forTrades: Bool) -> some View {
         ZStack {
             Color(.xBackground)
                 .edgesIgnoringSafeArea(.all)
-            VStack {
-                OriginCard {
-                    GroupBox {
-                        HStack {
-                            Text("Date")
-                                .font(.system(size: 12, weight: .medium, design: .rounded))
-                            Spacer()
-                            Text(stats.tradeDate.asDate())
-                                .font(.system(size: 12, design: .rounded))
-                                .foregroundStyle(.secondary)
-                        }
-                        .frame(height: 12)
-                    }
-                    .backgroundStyle(Color(.xCardBackground))
-                }
-                
+            if forTrades {
                 OriginCard {
                     VStack(spacing: 0) {
-                        VStack(spacing: 0) {
-                            GroupBox {
-                                HStack {
-                                    Text("Realized P&L")
-                                        .font(.system(size: 12, weight: .medium, design: .rounded))
-                                    Spacer()
-                                    let direction = (stats.totalPnL - stats.totalFees) >= 0 ? "+" : "-"
-                                    Text(stats.totalTrades > 0 ? "\(direction)\(abs(stats.totalPnL - stats.totalFees).asCurrency())" : "--")
-                                        .font(.system(size: 12, design: .rounded))
+                        let trades = globalVM.accountTrades.filter({ $0.tradeDay == stats.tradeDate }).reversed()
+                        ForEach(trades) { trade in
+                            HStack {
+                                VStack(alignment: .center) {
+                                    Text(abs(trade.pnL).asCurrency())
+                                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                                        .foregroundStyle(trade.pnL > 0.0 ? .green : trade.pnL < 0.0 ? .red : .secondary)
+                                    Text("P&L")
+                                        .font(.system(size: 6, design: .monospaced))
                                         .foregroundStyle(.secondary)
                                 }
-                                .frame(height: 12)
-                            }
-                            
-                            Divider()
-                                .frame(height: 1)
-                                .overlay(Color(.xOutline))
-                            
-                            GroupBox {
-                                HStack {
-                                    Text("Total Fees")
-                                        .font(.system(size: 12, weight: .medium, design: .rounded))
-                                    Spacer()
-                                    Text(stats.totalTrades > 0 ? "-\(abs(stats.totalFees).asCurrency())" : "--")
-                                        .font(.system(size: 12, design: .rounded))
+                                .frame(maxWidth: .infinity)
+                                
+                                VStack(alignment: .center) {
+                                    Text(abs(trade.fees).asCurrency())
+                                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                                        .foregroundStyle(.red)
+                                    Text("FEES")
+                                        .font(.system(size: 6, design: .monospaced))
                                         .foregroundStyle(.secondary)
                                 }
-                                .frame(height: 12)
-                            }
-                            
-                            Divider()
-                                .frame(height: 1)
-                                .overlay(Color(.xOutline))
-                            
-                            GroupBox {
-                                HStack {
-                                    Text("Max Drawdown")
-                                        .font(.system(size: 12, weight: .medium, design: .rounded))
-                                    Spacer()
-                                    Text(stats.totalTrades > 0 ? "-\(abs(globalVM.statsDrawdown).asCurrency())" : "--")
-                                        .font(.system(size: 12, design: .rounded))
+                                .frame(maxWidth: .infinity)
+                                
+                                VStack(alignment: .center) {
+                                    Text(abs(globalVM.drawdownDollarsMap[globalVM.selectedAccount!.firm]![trade.ref]!).asCurrency())
+                                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                                        .foregroundStyle(globalVM.drawdownDollarsMap[globalVM.selectedAccount!.firm]![trade.ref]! != 0.0 ? .red : .secondary)
+                                    Text("DRAWDOWN")
+                                        .font(.system(size: 6, design: .monospaced))
                                         .foregroundStyle(.secondary)
                                 }
-                                .frame(height: 12)
+                                .frame(maxWidth: .infinity)
                             }
+                            .padding(.all, 14)
+                            
+                            if trades.last != trade {
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                            }
+                        }
+                    }
+                }
+                .padding()
+            } else {
+                VStack {
+                    OriginCard {
+                        GroupBox {
+                            HStack {
+                                Text("Date")
+                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                Spacer()
+                                Text(stats.tradeDate.asDate())
+                                    .font(.system(size: 12, design: .rounded))
+                                    .foregroundStyle(.secondary)
+                            }
+                            .frame(height: 12)
                         }
                         .backgroundStyle(Color(.xCardBackground))
                     }
-                }
-                
-                OriginCard {
-                    VStack(spacing: 0) {
+                    
+                    OriginCard {
                         VStack(spacing: 0) {
-                            GroupBox {
-                                HStack {
-                                    Text("Total Trades")
-                                        .font(.system(size: 12, weight: .medium, design: .rounded))
-                                    Spacer()
-                                    Text(String(stats.totalTrades))
-                                        .font(.system(size: 12, design: .rounded))
-                                        .foregroundStyle(.secondary)
+                            VStack(spacing: 0) {
+                                GroupBox {
+                                    HStack {
+                                        Text("Realized P&L")
+                                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                                        Spacer()
+                                        let direction = (stats.totalPnL - stats.totalFees) >= 0 ? "+" : "-"
+                                        Text(stats.totalTrades > 0 ? "\(direction)\(abs(stats.totalPnL - stats.totalFees).asCurrency())" : "--")
+                                            .font(.system(size: 12, design: .rounded))
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    .frame(height: 12)
                                 }
-                                .frame(height: 12)
-                            }
-                            
-                            Divider()
-                                .frame(height: 1)
-                                .overlay(Color(.xOutline))
-                            
-                            GroupBox {
-                                HStack {
-                                    Text("Winning Trades")
-                                        .font(.system(size: 12, weight: .medium, design: .rounded))
-                                    Spacer()
-                                    Text(String(stats.winningTrades))
-                                        .font(.system(size: 12, design: .rounded))
-                                        .foregroundStyle(.secondary)
+                                
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                                
+                                GroupBox {
+                                    HStack {
+                                        Text("Total Fees")
+                                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                                        Spacer()
+                                        Text(stats.totalTrades > 0 ? "-\(abs(stats.totalFees).asCurrency())" : "--")
+                                            .font(.system(size: 12, design: .rounded))
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    .frame(height: 12)
                                 }
-                                .frame(height: 12)
-                            }
-                            
-                            Divider()
-                                .frame(height: 1)
-                                .overlay(Color(.xOutline))
-                            
-                            GroupBox {
-                                HStack {
-                                    Text("Losing Trades")
-                                        .font(.system(size: 12, weight: .medium, design: .rounded))
-                                    Spacer()
-                                    Text(String(stats.losingTrades))
-                                        .font(.system(size: 12, design: .rounded))
-                                        .foregroundStyle(.secondary)
+                                
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                                
+                                GroupBox {
+                                    HStack {
+                                        Text("Max Drawdown")
+                                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                                        Spacer()
+                                        Text(stats.totalTrades > 0 ? "-\(abs(globalVM.statsDrawdown).asCurrency())" : "--")
+                                            .font(.system(size: 12, design: .rounded))
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    .frame(height: 12)
                                 }
-                                .frame(height: 12)
                             }
+                            .backgroundStyle(Color(.xCardBackground))
                         }
-                        .backgroundStyle(Color(.xCardBackground))
+                    }
+                    
+                    OriginCard {
+                        VStack(spacing: 0) {
+                            VStack(spacing: 0) {
+                                GroupBox {
+                                    HStack {
+                                        Text("Total Trades")
+                                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                                        Spacer()
+                                        Text(String(stats.totalTrades))
+                                            .font(.system(size: 12, design: .rounded))
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    .frame(height: 12)
+                                }
+                                
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                                
+                                GroupBox {
+                                    HStack {
+                                        Text("Winning Trades")
+                                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                                        Spacer()
+                                        Text(String(stats.winningTrades))
+                                            .font(.system(size: 12, design: .rounded))
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    .frame(height: 12)
+                                }
+                                
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                                
+                                GroupBox {
+                                    HStack {
+                                        Text("Losing Trades")
+                                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                                        Spacer()
+                                        Text(String(stats.losingTrades))
+                                            .font(.system(size: 12, design: .rounded))
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    .frame(height: 12)
+                                }
+                            }
+                            .backgroundStyle(Color(.xCardBackground))
+                        }
+                    }
+                    
+                    OriginCard {
+                        VStack(spacing: 0) {
+                            VStack(spacing: 0) {
+                                GroupBox {
+                                    HStack {
+                                        Text("Largest Winner")
+                                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                                        Spacer()
+                                        Text(stats.totalTrades > 0 ? "+\(abs(globalVM.statsWinner).asCurrency())" : "--")
+                                            .font(.system(size: 12, design: .rounded))
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    .frame(height: 12)
+                                }
+                                
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                                
+                                GroupBox {
+                                    HStack {
+                                        Text("Largest Loser")
+                                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                                        Spacer()
+                                        Text(stats.totalTrades > 0 ? "-\(abs(globalVM.statsLoser).asCurrency())" : "--")
+                                            .font(.system(size: 12, design: .rounded))
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    .frame(height: 12)
+                                }
+                            }
+                            .backgroundStyle(Color(.xCardBackground))
+                        }
                     }
                 }
-                
-                OriginCard {
-                    VStack(spacing: 0) {
-                        VStack(spacing: 0) {
-                            GroupBox {
-                                HStack {
-                                    Text("Largest Winner")
-                                        .font(.system(size: 12, weight: .medium, design: .rounded))
-                                    Spacer()
-                                    Text(stats.totalTrades > 0 ? "+\(abs(globalVM.statsWinner).asCurrency())" : "--")
-                                        .font(.system(size: 12, design: .rounded))
-                                        .foregroundStyle(.secondary)
-                                }
-                                .frame(height: 12)
-                            }
-                            
-                            Divider()
-                                .frame(height: 1)
-                                .overlay(Color(.xOutline))
-                            
-                            GroupBox {
-                                HStack {
-                                    Text("Largest Loser")
-                                        .font(.system(size: 12, weight: .medium, design: .rounded))
-                                    Spacer()
-                                    Text(stats.totalTrades > 0 ? "-\(abs(globalVM.statsLoser).asCurrency())" : "--")
-                                        .font(.system(size: 12, design: .rounded))
-                                        .foregroundStyle(.secondary)
-                                }
-                                .frame(height: 12)
-                            }
-                        }
-                        .backgroundStyle(Color(.xCardBackground))
-                    }
-                }
+                .padding()
             }
-            .padding()
         }
         .environment(\.colorScheme, colorScheme)
         .environment(\.dynamicTypeSize, dynamicTypeSize)
