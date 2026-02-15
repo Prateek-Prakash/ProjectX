@@ -73,22 +73,6 @@ struct DailyStatsInfoSheet: View {
                                     }
                                     .frame(height: 12)
                                 }
-                                
-                                Divider()
-                                    .frame(height: 1)
-                                    .overlay(Color(.xOutline))
-                                
-                                GroupBox {
-                                    HStack {
-                                        Text("Max Drawdown")
-                                            .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        Spacer()
-                                        Text(stats.totalTrades > 0 ? "-\(abs(globalVM.statsDrawdown).asCurrency())" : "--")
-                                            .font(.system(size: 12, design: .rounded))
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    .frame(height: 12)
-                                }
                             }
                             .backgroundStyle(Color(.xCardBackground))
                         }
@@ -153,9 +137,13 @@ struct DailyStatsInfoSheet: View {
                                         Text("Largest Winner")
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
                                         Spacer()
-                                        Text(stats.totalTrades > 0 ? "+\(abs(globalVM.statsWinner).asCurrency())" : "--")
-                                            .font(.system(size: 12, design: .rounded))
-                                            .foregroundStyle(.secondary)
+                                        if !globalVM.loadingStatsInfo {
+                                            Text(globalVM.statsWinner != nil ? "+\(abs(globalVM.statsWinner!).asCurrency())" : "--")
+                                                .font(.system(size: 12, design: .rounded))
+                                                .foregroundStyle(.secondary)
+                                        } else {
+                                            ProgressView()
+                                        }
                                     }
                                     .frame(height: 12)
                                 }
@@ -169,9 +157,34 @@ struct DailyStatsInfoSheet: View {
                                         Text("Largest Loser")
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
                                         Spacer()
-                                        Text(stats.totalTrades > 0 ? "-\(abs(globalVM.statsLoser).asCurrency())" : "--")
-                                            .font(.system(size: 12, design: .rounded))
-                                            .foregroundStyle(.secondary)
+                                        if !globalVM.loadingStatsInfo {
+                                            Text(globalVM.statsLoser != nil ? "-\(abs(globalVM.statsLoser!).asCurrency())" : "--")
+                                                .font(.system(size: 12, design: .rounded))
+                                                .foregroundStyle(.secondary)
+                                        } else {
+                                            ProgressView()
+                                        }
+                                    }
+                                    .frame(height: 12)
+                                }
+                                
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                                
+                                GroupBox {
+                                    HStack {
+                                        Text("Max Drawdown")
+                                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                                        Spacer()
+                                        if !globalVM.loadingStatsInfo {
+                                            Text(globalVM.statsDrawdown != nil ? "-\(abs(globalVM.statsDrawdown!).asCurrency())" : "--")
+                                                .font(.system(size: 12, design: .rounded))
+                                                .foregroundStyle(.secondary)
+                                        } else {
+                                            ProgressView()
+                                        }
+                                        
                                     }
                                     .frame(height: 12)
                                 }
@@ -268,9 +281,10 @@ struct DailyStatsInfoSheet: View {
                                 .frame(maxWidth: .infinity)
                                 
                                 VStack(alignment: .center) {
-                                    Text(abs(globalVM.drawdownDollarsMap[globalVM.selectedAccount!.firm]![trade.ref]!).asCurrency())
+                                    let drawdown = globalVM.drawdownDollarsMap[globalVM.selectedAccount!.firm]![trade.ref]
+                                    Text(drawdown != nil ? abs(drawdown!).asCurrency() : "--")
                                         .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                                        .foregroundStyle(globalVM.drawdownDollarsMap[globalVM.selectedAccount!.firm]![trade.ref]! != 0.0 ? .red : .secondary)
+                                        .foregroundStyle(drawdown != nil ? drawdown != 0.0 ? .red : .secondary : .secondary)
                                     Text("DRAWDOWN")
                                         .font(.system(size: 6, design: .monospaced))
                                         .foregroundStyle(.secondary)
@@ -331,22 +345,6 @@ struct DailyStatsInfoSheet: View {
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
                                         Spacer()
                                         Text(stats.totalTrades > 0 ? "-\(abs(stats.totalFees).asCurrency())" : "--")
-                                            .font(.system(size: 12, design: .rounded))
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    .frame(height: 12)
-                                }
-                                
-                                Divider()
-                                    .frame(height: 1)
-                                    .overlay(Color(.xOutline))
-                                
-                                GroupBox {
-                                    HStack {
-                                        Text("Max Drawdown")
-                                            .font(.system(size: 12, weight: .medium, design: .rounded))
-                                        Spacer()
-                                        Text(stats.totalTrades > 0 ? "-\(abs(globalVM.statsDrawdown).asCurrency())" : "--")
                                             .font(.system(size: 12, design: .rounded))
                                             .foregroundStyle(.secondary)
                                     }
@@ -416,9 +414,13 @@ struct DailyStatsInfoSheet: View {
                                         Text("Largest Winner")
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
                                         Spacer()
-                                        Text(stats.totalTrades > 0 ? "+\(abs(globalVM.statsWinner).asCurrency())" : "--")
-                                            .font(.system(size: 12, design: .rounded))
-                                            .foregroundStyle(.secondary)
+                                        if !globalVM.loadingStatsInfo {
+                                            Text(globalVM.statsWinner != nil ? "+\(abs(globalVM.statsWinner!).asCurrency())" : "--")
+                                                .font(.system(size: 12, design: .rounded))
+                                                .foregroundStyle(.secondary)
+                                        } else {
+                                            ProgressView()
+                                        }
                                     }
                                     .frame(height: 12)
                                 }
@@ -432,9 +434,34 @@ struct DailyStatsInfoSheet: View {
                                         Text("Largest Loser")
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
                                         Spacer()
-                                        Text(stats.totalTrades > 0 ? "-\(abs(globalVM.statsLoser).asCurrency())" : "--")
-                                            .font(.system(size: 12, design: .rounded))
-                                            .foregroundStyle(.secondary)
+                                        if !globalVM.loadingStatsInfo {
+                                            Text(globalVM.statsLoser != nil ? "-\(abs(globalVM.statsLoser!).asCurrency())" : "--")
+                                                .font(.system(size: 12, design: .rounded))
+                                                .foregroundStyle(.secondary)
+                                        } else {
+                                            ProgressView()
+                                        }
+                                    }
+                                    .frame(height: 12)
+                                }
+                                
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                                
+                                GroupBox {
+                                    HStack {
+                                        Text("Max Drawdown")
+                                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                                        Spacer()
+                                        if !globalVM.loadingStatsInfo {
+                                            Text(globalVM.statsDrawdown != nil ? "-\(abs(globalVM.statsDrawdown!).asCurrency())" : "--")
+                                                .font(.system(size: 12, design: .rounded))
+                                                .foregroundStyle(.secondary)
+                                        } else {
+                                            ProgressView()
+                                        }
+                                        
                                     }
                                     .frame(height: 12)
                                 }

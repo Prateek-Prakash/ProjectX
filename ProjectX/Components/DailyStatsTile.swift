@@ -17,9 +17,9 @@ struct DailyStatsTile: View {
     var body: some View {
         Button {
             Task {
-                await globalVM.calculateDailyStatsInfo(stats.tradeDate)
-                showDailyStatsInfoSheet.toggle()
+                await globalVM.calculateStatsInfo(stats.tradeDate)
             }
+            showDailyStatsInfoSheet.toggle()
         } label: {
             HStack {
                 HStack {

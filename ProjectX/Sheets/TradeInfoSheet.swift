@@ -82,8 +82,8 @@ struct TradeInfoSheet: View {
                                         Text("Points")
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
                                         Spacer()
-                                        if let runUpPoints = globalVM.runUpPoints {
-                                            Text(runUpPoints != -1 ? "+\(abs(runUpPoints).asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))" : "--")
+                                        if !globalVM.loadingTradeInfo {
+                                            Text(globalVM.runUpPoints != nil ? "+\(abs(globalVM.runUpPoints!).asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))" : "--")
                                                 .font(.system(size: 12, design: .rounded))
                                                 .foregroundStyle(.secondary)
                                         } else {
@@ -102,8 +102,8 @@ struct TradeInfoSheet: View {
                                         Text("Dollars")
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
                                         Spacer()
-                                        if let runUpDollars = globalVM.runUpDollars {
-                                            Text(runUpDollars != -1 ? "+\(abs(runUpDollars).asCurrency())" : "--")
+                                        if !globalVM.loadingTradeInfo {
+                                            Text(globalVM.runUpDollars != nil ? "+\(abs(globalVM.runUpDollars!).asCurrency())" : "--")
                                                 .font(.system(size: 12, design: .rounded))
                                                 .foregroundStyle(.secondary)
                                         } else {
@@ -136,8 +136,8 @@ struct TradeInfoSheet: View {
                                         Text("Points")
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
                                         Spacer()
-                                        if let drawdownPoints = globalVM.drawdownPoints {
-                                            Text(drawdownPoints != -1 ? "-\(abs(drawdownPoints).asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))" : "--")
+                                        if !globalVM.loadingTradeInfo {
+                                            Text(globalVM.drawdownPoints != nil ? "-\(abs(globalVM.drawdownPoints!).asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))" : "--")
                                                 .font(.system(size: 12, design: .rounded))
                                                 .foregroundStyle(.secondary)
                                         } else {
@@ -156,8 +156,8 @@ struct TradeInfoSheet: View {
                                         Text("Dollars")
                                             .font(.system(size: 12, weight: .medium, design: .rounded))
                                         Spacer()
-                                        if let drawdownDollars = globalVM.drawdownDollars {
-                                            Text(drawdownDollars != -1 ? "-\(abs(drawdownDollars).asCurrency())" : "--")
+                                        if !globalVM.loadingTradeInfo {
+                                            Text(globalVM.drawdownDollars != nil ? "-\(abs(globalVM.drawdownDollars!).asCurrency())" : "--")
                                                 .font(.system(size: 12, design: .rounded))
                                                 .foregroundStyle(.secondary)
                                         } else {
@@ -235,9 +235,10 @@ struct TradeInfoSheet: View {
                             Text("Points")
                                 .font(.system(size: 12, weight: .medium, design: .rounded))
                             Spacer()
-                            Text(abs(trade.exitPrice - trade.entryPrice).asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))
+                            let direction = (trade.exitPrice - trade.entryPrice) * (trade.positionSize < 0 ? 1 : -1) >= 0 ? "+" : "-"
+                            Text("\(direction)\(abs(trade.exitPrice - trade.entryPrice).asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))")
                                 .font(.system(size: 12, design: .rounded))
-                                .foregroundStyle((trade.exitPrice - trade.entryPrice) * (trade.positionSize < 0 ? 1 : -1) > 0 ? .green : (trade.exitPrice - trade.entryPrice) < 0 ? .red : .secondary)
+                                .foregroundStyle(.secondary)
                         }
                         .frame(height: 12)
                     }
@@ -278,8 +279,8 @@ struct TradeInfoSheet: View {
                                     Text("Points")
                                         .font(.system(size: 12, weight: .medium, design: .rounded))
                                     Spacer()
-                                    if let runUpPoints = globalVM.runUpPoints {
-                                        Text(runUpPoints != -1 ? "+\(abs(runUpPoints).asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))" : "--")
+                                    if !globalVM.loadingTradeInfo {
+                                        Text(globalVM.runUpPoints != nil ? "+\(abs(globalVM.runUpPoints!).asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))" : "--")
                                             .font(.system(size: 12, design: .rounded))
                                             .foregroundStyle(.secondary)
                                     } else {
@@ -298,8 +299,8 @@ struct TradeInfoSheet: View {
                                     Text("Dollars")
                                         .font(.system(size: 12, weight: .medium, design: .rounded))
                                     Spacer()
-                                    if let runUpDollars = globalVM.runUpDollars {
-                                        Text(runUpDollars != -1 ? "+\(abs(runUpDollars).asCurrency())" : "--")
+                                    if !globalVM.loadingTradeInfo {
+                                        Text(globalVM.runUpDollars != nil ? "+\(abs(globalVM.runUpDollars!).asCurrency())" : "--")
                                             .font(.system(size: 12, design: .rounded))
                                             .foregroundStyle(.secondary)
                                     } else {
@@ -332,8 +333,8 @@ struct TradeInfoSheet: View {
                                     Text("Points")
                                         .font(.system(size: 12, weight: .medium, design: .rounded))
                                     Spacer()
-                                    if let drawdownPoints = globalVM.drawdownPoints {
-                                        Text(drawdownPoints != -1 ? "-\(abs(drawdownPoints).asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))" : "--")
+                                    if !globalVM.loadingTradeInfo {
+                                        Text(globalVM.drawdownPoints != nil ? "-\(abs(globalVM.drawdownPoints!).asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))" : "--")
                                             .font(.system(size: 12, design: .rounded))
                                             .foregroundStyle(.secondary)
                                     } else {
@@ -352,8 +353,8 @@ struct TradeInfoSheet: View {
                                     Text("Dollars")
                                         .font(.system(size: 12, weight: .medium, design: .rounded))
                                     Spacer()
-                                    if let drawdownDollars = globalVM.drawdownDollars {
-                                        Text(drawdownDollars != -1 ? "-\(abs(drawdownDollars).asCurrency())" : "--")
+                                    if !globalVM.loadingTradeInfo {
+                                        Text(globalVM.drawdownDollars != nil ? "-\(abs(globalVM.drawdownDollars!).asCurrency())" : "--")
                                             .font(.system(size: 12, design: .rounded))
                                             .foregroundStyle(.secondary)
                                     } else {

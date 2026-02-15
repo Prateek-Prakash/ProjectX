@@ -47,6 +47,7 @@ class GlobalViewModel: ObservableObject {
     @AppStorage("delayAuthentication") var delayAuthentication: Bool = false
     @AppStorage("delayLoadingTrades") var delayLoadingTrades: Bool = false
     @AppStorage("delayTradeInfo") var delayTradeInfo: Bool = false
+    @AppStorage("delayStatsInfo") var delayStatsInfo: Bool = false
     @AppStorage("delaySymbolBlocks") var delaySymbolBlocks: Bool = false
     @AppStorage("executeLockouts") var executeLockouts: Bool = true
     @AppStorage("blurBalances") var blurBalances: Bool = false
@@ -81,14 +82,16 @@ class GlobalViewModel: ObservableObject {
         .topstep: []
     ]
     
+    @Published var loadingTradeInfo: Bool = false
     @Published var runUpPoints: Double? = nil
     @Published var runUpDollars: Double? = nil
     @Published var drawdownPoints: Double? = nil
     @Published var drawdownDollars: Double? = nil
     
-    @Published var statsDrawdown: Double = 0.0
-    @Published var statsWinner: Double = 0.0
-    @Published var statsLoser: Double = 0.0
+    @Published var loadingStatsInfo: Bool = false
+    @Published var statsDrawdown: Double? = nil
+    @Published var statsWinner: Double? = nil
+    @Published var statsLoser: Double? = nil
     
     @Published var runUpPointsMap: [Firm:[String:Double]] = [
         .theFuturesDesk: [:],
@@ -385,7 +388,9 @@ class GlobalViewModel: ObservableObject {
     
     // MARK: Caclulate Stats
     
-    func calculateTradeStats(_ firm: Firm, _ trade: Trade) async {
+    func calculateTradeInfo(_ firm: Firm, _ trade: Trade) async {
+        loadingTradeInfo = true
+        
         runUpPoints = nil
         runUpDollars = nil
         drawdownPoints = nil
@@ -469,21 +474,23 @@ class GlobalViewModel: ObservableObject {
             }
         }
         
-        if runUpPoints == nil { runUpPoints = -1 }
-        if runUpDollars == nil { runUpDollars = -1 }
-        if drawdownPoints == nil { drawdownPoints = -1 }
-        if drawdownDollars == nil { drawdownDollars = -1 }
+        loadingTradeInfo = false
     }
     
     // Might Be Off Sometimes Until Sub-Second Bar Data Above
-    func calculateDailyStatsInfo(_ day: String) async {
-        statsDrawdown = 0.0
-        statsWinner = 0.0
-        statsLoser = 0.0
+    func calculateStatsInfo(_ day: String) async {
+        loadingStatsInfo = true
+        
+        statsDrawdown = nil
+        statsWinner = nil
+        statsLoser = nil
+        
+        if delayStatsInfo {
+            try! await Task.sleep(for: .seconds(3))
+        }
         
         var streak: Bool = false
         var running: Double = 0.0
-        var drawdown: Double = 0.0
         
         for trade in accountTrades.filter({ $0.tradeDay == day }).reversed() {
             if drawdownDollarsMap[selectedAccount!.firm]![trade.ref] != nil {
@@ -491,7 +498,7 @@ class GlobalViewModel: ObservableObject {
                 drawdownDollars = drawdownDollarsMap[selectedAccount!.firm]![trade.ref]
             } else {
                 // TODO: Handle Rate Limit
-                await calculateTradeStats(selectedAccount!.firm, trade)
+                await calculateTradeInfo(selectedAccount!.firm, trade)
             }
             
             Helpers.debugLog("P&L: \(trade.pnL)")
@@ -504,6 +511,7 @@ class GlobalViewModel: ObservableObject {
                 // TODO: Display Alert + Exit Calculation || Delay + Retry
                 Helpers.debugLog("\(trade.ref): SOMETHING WENT WRONG")
             }
+            
             if trade.pnL >= 0.0 {
                 // Winning Trade
                 streak = false
@@ -511,14 +519,30 @@ class GlobalViewModel: ObservableObject {
                 // Losing tradee
                 streak = true
             }
-            drawdown < running ? (drawdown = running) : ()
+            
+            if statsDrawdown == nil {
+                statsDrawdown = running
+            } else {
+                statsDrawdown! < running ? (statsDrawdown = running) : ()
+            }
             !streak ? (running = 0.0) : ()
             
-            statsWinner < trade.pnL ? (statsWinner = trade.pnL) : ()
-            statsLoser > trade.pnL ? (statsLoser = trade.pnL) : ()
+            if statsWinner == nil {
+                statsWinner = trade.pnL
+            } else {
+                statsWinner! < trade.pnL ? (statsWinner = trade.pnL) : ()
+            }
+            
+            if statsLoser == nil {
+                statsLoser = trade.pnL
+            } else {
+                statsLoser! > trade.pnL ? (statsLoser = trade.pnL) : ()
+            }
         }
         
-        statsDrawdown = drawdown * -1
+        statsDrawdown != nil ? (statsDrawdown = statsDrawdown! * -1) : ()
+        
+        loadingStatsInfo = false
     }
     
     // MARK: Symbol Blocks

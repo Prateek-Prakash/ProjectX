@@ -543,6 +543,27 @@ struct DeveloperView: View {
                                         .overlay(Color(.xOutline))
                                     
                                     Button {
+                                        globalVM.delayStatsInfo.toggle()
+                                    } label: {
+                                        GroupBox {
+                                            HStack {
+                                                Text("Delay Stats Info")
+                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                Spacer()
+                                                Toggle("", isOn: $globalVM.delayStatsInfo)
+                                                    .scaleEffect(0.6, anchor: .trailing)
+                                            }
+                                            .frame(height: 12)
+                                        }
+                                        .backgroundStyle(Color(.xCardBackground))
+                                    }
+                                    .buttonStyle(.plain)
+                                    
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    Button {
                                         globalVM.delaySymbolBlocks.toggle()
                                     } label: {
                                         GroupBox {

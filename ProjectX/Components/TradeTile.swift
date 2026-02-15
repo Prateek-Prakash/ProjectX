@@ -20,7 +20,7 @@ struct TradeTile: View {
         Button {
             if tappable {
                 Task {
-                    await globalVM.calculateTradeStats(firm, trade)
+                    await globalVM.calculateTradeInfo(firm, trade)
                 }
                 showTradeInfoSheet.toggle()
             }
