@@ -545,7 +545,35 @@ class GlobalViewModel: ObservableObject {
         loadingStatsInfo = false
     }
     
-    func exportTradesJson(_ day: String) -> String {
+    func exportTrade(_ trade: Trade) -> String {
+        let runUpDollars = runUpDollarsMap[selectedAccount!.firm]![trade.ref] != nil ? abs(runUpDollarsMap[selectedAccount!.firm]![trade.ref]!).asCurrency() : nil
+        let runUp = runUpDollars != nil ? Double(runUpDollars!.replacingOccurrences(of: "$", with: "")) : nil
+        let drawdownDollar = drawdownDollarsMap[selectedAccount!.firm]![trade.ref] != nil ? (-1 * abs(drawdownDollarsMap[selectedAccount!.firm]![trade.ref]!)).asCurrency() : nil
+        let drawdown = drawdownDollar != nil ? Double(drawdownDollar!.replacingOccurrences(of: "$", with: "")) : nil
+        let export = TradeExport(
+            id: trade.id,
+            tradeDate: trade.tradeDay,
+            side: trade.positionSize < 0 ? "Long" : "Short",
+            ticker: getTickerId(selectedAccount!.firm, trade.symbolId),
+            size: abs(trade.positionSize),
+            pnl: trade.pnL,
+            fees: -1 * trade.fees,
+            runUp: runUp,
+            drawdown: drawdown,
+            entryPrice: trade.entryPrice,
+            exitPrice: trade.exitPrice,
+            entryAt: trade.createdAt,
+            exitAt: trade.exitedAt,
+            duration: trade.tradeDurationDisplay
+        )
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        let data = try! encoder.encode(export)
+        let json = String(data: data, encoding: .utf8)!
+        return json
+    }
+    
+    func exportTrades(for day: String) -> String {
         let trades: [TradeExport] = accountTrades.filter({ $0.tradeDay == day }).reversed().map({
             let runUpDollars = runUpDollarsMap[selectedAccount!.firm]![$0.ref] != nil ? abs(runUpDollarsMap[selectedAccount!.firm]![$0.ref]!).asCurrency() : nil
             let runUp = runUpDollars != nil ? Double(runUpDollars!.replacingOccurrences(of: "$", with: "")) : nil

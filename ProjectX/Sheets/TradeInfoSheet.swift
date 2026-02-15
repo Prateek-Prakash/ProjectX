@@ -48,9 +48,20 @@ struct TradeInfoSheet: View {
                 }
                 
                 ToolbarItem(placement: .topBarTrailing) {
-                    ShareLink(item: prepareExport(), preview: SharePreview("", image: renderAsImage())) {
+                    Menu {
+                        ShareLink(item: prepareExport(), preview: SharePreview("", image: renderAsImage())) {
+                            Label("Share Trade", systemImage: "list.bullet.clipboard")
+                        }
+                        
+                        Button {
+                            HapticViewModel.shared.successHaptic()
+                            UIPasteboard.general.string = globalVM.exportTrade(trade)
+                        } label: {
+                            Label("Export Trade", systemImage: "document.on.document")
+                        }
+                    } label: {
                         Image(systemName: "square.and.arrow.up")
-                            .imageScale(.small)
+                            .imageScale(.medium)
                     }
                 }
                 .sharedBackgroundVisibility(.hidden)
