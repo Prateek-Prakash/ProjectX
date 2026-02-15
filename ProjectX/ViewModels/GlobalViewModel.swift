@@ -545,6 +545,11 @@ class GlobalViewModel: ObservableObject {
         loadingStatsInfo = false
     }
     
+    func getTradesJson(_ day: String) -> String {
+        // TODO: Implement
+        return "Work-In-Progress"
+    }
+    
     // MARK: Symbol Blocks
     
     func loadSymbolBlocks() async {
