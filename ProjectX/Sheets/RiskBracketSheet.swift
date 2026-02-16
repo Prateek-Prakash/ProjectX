@@ -36,7 +36,7 @@ struct RiskBracketSheet: View {
                     
                     Button {
                         Task {
-                            let _ = await XClient.get(account.firm).setPositionBrackets(account.accountId, account.bracketAutoApply ?? false, riskBracket.isEmpty ? 0 : Double(riskBracket), account.bracketAmountToMake)
+                            let _ = await XClient.get(account.firm).setPositionBrackets(account.accountId, account.bracketAutoApply ?? false, riskBracket.isEmpty ? nil : Double(riskBracket), account.bracketAmountToMake)
                             dismiss()
                         }
                     } label: {

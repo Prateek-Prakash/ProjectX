@@ -36,7 +36,7 @@ struct ProfitBracketSheet: View {
                     
                     Button {
                         Task {
-                            let _ = await XClient.get(account.firm).setPositionBrackets(account.accountId, account.bracketAutoApply ?? false, account.bracketAmountToRisk, profitBracket.isEmpty ? 0 : Double(profitBracket))
+                            let _ = await XClient.get(account.firm).setPositionBrackets(account.accountId, account.bracketAutoApply ?? false, account.bracketAmountToRisk, profitBracket.isEmpty ? nil : Double(profitBracket))
                             dismiss()
                         }
                     } label: {
