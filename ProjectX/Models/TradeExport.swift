@@ -23,6 +23,8 @@ struct TradeExport: Identifiable, Codable {
     var exitAt: String
     var duration: String
     
+    var barData: BarResponseDTO? = nil
+    
     enum CodingKeys: String, CodingKey {
         case id = "id"
         case tradeDate = "tradeDate"
@@ -38,6 +40,7 @@ struct TradeExport: Identifiable, Codable {
         case entryAt = "entryAt"
         case exitAt = "exitAt"
         case duration = "duration"
+        case barData = "barData"
     }
     
     func encode(to encoder: Encoder) throws {
@@ -56,5 +59,6 @@ struct TradeExport: Identifiable, Codable {
         try container.encode(entryAt, forKey: .entryAt)
         try container.encode(exitAt, forKey: .exitAt)
         try container.encode(duration, forKey: .duration)
+        try container.encode(barData, forKey: .barData)
     }
 }

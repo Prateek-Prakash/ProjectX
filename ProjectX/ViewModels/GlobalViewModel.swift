@@ -93,6 +93,12 @@ class GlobalViewModel: ObservableObject {
     @Published var statsWinner: Double? = nil
     @Published var statsLoser: Double? = nil
     
+    
+    @Published var barData: [Firm:[String:BarResponseDTO]] = [
+        .theFuturesDesk: [:],
+        .topstep: [:]
+    ]
+    
     @Published var runUpPointsMap: [Firm:[String:Double]] = [
         .theFuturesDesk: [:],
         .topstep: [:]
@@ -412,6 +418,8 @@ class GlobalViewModel: ObservableObject {
             } else {
                 if let response = await XClient.get(firm).getBars(trade.contractId!, trade.createdAt, trade.exitedAt, .second) {
                     if !response.bars.isEmpty {
+                        barData[firm]![trade.ref] = response
+                        
                         var high = trade.entryPrice
                         var low = trade.entryPrice
                         for bar in response.bars {
@@ -564,7 +572,8 @@ class GlobalViewModel: ObservableObject {
             exitPrice: trade.exitPrice,
             entryAt: trade.createdAt,
             exitAt: trade.exitedAt,
-            duration: trade.tradeDurationDisplay
+            duration: trade.tradeDurationDisplay,
+            barData: barData[selectedAccount!.firm]![trade.ref]
         )
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
@@ -593,7 +602,8 @@ class GlobalViewModel: ObservableObject {
                 exitPrice: $0.exitPrice,
                 entryAt: $0.createdAt,
                 exitAt: $0.exitedAt,
-                duration: $0.tradeDurationDisplay
+                duration: $0.tradeDurationDisplay,
+                barData: barData[selectedAccount!.firm]![$0.ref]
             )
         })
         let encoder = JSONEncoder()
