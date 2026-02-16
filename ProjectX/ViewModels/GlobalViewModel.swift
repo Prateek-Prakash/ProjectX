@@ -406,7 +406,14 @@ class GlobalViewModel: ObservableObject {
         }
         
         // TODO: Calculate 5+ Hours
-        // TODO: Sub-Second Bar Data?
+        // --
+        // TODO: Tick Data
+        // --
+        // TODO: MFE: Long = (Highest) Bid - Entry
+        // TODO: MFE: Short = Entry - (Lowest) Ask
+        // --
+        // TODO: MAE: Long = Entry - (Lowest) Bid
+        // TODO: MAE: Short = (Highest) Ask - Entry
         if trade.underFiveHours() {
             if mfePointsMap[firm]![trade.ref] != nil && mfeDollarsMap[firm]![trade.ref] != nil &&  maePointsMap[firm]![trade.ref] != nil && maeDollarsMap[firm]![trade.ref] != nil {
                 Helpers.debugLog("\(trade.ref): USING CACHED TRADE - calculateTradeStats")
@@ -487,7 +494,7 @@ class GlobalViewModel: ObservableObject {
         loadingTradeInfo = false
     }
     
-    // Might Be Off Sometimes Until Sub-Second Bar Data Above
+    // Might Be Off Sometimes Until Tick Data Above
     func calculateStatsInfo(_ day: String) async {
         loadingStatsInfo = true
         
