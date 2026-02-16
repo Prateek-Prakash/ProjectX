@@ -158,114 +158,6 @@ struct DeveloperView: View {
                                             }
                                             .frame(height: 12)
                                         }
-                                        
-                                        Divider()
-                                            .frame(height: 1)
-                                            .overlay(Color(.xOutline))
-                                        
-                                        GroupBox {
-                                            HStack {
-                                                Image(systemName: "text.page")
-                                                    .imageScale(.small)
-                                                Text("ES")
-                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
-                                                Spacer()
-                                                Text(globalVM.esPrice?.asPoints(2) ?? "--")
-                                                    .font(.system(size: 12, design: .monospaced))
-                                                    .foregroundStyle(.secondary)
-                                            }
-                                            .frame(height: 12)
-                                        }
-                                        
-                                        Divider()
-                                            .frame(height: 1)
-                                            .overlay(Color(.xOutline))
-                                        
-                                        GroupBox {
-                                            HStack {
-                                                Image(systemName: "text.page")
-                                                    .imageScale(.small)
-                                                Text("MES")
-                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
-                                                Spacer()
-                                                Text(globalVM.mesPrice?.asPoints(2) ?? "--")
-                                                    .font(.system(size: 12, design: .monospaced))
-                                                    .foregroundStyle(.secondary)
-                                            }
-                                            .frame(height: 12)
-                                        }
-                                        
-                                        Divider()
-                                            .frame(height: 1)
-                                            .overlay(Color(.xOutline))
-                                        
-                                        GroupBox {
-                                            HStack {
-                                                Image(systemName: "text.page")
-                                                    .imageScale(.small)
-                                                Text("GC")
-                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
-                                                Spacer()
-                                                Text(globalVM.gcPrice?.asPoints(1) ?? "--")
-                                                    .font(.system(size: 12, design: .monospaced))
-                                                    .foregroundStyle(.secondary)
-                                            }
-                                            .frame(height: 12)
-                                        }
-                                        
-                                        Divider()
-                                            .frame(height: 1)
-                                            .overlay(Color(.xOutline))
-                                        
-                                        GroupBox {
-                                            HStack {
-                                                Image(systemName: "text.page")
-                                                    .imageScale(.small)
-                                                Text("MGC")
-                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
-                                                Spacer()
-                                                Text(globalVM.mgcPrice?.asPoints(1) ?? "--")
-                                                    .font(.system(size: 12, design: .monospaced))
-                                                    .foregroundStyle(.secondary)
-                                            }
-                                            .frame(height: 12)
-                                        }
-                                        
-                                        Divider()
-                                            .frame(height: 1)
-                                            .overlay(Color(.xOutline))
-                                        
-                                        GroupBox {
-                                            HStack {
-                                                Image(systemName: "text.page")
-                                                    .imageScale(.small)
-                                                Text("SI")
-                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
-                                                Spacer()
-                                                Text(globalVM.siPrice?.asPoints(3) ?? "--")
-                                                    .font(.system(size: 12, design: .monospaced))
-                                                    .foregroundStyle(.secondary)
-                                            }
-                                            .frame(height: 12)
-                                        }
-                                        
-                                        Divider()
-                                            .frame(height: 1)
-                                            .overlay(Color(.xOutline))
-                                        
-                                        GroupBox {
-                                            HStack {
-                                                Image(systemName: "text.page")
-                                                    .imageScale(.small)
-                                                Text("SIL")
-                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
-                                                Spacer()
-                                                Text(globalVM.silPrice?.asPoints(3) ?? "--")
-                                                    .font(.system(size: 12, design: .monospaced))
-                                                    .foregroundStyle(.secondary)
-                                            }
-                                            .frame(height: 12)
-                                        }
                                     }
                                 }
                                 .backgroundStyle(Color(.xCardBackground))
@@ -651,12 +543,6 @@ struct DeveloperView: View {
                         globalVM.marketCtx = nil
                         globalVM.nqPrice = nil
                         globalVM.mnqPrice = nil
-                        globalVM.esPrice = nil
-                        globalVM.mesPrice = nil
-                        globalVM.gcPrice = nil
-                        globalVM.mgcPrice = nil
-                        globalVM.siPrice = nil
-                        globalVM.silPrice = nil
                     }
                 } else {
                     Task {

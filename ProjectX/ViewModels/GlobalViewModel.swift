@@ -70,12 +70,6 @@ class GlobalViewModel: ObservableObject {
     @Published var marketCtx: HubConnection?
     @Published var nqPrice: Double? = nil
     @Published var mnqPrice: Double? = nil
-    @Published var esPrice: Double? = nil
-    @Published var mesPrice: Double? = nil
-    @Published var gcPrice: Double? = nil
-    @Published var mgcPrice: Double? = nil
-    @Published var siPrice: Double? = nil
-    @Published var silPrice: Double? = nil
     
     @Published var allContracts: [Firm:[Contract]] = [
         .theFuturesDesk: [],
@@ -702,18 +696,6 @@ class GlobalViewModel: ObservableObject {
                         self.nqPrice = price
                     } else if id.contains("CON.F.US.MNQ") {
                         self.mnqPrice = price
-                    } else if id.contains("CON.F.US.EP") {
-                        self.esPrice = price
-                    } else if id.contains("CON.F.US.MES") {
-                        self.mesPrice = price
-                    } else if id.contains("CON.F.US.GCE") {
-                        self.gcPrice = price
-                    } else if id.contains("CON.F.US.MGC") {
-                        self.mgcPrice = price
-                    } else if id.contains("CON.F.US.SIE") {
-                        self.siPrice = price
-                    } else if id.contains("CON.F.US.SIL") {
-                        self.silPrice = price
                     }
                 }
             }
@@ -735,12 +717,6 @@ class GlobalViewModel: ObservableObject {
     func invokeWatchlistSubscriptions() async {
         await invokeMarketSubscription("CON.F.US.ENQ.H26")
         await invokeMarketSubscription("CON.F.US.MNQ.H26")
-        await invokeMarketSubscription("CON.F.US.EP.H26")
-        await invokeMarketSubscription("CON.F.US.MES.H26")
-        await invokeMarketSubscription("CON.F.US.GCE.J26")
-        await invokeMarketSubscription("CON.F.US.MGC.J26")
-        await invokeMarketSubscription("CON.F.US.SIE.H26")
-        await invokeMarketSubscription("CON.F.US.SIL.H26")
     }
     
     func invokeMarketSubscription(_ contract: String) async {
