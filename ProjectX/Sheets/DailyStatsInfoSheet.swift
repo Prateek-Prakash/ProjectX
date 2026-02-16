@@ -321,7 +321,7 @@ struct DailyStatsInfoSheet: View {
                                     let mfe = globalVM.mfeDollarsMap[globalVM.selectedAccount!.firm]![trade.ref]
                                     Text(mfe != nil ? abs(mfe!).asCurrency() : "--")
                                         .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                                        .foregroundStyle(.green)
+                                        .foregroundStyle(mfe != nil ? mfe != 0.0 ? .green : .secondary : .secondary)
                                     Text("MFE")
                                         .font(.system(size: 8, design: .monospaced))
                                         .foregroundStyle(.secondary)
