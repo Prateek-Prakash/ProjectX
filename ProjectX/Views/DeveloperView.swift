@@ -131,12 +131,40 @@ struct DeveloperView: View {
                                             HStack {
                                                 Image(systemName: "text.page")
                                                     .imageScale(.small)
-                                                Text("NQ")
+                                                Text("NQ Ask")
+                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                Spacer()
+                                                Text(globalVM.nqAsk?.asPoints(2) ?? "--")
+                                                    .font(.system(size: 12, design: .monospaced))
+                                                    .foregroundStyle(.red.secondary)
+                                            }
+                                            .frame(height: 12)
+                                        }
+                                        
+                                        GroupBox {
+                                            HStack {
+                                                Image(systemName: "text.page")
+                                                    .imageScale(.small)
+                                                Text("NQ Price")
                                                     .font(.system(size: 12, weight: .medium, design: .rounded))
                                                 Spacer()
                                                 Text(globalVM.nqPrice?.asPoints(2) ?? "--")
                                                     .font(.system(size: 12, design: .monospaced))
                                                     .foregroundStyle(.secondary)
+                                            }
+                                            .frame(height: 12)
+                                        }
+                                        
+                                        GroupBox {
+                                            HStack {
+                                                Image(systemName: "text.page")
+                                                    .imageScale(.small)
+                                                Text("NQ Bid")
+                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                Spacer()
+                                                Text(globalVM.nqBid?.asPoints(2) ?? "--")
+                                                    .font(.system(size: 12, design: .monospaced))
+                                                    .foregroundStyle(.green.secondary)
                                             }
                                             .frame(height: 12)
                                         }
@@ -149,12 +177,40 @@ struct DeveloperView: View {
                                             HStack {
                                                 Image(systemName: "text.page")
                                                     .imageScale(.small)
-                                                Text("MNQ")
+                                                Text("MNQ Ask")
+                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                Spacer()
+                                                Text(globalVM.mnqAsk?.asPoints(2) ?? "--")
+                                                    .font(.system(size: 12, design: .monospaced))
+                                                    .foregroundStyle(.red.secondary)
+                                            }
+                                            .frame(height: 12)
+                                        }
+                                        
+                                        GroupBox {
+                                            HStack {
+                                                Image(systemName: "text.page")
+                                                    .imageScale(.small)
+                                                Text("MNQ Price")
                                                     .font(.system(size: 12, weight: .medium, design: .rounded))
                                                 Spacer()
                                                 Text(globalVM.mnqPrice?.asPoints(2) ?? "--")
                                                     .font(.system(size: 12, design: .monospaced))
                                                     .foregroundStyle(.secondary)
+                                            }
+                                            .frame(height: 12)
+                                        }
+                                        
+                                        GroupBox {
+                                            HStack {
+                                                Image(systemName: "text.page")
+                                                    .imageScale(.small)
+                                                Text("MNQ Bid")
+                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                Spacer()
+                                                Text(globalVM.mnqBid?.asPoints(2) ?? "--")
+                                                    .font(.system(size: 12, design: .monospaced))
+                                                    .foregroundStyle(.green.secondary)
                                             }
                                             .frame(height: 12)
                                         }

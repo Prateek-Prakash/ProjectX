@@ -69,7 +69,11 @@ class GlobalViewModel: ObservableObject {
     
     @Published var marketCtx: HubConnection?
     @Published var nqPrice: Double? = nil
+    @Published var nqBid: Double? = nil
+    @Published var nqAsk: Double? = nil
     @Published var mnqPrice: Double? = nil
+    @Published var mnqBid: Double? = nil
+    @Published var mnqAsk: Double? = nil
     
     @Published var allContracts: [Firm:[Contract]] = [
         .theFuturesDesk: [],
@@ -724,8 +728,12 @@ class GlobalViewModel: ObservableObject {
                     Helpers.debugLog("\(id): \(price)")
                     if id.contains("CON.F.US.ENQ") {
                         self.nqPrice = price
+                        self.nqBid = quote.bestBid
+                        self.nqAsk = quote.bestAsk
                     } else if id.contains("CON.F.US.MNQ") {
                         self.mnqPrice = price
+                        self.mnqBid = quote.bestBid
+                        self.mnqAsk = quote.bestAsk
                     }
                 }
             }
