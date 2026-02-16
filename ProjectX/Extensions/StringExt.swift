@@ -58,4 +58,28 @@ extension String {
         formatter.dateFormat = "hh:mm:ss a"
         return formatter.string(from: date)
     }
+    
+    func roundDateTime() -> String {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        let date = formatter.date(from: self)!
+        let rounded = round(date.timeIntervalSinceReferenceDate)
+        return formatter.string(from: Date(timeIntervalSinceReferenceDate: rounded))
+    }
+    
+    func floorDateTime() -> String {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        let date = formatter.date(from: self)!
+        let rounded = floor(date.timeIntervalSinceReferenceDate)
+        return formatter.string(from: Date(timeIntervalSinceReferenceDate: rounded))
+    }
+    
+    func ceilDateTime() -> String {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        let date = formatter.date(from: self)!
+        let rounded = ceil(date.timeIntervalSinceReferenceDate)
+        return formatter.string(from: Date(timeIntervalSinceReferenceDate: rounded))
+    }
 }

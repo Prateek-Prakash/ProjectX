@@ -42,6 +42,10 @@ class GlobalViewModel: ObservableObject {
     // Developer
     @AppStorage("nextMarketOpen") var nextMarketOpen: String = ""
     @AppStorage("nextMarketClose") var nextMarketClose: String = ""
+    @AppStorage("startFloor") var startFloor: Bool = false
+    @AppStorage("startRound") var startRound: Bool = false
+    @AppStorage("endCeiling") var endCeiling: Bool = false
+    @AppStorage("endRound") var endRound: Bool = false
     @AppStorage("streamingSource") var streamingSource: Firm = .topstep
     @AppStorage("priceStreaming") var priceStreaming: Bool = false
     @AppStorage("delayAuthentication") var delayAuthentication: Bool = false
@@ -422,8 +426,19 @@ class GlobalViewModel: ObservableObject {
                 maePoints = maePointsMap[selectedAccount!.firm]![trade.ref]
                 maeDollars = maeDollarsMap[selectedAccount!.firm]![trade.ref]
             } else {
-                let start = trade.createdAt // TODO: Floor
-                let end = trade.exitedAt // TODO: Ceiling
+                var start = trade.createdAt
+                if startFloor {
+                    start = start.floorDateTime()
+                } else if startRound {
+                    start = start.roundDateTime()
+                }
+                
+                var end = trade.exitedAt
+                if startFloor {
+                    end = end.ceilDateTime()
+                } else if startRound {
+                    end = end.roundDateTime()
+                }
                 
                 if let response = await XClient.get(firm).getBars(trade.contractId!, start, end, .second) {
                     if !response.bars.isEmpty {

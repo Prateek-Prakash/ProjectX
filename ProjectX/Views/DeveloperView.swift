@@ -68,6 +68,138 @@ struct DeveloperView: View {
                         OriginCard {
                             VStack(spacing: 0) {
                                 OriginHeader {
+                                    Text("BAR START TIME")
+                                        .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                        .tracking(2)
+                                        .foregroundStyle(Color(.xHeaderText))
+                                }
+                                
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                                
+                                VStack(spacing: 0) {
+                                    Button {
+                                        globalVM.startFloor.toggle()
+                                    } label: {
+                                        GroupBox {
+                                            HStack {
+                                                Text("Floor")
+                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                Spacer()
+                                                Toggle("", isOn: $globalVM.startFloor)
+                                                    .scaleEffect(0.6, anchor: .trailing)
+                                            }
+                                            .frame(height: 12)
+                                        }
+                                        .backgroundStyle(Color(.xCardBackground))
+                                    }
+                                    .buttonStyle(.plain)
+                                    .onChange(of: globalVM.startFloor) { _, new in
+                                        if new {
+                                            globalVM.startRound = false
+                                        }
+                                    }
+                                    
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    Button {
+                                        globalVM.startRound.toggle()
+                                    } label: {
+                                        GroupBox {
+                                            HStack {
+                                                Text("Round")
+                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                Spacer()
+                                                Toggle("", isOn: $globalVM.startRound)
+                                                    .scaleEffect(0.6, anchor: .trailing)
+                                            }
+                                            .frame(height: 12)
+                                        }
+                                        .backgroundStyle(Color(.xCardBackground))
+                                    }
+                                    .buttonStyle(.plain)
+                                    .onChange(of: globalVM.startRound) { _, new in
+                                        if new {
+                                            globalVM.startFloor = false
+                                        }
+                                    }
+                                }
+                                .backgroundStyle(Color(.xCardBackground))
+                            }
+                        }
+                        
+                        OriginCard {
+                            VStack(spacing: 0) {
+                                OriginHeader {
+                                    Text("BAR END TIME")
+                                        .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                        .tracking(2)
+                                        .foregroundStyle(Color(.xHeaderText))
+                                }
+                                
+                                Divider()
+                                    .frame(height: 1)
+                                    .overlay(Color(.xOutline))
+                                
+                                VStack(spacing: 0) {
+                                    Button {
+                                        globalVM.endCeiling.toggle()
+                                    } label: {
+                                        GroupBox {
+                                            HStack {
+                                                Text("Ceiling")
+                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                Spacer()
+                                                Toggle("", isOn: $globalVM.endCeiling)
+                                                    .scaleEffect(0.6, anchor: .trailing)
+                                            }
+                                            .frame(height: 12)
+                                        }
+                                        .backgroundStyle(Color(.xCardBackground))
+                                    }
+                                    .buttonStyle(.plain)
+                                    .onChange(of: globalVM.endCeiling) { _, new in
+                                        if new {
+                                            globalVM.endRound = false
+                                        }
+                                    }
+                                    
+                                    Divider()
+                                        .frame(height: 1)
+                                        .overlay(Color(.xOutline))
+                                    
+                                    Button {
+                                        globalVM.endRound.toggle()
+                                    } label: {
+                                        GroupBox {
+                                            HStack {
+                                                Text("Round")
+                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                Spacer()
+                                                Toggle("", isOn: $globalVM.endRound)
+                                                    .scaleEffect(0.6, anchor: .trailing)
+                                            }
+                                            .frame(height: 12)
+                                        }
+                                        .backgroundStyle(Color(.xCardBackground))
+                                    }
+                                    .buttonStyle(.plain)
+                                    .onChange(of: globalVM.endRound) { _, new in
+                                        if new {
+                                            globalVM.endCeiling = false
+                                        }
+                                    }
+                                }
+                                .backgroundStyle(Color(.xCardBackground))
+                            }
+                        }
+                        
+                        OriginCard {
+                            VStack(spacing: 0) {
+                                OriginHeader {
                                     Text("STREAMING")
                                         .font(.system(size: 8, weight: .semibold, design: .monospaced))
                                         .tracking(2)
