@@ -133,6 +133,51 @@ struct DailyStatsInfoSheet: View {
                     VStack(spacing: 0) {
                         GroupBox {
                             HStack {
+                                Text("Max Favorable Excursion")
+                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                Spacer()
+                                if !globalVM.loadingStatsInfo {
+                                    Text("--") // TODO: Implement
+                                        .font(.system(size: 12, design: .rounded))
+                                        .foregroundStyle(.secondary)
+                                } else {
+                                    ProgressView()
+                                }
+                                
+                            }
+                            .frame(height: 12)
+                        }
+                        
+                        Divider()
+                            .frame(height: 1)
+                            .overlay(Color(.xOutline))
+                        
+                        GroupBox {
+                            HStack {
+                                Text("Max Adverse Excursion")
+                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                Spacer()
+                                if !globalVM.loadingStatsInfo {
+                                    Text(globalVM.statsDrawdown != nil ? "-\(abs(globalVM.statsDrawdown!).asCurrency())" : "--")
+                                        .font(.system(size: 12, design: .rounded))
+                                        .foregroundStyle(.secondary)
+                                } else {
+                                    ProgressView()
+                                }
+                                
+                            }
+                            .frame(height: 12)
+                        }
+                    }
+                    .backgroundStyle(Color(.xCardBackground))
+                }
+            }
+            
+            OriginCard {
+                VStack(spacing: 0) {
+                    VStack(spacing: 0) {
+                        GroupBox {
+                            HStack {
                                 Text("Total Trades")
                                     .font(.system(size: 12, weight: .medium, design: .rounded))
                                 Spacer()
@@ -217,27 +262,6 @@ struct DailyStatsInfoSheet: View {
                             }
                             .frame(height: 12)
                         }
-                        
-                        Divider()
-                            .frame(height: 1)
-                            .overlay(Color(.xOutline))
-                        
-                        GroupBox {
-                            HStack {
-                                Text("Max Drawdown")
-                                    .font(.system(size: 12, weight: .medium, design: .rounded))
-                                Spacer()
-                                if !globalVM.loadingStatsInfo {
-                                    Text(globalVM.statsDrawdown != nil ? "-\(abs(globalVM.statsDrawdown!).asCurrency())" : "--")
-                                        .font(.system(size: 12, design: .rounded))
-                                        .foregroundStyle(.secondary)
-                                } else {
-                                    ProgressView()
-                                }
-                                
-                            }
-                            .frame(height: 12)
-                        }
                     }
                     .backgroundStyle(Color(.xCardBackground))
                 }
@@ -298,7 +322,7 @@ struct DailyStatsInfoSheet: View {
                                     Text(runUp != nil ? abs(runUp!).asCurrency() : "--")
                                         .font(.system(size: 10, weight: .semibold, design: .monospaced))
                                         .foregroundStyle(.green)
-                                    Text("RUN-UP")
+                                    Text("MFE")
                                         .font(.system(size: 8, design: .monospaced))
                                         .foregroundStyle(.secondary)
                                 }
@@ -309,7 +333,7 @@ struct DailyStatsInfoSheet: View {
                                     Text(drawdown != nil ? abs(drawdown!).asCurrency() : "--")
                                         .font(.system(size: 10, weight: .semibold, design: .monospaced))
                                         .foregroundStyle(drawdown != nil ? drawdown != 0.0 ? .red : .secondary : .secondary)
-                                    Text("DRAWDOWN")
+                                    Text("MAE")
                                         .font(.system(size: 8, design: .monospaced))
                                         .foregroundStyle(.secondary)
                                 }

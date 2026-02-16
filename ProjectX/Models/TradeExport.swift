@@ -15,8 +15,8 @@ struct TradeExport: Identifiable, Codable {
     var size: Int
     var pnl: Double
     var fees: Double
-    var runUp: Double?
-    var drawdown: Double?
+    var mfe: Double?
+    var mae: Double?
     var entryPrice: Double
     var exitPrice: Double
     var entryAt: String
@@ -33,8 +33,8 @@ struct TradeExport: Identifiable, Codable {
         case size = "size"
         case pnl = "pnl"
         case fees = "fees"
-        case runUp = "runUp"
-        case drawdown = "drawdown"
+        case mfe = "mfe"
+        case mae = "mae"
         case entryPrice = "entryPrice"
         case exitPrice = "exitPrice"
         case entryAt = "entryAt"
@@ -52,8 +52,8 @@ struct TradeExport: Identifiable, Codable {
         try container.encode(size, forKey: .size)
         try container.encode(pnl, forKey: .pnl)
         try container.encode(fees, forKey: .fees)
-        try container.encode(runUp, forKey: .runUp)
-        try container.encode(drawdown, forKey: .drawdown)
+        try container.encode(mfe, forKey: .mfe)
+        try container.encode(mae, forKey: .mae)
         try container.encode(entryPrice, forKey: .entryPrice)
         try container.encode(exitPrice, forKey: .exitPrice)
         try container.encode(entryAt, forKey: .entryAt)

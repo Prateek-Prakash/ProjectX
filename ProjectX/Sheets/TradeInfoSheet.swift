@@ -112,7 +112,7 @@ struct TradeInfoSheet: View {
             OriginCard {
                 VStack(spacing: 0) {
                     OriginHeader {
-                        Text("RUN-UP")
+                        Text("MAX FAVORABLE EXCURSION")
                             .font(.system(size: 8, weight: .semibold, design: .monospaced))
                             .tracking(2)
                             .foregroundStyle(Color(.xHeaderText))
@@ -166,7 +166,7 @@ struct TradeInfoSheet: View {
             OriginCard {
                 VStack(spacing: 0) {
                     OriginHeader {
-                        Text("DRAWDOWN")
+                        Text("MAX ADVERSE EXCURSION")
                             .font(.system(size: 8, weight: .semibold, design: .monospaced))
                             .tracking(2)
                             .foregroundStyle(Color(.xHeaderText))
