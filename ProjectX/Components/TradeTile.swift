@@ -19,6 +19,7 @@ struct TradeTile: View {
     var body: some View {
         Button {
             if tappable {
+                globalVM.loadingTradeInfo = true
                 Task {
                     await globalVM.calculateTradeInfo(firm, trade)
                 }

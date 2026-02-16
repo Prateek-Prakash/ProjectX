@@ -16,6 +16,7 @@ struct DailyStatsTile: View {
     
     var body: some View {
         Button {
+            globalVM.loadingStatsInfo = true
             Task {
                 await globalVM.calculateStatsInfo(stats.tradeDate)
             }
