@@ -43,21 +43,43 @@ struct BackupsView: View {
                                 }
                                 Spacer()
                                 Button {
+                                    // TODO: Open
+                                } label: {
+                                    HStack {
+                                        Text("VIEW")
+                                            .font(.system(size: 10, weight: .bold, design: .rounded))
+                                            .foregroundColor(.white)
+                                            .padding(.vertical, 4)
+                                            .padding(.horizontal, 8)
+                                    }
+                                    .background(.accent)
+                                    .cornerRadius(4.0)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 4.0)
+                                            .stroke(.accent, lineWidth: 1)
+                                    )
+                                }
+                                .buttonStyle(.plain)
+                            }
+                            .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                                Button {
                                     HapticViewModel.shared.successHaptic()
                                     UIPasteboard.general.string = backup.json
                                 } label: {
                                     Image(systemName: "document.on.document")
-                                        .foregroundStyle(.secondary)
                                         .fontDesign(.rounded)
                                         .imageScale(.small)
                                 }
                             }
                             .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                                 Button(role: .destructive) {
+                                    HapticViewModel.shared.successHaptic()
                                     modelContext.delete(backup)
                                     try? modelContext.save()
                                 } label: {
-                                    Image(systemName: "minus.circle")
+                                    Image(systemName: "trash")
+                                        .fontDesign(.rounded)
+                                        .imageScale(.small)
                                 }
                             }
                         }
