@@ -9,7 +9,7 @@ import Foundation
 
 struct TradeExport: Identifiable, Codable {
     var id: Int
-    var tradeDate: String
+    var date: String
     var side: String
     var ticker: String
     var size: Int
@@ -23,11 +23,11 @@ struct TradeExport: Identifiable, Codable {
     var exitAt: String
     var duration: String
     
-    var barData: BarResponseDTO? = nil
+    var bars: [BarDTO]? = nil
     
     enum CodingKeys: String, CodingKey {
         case id = "id"
-        case tradeDate = "tradeDate"
+        case date = "date"
         case side = "side"
         case ticker = "ticker"
         case size = "size"
@@ -40,13 +40,13 @@ struct TradeExport: Identifiable, Codable {
         case entryAt = "entryAt"
         case exitAt = "exitAt"
         case duration = "duration"
-        case barData = "barData"
+        case bars = "bars"
     }
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(id, forKey: .id)
-        try container.encode(tradeDate, forKey: .tradeDate)
+        try container.encode(date, forKey: .date)
         try container.encode(side, forKey: .side)
         try container.encode(ticker, forKey: .ticker)
         try container.encode(size, forKey: .size)
@@ -59,6 +59,6 @@ struct TradeExport: Identifiable, Codable {
         try container.encode(entryAt, forKey: .entryAt)
         try container.encode(exitAt, forKey: .exitAt)
         try container.encode(duration, forKey: .duration)
-        try container.encode(barData, forKey: .barData)
+        try container.encode(bars, forKey: .bars)
     }
 }

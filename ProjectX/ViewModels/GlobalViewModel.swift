@@ -586,33 +586,30 @@ class GlobalViewModel: ObservableObject {
         }
         
         statsMfe != nil ? (statsMfe = abs(statsMfe!)) : ()
-        statsMae != nil ? (statsMae = abs(statsMae!) * -1) : ()
+        statsMae != nil ? (statsMae = abs(statsMae!) * -1.0) : ()
         
         loadingStatsInfo = false
     }
     
     func exportTrade(_ trade: Trade) -> String {
-        let mfeDollars = mfeDollarsMap[selectedAccount!.firm]![trade.ref] != nil ? abs(mfeDollarsMap[selectedAccount!.firm]![trade.ref]!).asCurrency() : nil
-        let mfe = mfeDollars != nil ? Double(mfeDollars!.replacingOccurrences(of: "$", with: "")) : nil
-        let maeDollar = maeDollarsMap[selectedAccount!.firm]![trade.ref] != nil ? (-1 * abs(maeDollarsMap[selectedAccount!.firm]![trade.ref]!)).asCurrency() : nil
-        let mae = maeDollar != nil ? Double(maeDollar!.replacingOccurrences(of: "$", with: "")) : nil
         let export = TradeExport(
             id: trade.id,
-            tradeDate: trade.tradeDay,
+            date: trade.tradeDay,
             side: trade.positionSize < 0 ? "Long" : "Short",
             ticker: getTickerId(selectedAccount!.firm, trade.symbolId),
             size: abs(trade.positionSize),
             pnl: trade.pnL,
-            fees: -1 * trade.fees,
-            mfe: mfe,
-            mae: mae,
+            fees: -1.0 * trade.fees,
+            mfe: mfeDollarsMap[selectedAccount!.firm]![trade.ref],
+            mae: maeDollarsMap[selectedAccount!.firm]![trade.ref],
             entryPrice: trade.entryPrice,
             exitPrice: trade.exitPrice,
             entryAt: trade.createdAt,
             exitAt: trade.exitedAt,
             duration: trade.tradeDurationDisplay,
-            barData: barData[selectedAccount!.firm]![trade.ref]
+            bars: barData[selectedAccount!.firm]![trade.ref]?.bars
         )
+        
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
         let data = try! encoder.encode(export)
@@ -622,28 +619,25 @@ class GlobalViewModel: ObservableObject {
     
     func exportTrades(for day: String) -> String {
         let trades: [TradeExport] = accountTrades.filter({ $0.tradeDay == day }).reversed().map({
-            let mfeDollars = mfeDollarsMap[selectedAccount!.firm]![$0.ref] != nil ? abs(mfeDollarsMap[selectedAccount!.firm]![$0.ref]!).asCurrency() : nil
-            let mfe = mfeDollars != nil ? Double(mfeDollars!.replacingOccurrences(of: "$", with: "")) : nil
-            let maeDollars = maeDollarsMap[selectedAccount!.firm]![$0.ref] != nil ? (-1 * abs(maeDollarsMap[selectedAccount!.firm]![$0.ref]!)).asCurrency() : nil
-            let mae = maeDollars != nil ? Double(maeDollars!.replacingOccurrences(of: "$", with: "")) : nil
             return TradeExport(
                 id: $0.id,
-                tradeDate: $0.tradeDay,
+                date: $0.tradeDay,
                 side: $0.positionSize < 0 ? "Long" : "Short",
                 ticker: getTickerId(selectedAccount!.firm, $0.symbolId),
                 size: abs($0.positionSize),
                 pnl: $0.pnL,
-                fees: -1 * $0.fees,
-                mfe: mfe,
-                mae: mae,
+                fees: -1.0 * $0.fees,
+                mfe: mfeDollarsMap[selectedAccount!.firm]![$0.ref],
+                mae: maeDollarsMap[selectedAccount!.firm]![$0.ref],
                 entryPrice: $0.entryPrice,
                 exitPrice: $0.exitPrice,
                 entryAt: $0.createdAt,
                 exitAt: $0.exitedAt,
                 duration: $0.tradeDurationDisplay,
-                barData: barData[selectedAccount!.firm]![$0.ref]
+                bars: barData[selectedAccount!.firm]![$0.ref]?.bars
             )
         })
+        
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
         let data = try! encoder.encode(trades)
