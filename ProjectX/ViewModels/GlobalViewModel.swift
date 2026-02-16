@@ -416,7 +416,10 @@ class GlobalViewModel: ObservableObject {
                 drawdownPoints = drawdownPointsMap[selectedAccount!.firm]![trade.ref]
                 drawdownDollars = drawdownDollarsMap[selectedAccount!.firm]![trade.ref]
             } else {
-                if let response = await XClient.get(firm).getBars(trade.contractId!, trade.createdAt, trade.exitedAt, .second) {
+                let start = trade.createdAt // TODO: Floor
+                let end = trade.exitedAt // TODO: Ceiling
+                
+                if let response = await XClient.get(firm).getBars(trade.contractId!, start, end, .second) {
                     if !response.bars.isEmpty {
                         barData[firm]![trade.ref] = response
                         

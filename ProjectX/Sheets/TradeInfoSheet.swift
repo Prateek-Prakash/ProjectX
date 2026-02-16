@@ -226,7 +226,7 @@ struct TradeInfoSheet: View {
         let imageRenderer = ImageRenderer(content: createScreenshot())
         imageRenderer.scale = displayScale
         imageRenderer.proposedSize = ProposedViewSize(width: viewWidth, height: nil)
-        return ExportableImage(uiImage: imageRenderer.uiImage ?? UIImage(), fileName: "TradeInfo-\(Int(Date.now.timeIntervalSince1970))")
+        return ExportableImage(uiImage: imageRenderer.uiImage ?? UIImage(), fileName: "\(Int(Date.now.timeIntervalSince1970))")
     }
     
     @MainActor
