@@ -129,7 +129,7 @@ struct TradeInfoSheet: View {
                                     .font(.system(size: 12, weight: .medium, design: .rounded))
                                 Spacer()
                                 if !globalVM.loadingTradeInfo {
-                                    Text(globalVM.runUpPoints != nil ? "+\(abs(globalVM.runUpPoints!).asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))" : "--")
+                                    Text(globalVM.mfePoints != nil ? "+\(abs(globalVM.mfePoints!).asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))" : "--")
                                         .font(.system(size: 12, design: .rounded))
                                         .foregroundStyle(.secondary)
                                 } else {
@@ -149,7 +149,7 @@ struct TradeInfoSheet: View {
                                     .font(.system(size: 12, weight: .medium, design: .rounded))
                                 Spacer()
                                 if !globalVM.loadingTradeInfo {
-                                    Text(globalVM.runUpDollars != nil ? "+\(abs(globalVM.runUpDollars!).asCurrency())" : "--")
+                                    Text(globalVM.mfeDollars != nil ? "+\(abs(globalVM.mfeDollars!).asCurrency())" : "--")
                                         .font(.system(size: 12, design: .rounded))
                                         .foregroundStyle(.secondary)
                                 } else {
@@ -183,7 +183,7 @@ struct TradeInfoSheet: View {
                                     .font(.system(size: 12, weight: .medium, design: .rounded))
                                 Spacer()
                                 if !globalVM.loadingTradeInfo {
-                                    Text(globalVM.drawdownPoints != nil ? "-\(abs(globalVM.drawdownPoints!).asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))" : "--")
+                                    Text(globalVM.maePoints != nil ? "-\(abs(globalVM.maePoints!).asPoints(globalVM.getTickerDigits(firm, trade.symbolId)))" : "--")
                                         .font(.system(size: 12, design: .rounded))
                                         .foregroundStyle(.secondary)
                                 } else {
@@ -203,7 +203,7 @@ struct TradeInfoSheet: View {
                                     .font(.system(size: 12, weight: .medium, design: .rounded))
                                 Spacer()
                                 if !globalVM.loadingTradeInfo {
-                                    Text(globalVM.drawdownDollars != nil ? "-\(abs(globalVM.drawdownDollars!).asCurrency())" : "--")
+                                    Text(globalVM.maeDollars != nil ? "-\(abs(globalVM.maeDollars!).asCurrency())" : "--")
                                         .font(.system(size: 12, design: .rounded))
                                         .foregroundStyle(.secondary)
                                 } else {

@@ -77,13 +77,14 @@ class GlobalViewModel: ObservableObject {
     ]
     
     @Published var loadingTradeInfo: Bool = false
-    @Published var runUpPoints: Double? = nil
-    @Published var runUpDollars: Double? = nil
-    @Published var drawdownPoints: Double? = nil
-    @Published var drawdownDollars: Double? = nil
+    @Published var mfePoints: Double? = nil
+    @Published var mfeDollars: Double? = nil
+    @Published var maePoints: Double? = nil
+    @Published var maeDollars: Double? = nil
     
     @Published var loadingStatsInfo: Bool = false
-    @Published var statsDrawdown: Double? = nil
+    @Published var statsMfe: Double? = nil
+    @Published var statsMae: Double? = nil
     @Published var statsWinner: Double? = nil
     @Published var statsLoser: Double? = nil
     
@@ -93,19 +94,19 @@ class GlobalViewModel: ObservableObject {
         .topstep: [:]
     ]
     
-    @Published var runUpPointsMap: [Firm:[String:Double]] = [
+    @Published var mfePointsMap: [Firm:[String:Double]] = [
         .theFuturesDesk: [:],
         .topstep: [:]
     ]
-    @Published var runUpDollarsMap: [Firm:[String:Double]] = [
+    @Published var mfeDollarsMap: [Firm:[String:Double]] = [
         .theFuturesDesk: [:],
         .topstep: [:]
     ]
-    @Published var drawdownPointsMap: [Firm:[String:Double]] = [
+    @Published var maePointsMap: [Firm:[String:Double]] = [
         .theFuturesDesk: [:],
         .topstep: [:]
     ]
-    @Published var drawdownDollarsMap: [Firm:[String:Double]] = [
+    @Published var maeDollarsMap: [Firm:[String:Double]] = [
         .theFuturesDesk: [:],
         .topstep: [:]
     ]
@@ -391,10 +392,10 @@ class GlobalViewModel: ObservableObject {
     func calculateTradeInfo(_ firm: Firm, _ trade: Trade) async {
         loadingTradeInfo = true
         
-        runUpPoints = nil
-        runUpDollars = nil
-        drawdownPoints = nil
-        drawdownDollars = nil
+        mfePoints = nil
+        mfeDollars = nil
+        maePoints = nil
+        maeDollars = nil
         
         if delayTradeInfo {
             try! await Task.sleep(for: .seconds(3))
@@ -403,12 +404,12 @@ class GlobalViewModel: ObservableObject {
         // TODO: Calculate 5+ Hours
         // TODO: Sub-Second Bar Data?
         if trade.underFiveHours() {
-            if runUpPointsMap[firm]![trade.ref] != nil && runUpDollarsMap[firm]![trade.ref] != nil &&  drawdownPointsMap[firm]![trade.ref] != nil && drawdownDollarsMap[firm]![trade.ref] != nil {
+            if mfePointsMap[firm]![trade.ref] != nil && mfeDollarsMap[firm]![trade.ref] != nil &&  maePointsMap[firm]![trade.ref] != nil && maeDollarsMap[firm]![trade.ref] != nil {
                 Helpers.debugLog("\(trade.ref): USING CACHED TRADE - calculateTradeStats")
-                runUpPoints = runUpPointsMap[selectedAccount!.firm]![trade.ref]
-                runUpDollars = runUpDollarsMap[selectedAccount!.firm]![trade.ref]
-                drawdownPoints = drawdownPointsMap[selectedAccount!.firm]![trade.ref]
-                drawdownDollars = drawdownDollarsMap[selectedAccount!.firm]![trade.ref]
+                mfePoints = mfePointsMap[selectedAccount!.firm]![trade.ref]
+                mfeDollars = mfeDollarsMap[selectedAccount!.firm]![trade.ref]
+                maePoints = maePointsMap[selectedAccount!.firm]![trade.ref]
+                maeDollars = maeDollarsMap[selectedAccount!.firm]![trade.ref]
             } else {
                 let start = trade.createdAt // TODO: Floor
                 let end = trade.exitedAt // TODO: Ceiling
@@ -432,46 +433,46 @@ class GlobalViewModel: ObservableObject {
                             // Long: positionSize < 0
                             // Short: positionSize > 0
                             
-                            runUpPoints = trade.positionSize < 0 ? high - trade.entryPrice : trade.entryPrice - low
-                            drawdownPoints = trade.positionSize < 0 ? low - trade.entryPrice : trade.entryPrice - high
+                            mfePoints = trade.positionSize < 0 ? high - trade.entryPrice : trade.entryPrice - low
+                            maePoints = trade.positionSize < 0 ? low - trade.entryPrice : trade.entryPrice - high
                             
                             let points = abs(trade.exitPrice - trade.entryPrice)
                             if trade.pnL < 0.0 {
-                                if abs(points) > abs(drawdownPoints!) {
-                                    drawdownPoints = abs(points)
+                                if abs(points) > abs(maePoints!) {
+                                    maePoints = abs(points)
                                 }
                             } else {
-                                if abs(points) > abs(runUpPoints!) {
-                                    runUpPoints = abs(points)
+                                if abs(points) > abs(mfePoints!) {
+                                    mfePoints = abs(points)
                                 }
                             }
                             
-                            runUpPointsMap[firm]![trade.ref] = runUpPoints
-                            drawdownPointsMap[firm]![trade.ref] = drawdownPoints
+                            mfePointsMap[firm]![trade.ref] = mfePoints
+                            maePointsMap[firm]![trade.ref] = maePoints
                             
                             if let contract = allContracts[firm]?.first(where: { $0.productId == trade.symbolId }) {
-                                runUpDollars = runUpPoints! / contract.tickSize * contract.tickValue * Double(abs(trade.positionSize))
-                                drawdownDollars = drawdownPoints! / contract.tickSize * contract.tickValue * Double(abs(trade.positionSize))
+                                mfeDollars = mfePoints! / contract.tickSize * contract.tickValue * Double(abs(trade.positionSize))
+                                maeDollars = maePoints! / contract.tickSize * contract.tickValue * Double(abs(trade.positionSize))
                                 
                                 if trade.pnL < 0.0 {
-                                    if abs(trade.pnL) > abs(drawdownDollars!) {
-                                        drawdownDollars = abs(trade.pnL)
+                                    if abs(trade.pnL) > abs(maeDollars!) {
+                                        maeDollars = abs(trade.pnL)
                                     }
                                 } else {
-                                    if abs(trade.pnL) > abs(runUpDollars!) {
-                                        runUpDollars = abs(trade.pnL)
+                                    if abs(trade.pnL) > abs(mfeDollars!) {
+                                        mfeDollars = abs(trade.pnL)
                                     }
                                 }
                                 
-                                runUpDollarsMap[firm]![trade.ref] = runUpDollars
-                                drawdownDollarsMap[firm]![trade.ref] = drawdownDollars
+                                mfeDollarsMap[firm]![trade.ref] = mfeDollars
+                                maeDollarsMap[firm]![trade.ref] = maeDollars
                                 
-                                Helpers.debugLog("\(trade.ref): runUpPoints: \(runUpPoints!)")
-                                Helpers.debugLog("\(trade.ref): drawdownPoints: \(drawdownPoints!)")
                                 Helpers.debugLog("\(trade.ref): tickSize: \(contract.tickSize)")
                                 Helpers.debugLog("\(trade.ref): tickValue: \(contract.tickValue)")
-                                Helpers.debugLog("\(trade.ref): runUpDollars: \(runUpDollars!)")
-                                Helpers.debugLog("\(trade.ref): drawdownDollars: \(drawdownDollars!)")
+                                Helpers.debugLog("\(trade.ref): mfePoints: \(mfePoints!)")
+                                Helpers.debugLog("\(trade.ref): mfeDollars: \(mfeDollars!)")
+                                Helpers.debugLog("\(trade.ref): maePoints: \(maePoints!)")
+                                Helpers.debugLog("\(trade.ref): maeDollars: \(maeDollars!)")
                             }
                         }
                     }
@@ -486,7 +487,8 @@ class GlobalViewModel: ObservableObject {
     func calculateStatsInfo(_ day: String) async {
         loadingStatsInfo = true
         
-        statsDrawdown = nil
+        statsMfe = nil
+        statsMae = nil
         statsWinner = nil
         statsLoser = nil
         
@@ -494,50 +496,77 @@ class GlobalViewModel: ObservableObject {
             try! await Task.sleep(for: .seconds(3))
         }
         
-        var streak: Bool = false
-        var running: Double = 0.0
+        var mfeStreak: Bool = false
+        var mfeRunning: Double = 0.0
+        var maeStreak: Bool = false
+        var maeRunning: Double = 0.0
         
         for trade in accountTrades.filter({ $0.tradeDay == day }).reversed() {
-            if drawdownDollarsMap[selectedAccount!.firm]![trade.ref] != nil {
+            if mfeDollarsMap[selectedAccount!.firm]![trade.ref] != nil && maeDollarsMap[selectedAccount!.firm]![trade.ref] != nil {
                 Helpers.debugLog("\(trade.ref): USING CACHED TRADE - calculateDailyStatsInfo")
-                drawdownDollars = drawdownDollarsMap[selectedAccount!.firm]![trade.ref]
+                mfeDollars = mfeDollarsMap[selectedAccount!.firm]![trade.ref]
+                maeDollars = maeDollarsMap[selectedAccount!.firm]![trade.ref]
             } else {
                 // TODO: Handle Rate Limit
                 await calculateTradeInfo(selectedAccount!.firm, trade)
             }
             
             Helpers.debugLog("P&L: \(trade.pnL)")
-            Helpers.debugLog("Drawdown: \(drawdownDollars ?? 0.0)")
+            Helpers.debugLog("MFE: \(mfeDollars ?? 0.0)")
+            Helpers.debugLog("MAE: \(maeDollars ?? 0.0)")
             
-            if drawdownDollars != nil && abs(drawdownDollars!) >= 0.0 {
-                running = running + abs(drawdownDollars!)
+            // MFE
+            if mfeDollars != nil && abs(mfeDollars!) >= 0.0 {
+                mfeRunning = mfeRunning + abs(mfeDollars!)
             } else {
                 // TODO: Probably Rate Limit
                 // TODO: Display Alert + Exit Calculation || Delay + Retry
-                Helpers.debugLog("\(trade.ref): SOMETHING WENT WRONG")
+                Helpers.debugLog("\(trade.ref): SOMETHING WENT WRONG WITH MFE")
+            }
+            
+            // MAE
+            if maeDollars != nil && abs(maeDollars!) >= 0.0 {
+                maeRunning = maeRunning + abs(maeDollars!)
+            } else {
+                // TODO: Probably Rate Limit
+                // TODO: Display Alert + Exit Calculation || Delay + Retry
+                Helpers.debugLog("\(trade.ref): SOMETHING WENT WRONG WITH MAE")
             }
             
             if trade.pnL >= 0.0 {
                 // Winning Trade
-                streak = false
+                mfeStreak = true
+                maeStreak = false
             } else {
                 // Losing tradee
-                streak = true
+                mfeStreak = false
+                maeStreak = true
             }
             
-            if statsDrawdown == nil {
-                statsDrawdown = running
+            // MFE
+            if statsMfe == nil {
+                statsMfe = mfeRunning
             } else {
-                statsDrawdown! < running ? (statsDrawdown = running) : ()
+                statsMfe! < mfeRunning ? (statsMfe = mfeRunning) : ()
             }
-            !streak ? (running = 0.0) : ()
+            !mfeStreak ? (mfeRunning = 0.0) : ()
             
+            // MAE
+            if statsMae == nil {
+                statsMae = maeRunning
+            } else {
+                statsMae! < maeRunning ? (statsMae = maeRunning) : ()
+            }
+            !maeStreak ? (maeRunning = 0.0) : ()
+            
+            // Largest Winner
             if statsWinner == nil {
                 statsWinner = trade.pnL
             } else {
                 statsWinner! < trade.pnL ? (statsWinner = trade.pnL) : ()
             }
             
+            // Largest Loser
             if statsLoser == nil {
                 statsLoser = trade.pnL
             } else {
@@ -545,16 +574,17 @@ class GlobalViewModel: ObservableObject {
             }
         }
         
-        statsDrawdown != nil ? (statsDrawdown = statsDrawdown! * -1) : ()
+        statsMfe != nil ? (statsMfe = abs(statsMfe!)) : ()
+        statsMae != nil ? (statsMae = abs(statsMae!) * -1) : ()
         
         loadingStatsInfo = false
     }
     
     func exportTrade(_ trade: Trade) -> String {
-        let runUpDollars = runUpDollarsMap[selectedAccount!.firm]![trade.ref] != nil ? abs(runUpDollarsMap[selectedAccount!.firm]![trade.ref]!).asCurrency() : nil
-        let runUp = runUpDollars != nil ? Double(runUpDollars!.replacingOccurrences(of: "$", with: "")) : nil
-        let drawdownDollar = drawdownDollarsMap[selectedAccount!.firm]![trade.ref] != nil ? (-1 * abs(drawdownDollarsMap[selectedAccount!.firm]![trade.ref]!)).asCurrency() : nil
-        let drawdown = drawdownDollar != nil ? Double(drawdownDollar!.replacingOccurrences(of: "$", with: "")) : nil
+        let mfeDollars = mfeDollarsMap[selectedAccount!.firm]![trade.ref] != nil ? abs(mfeDollarsMap[selectedAccount!.firm]![trade.ref]!).asCurrency() : nil
+        let mfe = mfeDollars != nil ? Double(mfeDollars!.replacingOccurrences(of: "$", with: "")) : nil
+        let maeDollar = maeDollarsMap[selectedAccount!.firm]![trade.ref] != nil ? (-1 * abs(maeDollarsMap[selectedAccount!.firm]![trade.ref]!)).asCurrency() : nil
+        let mae = maeDollar != nil ? Double(maeDollar!.replacingOccurrences(of: "$", with: "")) : nil
         let export = TradeExport(
             id: trade.id,
             tradeDate: trade.tradeDay,
@@ -563,8 +593,8 @@ class GlobalViewModel: ObservableObject {
             size: abs(trade.positionSize),
             pnl: trade.pnL,
             fees: -1 * trade.fees,
-            mfe: runUp,
-            mae: drawdown,
+            mfe: mfe,
+            mae: mae,
             entryPrice: trade.entryPrice,
             exitPrice: trade.exitPrice,
             entryAt: trade.createdAt,
@@ -581,10 +611,10 @@ class GlobalViewModel: ObservableObject {
     
     func exportTrades(for day: String) -> String {
         let trades: [TradeExport] = accountTrades.filter({ $0.tradeDay == day }).reversed().map({
-            let runUpDollars = runUpDollarsMap[selectedAccount!.firm]![$0.ref] != nil ? abs(runUpDollarsMap[selectedAccount!.firm]![$0.ref]!).asCurrency() : nil
-            let runUp = runUpDollars != nil ? Double(runUpDollars!.replacingOccurrences(of: "$", with: "")) : nil
-            let drawdownDollar = drawdownDollarsMap[selectedAccount!.firm]![$0.ref] != nil ? (-1 * abs(drawdownDollarsMap[selectedAccount!.firm]![$0.ref]!)).asCurrency() : nil
-            let drawdown = drawdownDollar != nil ? Double(drawdownDollar!.replacingOccurrences(of: "$", with: "")) : nil
+            let mfeDollars = mfeDollarsMap[selectedAccount!.firm]![$0.ref] != nil ? abs(mfeDollarsMap[selectedAccount!.firm]![$0.ref]!).asCurrency() : nil
+            let mfe = mfeDollars != nil ? Double(mfeDollars!.replacingOccurrences(of: "$", with: "")) : nil
+            let maeDollars = maeDollarsMap[selectedAccount!.firm]![$0.ref] != nil ? (-1 * abs(maeDollarsMap[selectedAccount!.firm]![$0.ref]!)).asCurrency() : nil
+            let mae = maeDollars != nil ? Double(maeDollars!.replacingOccurrences(of: "$", with: "")) : nil
             return TradeExport(
                 id: $0.id,
                 tradeDate: $0.tradeDay,
@@ -593,8 +623,8 @@ class GlobalViewModel: ObservableObject {
                 size: abs($0.positionSize),
                 pnl: $0.pnL,
                 fees: -1 * $0.fees,
-                mfe: runUp,
-                mae: drawdown,
+                mfe: mfe,
+                mae: mae,
                 entryPrice: $0.entryPrice,
                 exitPrice: $0.exitPrice,
                 entryAt: $0.createdAt,

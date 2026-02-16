@@ -137,7 +137,7 @@ struct DailyStatsInfoSheet: View {
                                     .font(.system(size: 12, weight: .medium, design: .rounded))
                                 Spacer()
                                 if !globalVM.loadingStatsInfo {
-                                    Text("--") // TODO: Implement
+                                    Text(globalVM.statsMfe != nil ? "+\(abs(globalVM.statsMfe!).asCurrency())" : "--")
                                         .font(.system(size: 12, design: .rounded))
                                         .foregroundStyle(.secondary)
                                 } else {
@@ -158,7 +158,7 @@ struct DailyStatsInfoSheet: View {
                                     .font(.system(size: 12, weight: .medium, design: .rounded))
                                 Spacer()
                                 if !globalVM.loadingStatsInfo {
-                                    Text(globalVM.statsDrawdown != nil ? "-\(abs(globalVM.statsDrawdown!).asCurrency())" : "--")
+                                    Text(globalVM.statsMae != nil ? "-\(abs(globalVM.statsMae!).asCurrency())" : "--")
                                         .font(.system(size: 12, design: .rounded))
                                         .foregroundStyle(.secondary)
                                 } else {
@@ -318,8 +318,8 @@ struct DailyStatsInfoSheet: View {
                                 .frame(maxWidth: .infinity)
                                 
                                 VStack(alignment: .center) {
-                                    let runUp = globalVM.runUpDollarsMap[globalVM.selectedAccount!.firm]![trade.ref]
-                                    Text(runUp != nil ? abs(runUp!).asCurrency() : "--")
+                                    let mfe = globalVM.mfeDollarsMap[globalVM.selectedAccount!.firm]![trade.ref]
+                                    Text(mfe != nil ? abs(mfe!).asCurrency() : "--")
                                         .font(.system(size: 10, weight: .semibold, design: .monospaced))
                                         .foregroundStyle(.green)
                                     Text("MFE")
@@ -329,10 +329,10 @@ struct DailyStatsInfoSheet: View {
                                 .frame(maxWidth: .infinity)
                                 
                                 VStack(alignment: .center) {
-                                    let drawdown = globalVM.drawdownDollarsMap[globalVM.selectedAccount!.firm]![trade.ref]
-                                    Text(drawdown != nil ? abs(drawdown!).asCurrency() : "--")
+                                    let mae = globalVM.maeDollarsMap[globalVM.selectedAccount!.firm]![trade.ref]
+                                    Text(mae != nil ? abs(mae!).asCurrency() : "--")
                                         .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                                        .foregroundStyle(drawdown != nil ? drawdown != 0.0 ? .red : .secondary : .secondary)
+                                        .foregroundStyle(mae != nil ? mae != 0.0 ? .red : .secondary : .secondary)
                                     Text("MAE")
                                         .font(.system(size: 8, design: .monospaced))
                                         .foregroundStyle(.secondary)
