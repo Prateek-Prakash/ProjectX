@@ -23,9 +23,6 @@ struct AppShell: View {
     @State var showCustomizationSheet: Bool = false
     @State var showSettingsCover: Bool = false
     
-    let oneSecondTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-    let twoSecondTimer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
-    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -91,12 +88,12 @@ struct AppShell: View {
             .sheet(isPresented: $showCustomizationSheet) {
                 CustomizationSheet()
             }
-            .onReceive(oneSecondTimer) { _ in
+            .onReceive(globalVM.marketTimer) { _ in
                 if globalVM.isInitialized {
                     globalVM.inTradingHours = !globalVM.isMarketClosed()
                 }
             }
-            .onReceive(twoSecondTimer) { _ in
+            .onReceive(globalVM.refreshTimer) { _ in
                 if globalVM.isInitialized {
                     Task {
                         await globalVM.refreshData()

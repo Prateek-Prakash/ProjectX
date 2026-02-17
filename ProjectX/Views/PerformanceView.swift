@@ -740,6 +740,11 @@ struct PerformanceView: View {
                     }
                 }
             }
+            .onReceive(globalVM.ordersTimer) { _ in
+                Task {
+                    await globalVM.loadOrders(account)
+                }
+            }
         }
         .interactiveDismissDisabled()
     }

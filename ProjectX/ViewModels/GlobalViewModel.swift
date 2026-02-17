@@ -14,6 +14,10 @@ import SwiftUI
 class GlobalViewModel: ObservableObject {
     static let shared = GlobalViewModel()
     
+    let marketTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    let refreshTimer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
+    let ordersTimer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
+    
     // TheFuturesDeskX
     @AppStorage("theFuturesDeskUsername") var theFuturesDeskUsername: String = ""
     @AppStorage("theFuturesDeskKey") var theFuturesDeskKey: String = ""
