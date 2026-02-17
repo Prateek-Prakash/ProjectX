@@ -731,7 +731,7 @@ struct PerformanceView: View {
                 }
             }
             .onChange(of: globalVM.accountPositions) { old, new in
-                if globalVM.audioAlerts {
+                if globalVM.audioAlerts && !globalVM.loadingPerformance {
                     // TODO: Improve Comparison
                     if old.count < new.count {
                         AudioViewModel.shared.speakText("ENTERED POSITION")
