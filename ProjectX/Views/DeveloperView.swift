@@ -200,7 +200,7 @@ struct DeveloperView: View {
                         OriginCard {
                             VStack(spacing: 0) {
                                 OriginHeader {
-                                    Text("STREAMING")
+                                    Text("MARKET HUB")
                                         .font(.system(size: 8, weight: .semibold, design: .monospaced))
                                         .tracking(2)
                                         .foregroundStyle(Color(.xHeaderText))
@@ -253,99 +253,168 @@ struct DeveloperView: View {
                                         .backgroundStyle(Color(.xCardBackground))
                                     }
                                     .buttonStyle(.plain)
+                                    .onChange(of: globalVM.priceStreaming) { _, new in
+                                        if !new {
+                                            globalVM.resetPriceStreaming()
+                                        }
+                                    }
                                     
                                     if globalVM.priceStreaming {
                                         Divider()
                                             .frame(height: 1)
                                             .overlay(Color(.xOutline))
-                                        
-                                        GroupBox {
-                                            HStack {
-                                                Image(systemName: "text.page")
-                                                    .imageScale(.small)
-                                                Text("NQ Ask")
-                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
-                                                Spacer()
-                                                Text(globalVM.nqAsk?.asPoints(2) ?? "--")
-                                                    .font(.system(size: 12, design: .monospaced))
-                                                    .foregroundStyle(.red.secondary)
+                                        VStack(spacing: 10) {
+                                            OriginCard {
+                                                VStack(spacing: 0) {
+                                                    OriginHeader {
+                                                        Text("NQ")
+                                                            .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                                            .tracking(2)
+                                                            .foregroundStyle(Color(.xHeaderText))
+                                                    }
+                                                    
+                                                    Divider()
+                                                        .frame(height: 1)
+                                                        .overlay(Color(.xOutline))
+                                                    
+                                                    HStack {
+                                                        Text("Best Ask")
+                                                            .font(.system(size: 10, weight: .medium, design: .rounded))
+                                                        Spacer()
+                                                        Text(globalVM.nqAsk?.asPoints(2) ?? "--")
+                                                            .font(.system(size: 10, design: .monospaced))
+                                                            .foregroundStyle(.red.secondary)
+                                                    }
+                                                    .frame(height: 12)
+                                                    .padding(.horizontal, 14)
+                                                    .padding(.vertical, 8)
+                                                    
+                                                    Divider()
+                                                        .frame(height: 1)
+                                                        .overlay(Color(.xOutline))
+                                                    
+                                                    HStack {
+                                                        Text("Latest Price")
+                                                            .font(.system(size: 10, weight: .medium, design: .rounded))
+                                                        Spacer()
+                                                        Text(globalVM.nqPrice?.asPoints(2) ?? "--")
+                                                            .font(.system(size: 10, design: .monospaced))
+                                                            .foregroundStyle(.secondary)
+                                                    }
+                                                    .frame(height: 12)
+                                                    .padding(.horizontal, 14)
+                                                    .padding(.vertical, 8)
+                                                    
+                                                    Divider()
+                                                        .frame(height: 1)
+                                                        .overlay(Color(.xOutline))
+                                                    
+                                                    HStack {
+                                                        Text("Best Bid")
+                                                            .font(.system(size: 10, weight: .medium, design: .rounded))
+                                                        Spacer()
+                                                        Text(globalVM.nqBid?.asPoints(2) ?? "--")
+                                                            .font(.system(size: 10, design: .monospaced))
+                                                            .foregroundStyle(.green.secondary)
+                                                    }
+                                                    .frame(height: 12)
+                                                    .padding(.horizontal, 14)
+                                                    .padding(.vertical, 8)
+                                                    
+                                                    Divider()
+                                                        .frame(height: 1)
+                                                        .overlay(Color(.xOutline))
+                                                    
+                                                    HStack {
+                                                        Text("Volume")
+                                                            .font(.system(size: 10, weight: .medium, design: .rounded))
+                                                        Spacer()
+                                                        Text(globalVM.nqVolume != nil ? "\(globalVM.nqVolume!)" : "--")
+                                                            .font(.system(size: 10, design: .monospaced))
+                                                            .foregroundStyle(.secondary)
+                                                    }
+                                                    .frame(height: 12)
+                                                    .padding(.horizontal, 14)
+                                                    .padding(.vertical, 8)
+                                                }
                                             }
-                                            .frame(height: 12)
-                                        }
-                                        
-                                        GroupBox {
-                                            HStack {
-                                                Image(systemName: "text.page")
-                                                    .imageScale(.small)
-                                                Text("NQ Price")
-                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
-                                                Spacer()
-                                                Text(globalVM.nqPrice?.asPoints(2) ?? "--")
-                                                    .font(.system(size: 12, design: .monospaced))
-                                                    .foregroundStyle(.secondary)
+                                            
+                                            OriginCard {
+                                                VStack(spacing: 0) {
+                                                    OriginHeader {
+                                                        Text("MNQ")
+                                                            .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                                                            .tracking(2)
+                                                            .foregroundStyle(Color(.xHeaderText))
+                                                    }
+                                                    
+                                                    Divider()
+                                                        .frame(height: 1)
+                                                        .overlay(Color(.xOutline))
+                                                    
+                                                    HStack {
+                                                        Text("Best Ask")
+                                                            .font(.system(size: 10, weight: .medium, design: .rounded))
+                                                        Spacer()
+                                                        Text(globalVM.mnqAsk?.asPoints(2) ?? "--")
+                                                            .font(.system(size: 10, design: .monospaced))
+                                                            .foregroundStyle(.red.secondary)
+                                                    }
+                                                    .frame(height: 12)
+                                                    .padding(.horizontal, 14)
+                                                    .padding(.vertical, 8)
+                                                    
+                                                    Divider()
+                                                        .frame(height: 1)
+                                                        .overlay(Color(.xOutline))
+                                                    
+                                                    HStack {
+                                                        Text("Latest Price")
+                                                            .font(.system(size: 10, weight: .medium, design: .rounded))
+                                                        Spacer()
+                                                        Text(globalVM.mnqPrice?.asPoints(2) ?? "--")
+                                                            .font(.system(size: 10, design: .monospaced))
+                                                            .foregroundStyle(.secondary)
+                                                    }
+                                                    .frame(height: 12)
+                                                    .padding(.horizontal, 14)
+                                                    .padding(.vertical, 8)
+                                                    
+                                                    Divider()
+                                                        .frame(height: 1)
+                                                        .overlay(Color(.xOutline))
+                                                    
+                                                    HStack {
+                                                        Text("Best Bid")
+                                                            .font(.system(size: 10, weight: .medium, design: .rounded))
+                                                        Spacer()
+                                                        Text(globalVM.mnqBid?.asPoints(2) ?? "--")
+                                                            .font(.system(size: 10, design: .monospaced))
+                                                            .foregroundStyle(.green.secondary)
+                                                    }
+                                                    .frame(height: 12)
+                                                    .padding(.horizontal, 14)
+                                                    .padding(.vertical, 8)
+                                                    
+                                                    Divider()
+                                                        .frame(height: 1)
+                                                        .overlay(Color(.xOutline))
+                                                    
+                                                    HStack {
+                                                        Text("Volume")
+                                                            .font(.system(size: 10, weight: .medium, design: .rounded))
+                                                        Spacer()
+                                                        Text(globalVM.mnqVolume != nil ? "\(globalVM.mnqVolume!)" : "--")
+                                                            .font(.system(size: 10, design: .monospaced))
+                                                            .foregroundStyle(.secondary)
+                                                    }
+                                                    .frame(height: 12)
+                                                    .padding(.horizontal, 14)
+                                                    .padding(.vertical, 8)
+                                                }
                                             }
-                                            .frame(height: 12)
                                         }
-                                        
-                                        GroupBox {
-                                            HStack {
-                                                Image(systemName: "text.page")
-                                                    .imageScale(.small)
-                                                Text("NQ Bid")
-                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
-                                                Spacer()
-                                                Text(globalVM.nqBid?.asPoints(2) ?? "--")
-                                                    .font(.system(size: 12, design: .monospaced))
-                                                    .foregroundStyle(.green.secondary)
-                                            }
-                                            .frame(height: 12)
-                                        }
-                                        
-                                        Divider()
-                                            .frame(height: 1)
-                                            .overlay(Color(.xOutline))
-                                        
-                                        GroupBox {
-                                            HStack {
-                                                Image(systemName: "text.page")
-                                                    .imageScale(.small)
-                                                Text("MNQ Ask")
-                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
-                                                Spacer()
-                                                Text(globalVM.mnqAsk?.asPoints(2) ?? "--")
-                                                    .font(.system(size: 12, design: .monospaced))
-                                                    .foregroundStyle(.red.secondary)
-                                            }
-                                            .frame(height: 12)
-                                        }
-                                        
-                                        GroupBox {
-                                            HStack {
-                                                Image(systemName: "text.page")
-                                                    .imageScale(.small)
-                                                Text("MNQ Price")
-                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
-                                                Spacer()
-                                                Text(globalVM.mnqPrice?.asPoints(2) ?? "--")
-                                                    .font(.system(size: 12, design: .monospaced))
-                                                    .foregroundStyle(.secondary)
-                                            }
-                                            .frame(height: 12)
-                                        }
-                                        
-                                        GroupBox {
-                                            HStack {
-                                                Image(systemName: "text.page")
-                                                    .imageScale(.small)
-                                                Text("MNQ Bid")
-                                                    .font(.system(size: 12, weight: .medium, design: .rounded))
-                                                Spacer()
-                                                Text(globalVM.mnqBid?.asPoints(2) ?? "--")
-                                                    .font(.system(size: 12, design: .monospaced))
-                                                    .foregroundStyle(.green.secondary)
-                                            }
-                                            .frame(height: 12)
-                                        }
+                                        .padding()
                                     }
                                 }
                                 .backgroundStyle(Color(.xCardBackground))
@@ -355,7 +424,7 @@ struct DeveloperView: View {
                         OriginCard {
                             VStack(spacing: 0) {
                                 OriginHeader {
-                                    Text("AUDIO TWEAKING")
+                                    Text("AUDIO ALERTS")
                                         .font(.system(size: 8, weight: .semibold, design: .monospaced))
                                         .tracking(2)
                                         .foregroundStyle(Color(.xHeaderText))
@@ -377,9 +446,9 @@ struct DeveloperView: View {
                                     .frame(height: 12)
                                 }
                                 .backgroundStyle(Color(.xCardBackground))
-//                                .onChange(of: audioVM.speechRate) {
-//                                    audioVM.speakText("VOICE UPDATED")
-//                                }
+                                //                                .onChange(of: audioVM.speechRate) {
+                                //                                    audioVM.speakText("VOICE UPDATED")
+                                //                                }
                                 
                                 Divider()
                                     .frame(height: 1)
@@ -397,9 +466,9 @@ struct DeveloperView: View {
                                     .frame(height: 12)
                                 }
                                 .backgroundStyle(Color(.xCardBackground))
-//                                .onChange(of: audioVM.speechPitch) {
-//                                    audioVM.speakText("VOICE UPDATED")
-//                                }
+                                //                                .onChange(of: audioVM.speechPitch) {
+                                //                                    audioVM.speakText("VOICE UPDATED")
+                                //                                }
                                 
                                 Divider()
                                     .frame(height: 1)

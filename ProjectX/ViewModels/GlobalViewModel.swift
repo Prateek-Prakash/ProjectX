@@ -75,9 +75,11 @@ class GlobalViewModel: ObservableObject {
     @Published var nqPrice: Double? = nil
     @Published var nqBid: Double? = nil
     @Published var nqAsk: Double? = nil
+    @Published var nqVolume: Int? = nil
     @Published var mnqPrice: Double? = nil
     @Published var mnqBid: Double? = nil
     @Published var mnqAsk: Double? = nil
+    @Published var mnqVolume: Int? = nil
     
     @Published var allContracts: [Firm:[Contract]] = [
         .theFuturesDesk: [],
@@ -746,10 +748,12 @@ class GlobalViewModel: ObservableObject {
                         self.nqPrice = price
                         self.nqBid = quote.bestBid
                         self.nqAsk = quote.bestAsk
+                        self.nqVolume = quote.volume
                     } else if id.contains("CON.F.US.MNQ") {
                         self.mnqPrice = price
                         self.mnqBid = quote.bestBid
                         self.mnqAsk = quote.bestAsk
+                        self.mnqVolume = quote.volume
                     }
                 }
             }
@@ -779,5 +783,16 @@ class GlobalViewModel: ObservableObject {
         } catch {
             Helpers.debugLog("invokeMarketSubscriptions: \(error)")
         }
+    }
+    
+    func resetPriceStreaming() {
+        nqPrice = nil
+        nqBid = nil
+        nqAsk = nil
+        nqVolume = nil
+        mnqPrice = nil
+        mnqBid = nil
+        mnqAsk = nil
+        mnqVolume = nil
     }
 }
