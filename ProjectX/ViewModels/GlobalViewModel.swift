@@ -63,10 +63,12 @@ class GlobalViewModel: ObservableObject {
     @Published var refreshingData: Bool = false
     @Published var allAccounts: [Account] = []
     
-    @Published var loadingTrades: Bool = false
+    @Published var loadingPerformance: Bool = false
     @Published var selectedAccount: Account? = nil
-    @Published var accountDailyStats: [DailyStats] = []
+    @Published var accountPositions: [Position] = []
+    @Published var accountOrders: [Order] = []
     @Published var accountTrades: [Trade] = []
+    @Published var accountDailyStats: [DailyStats] = []
     
     @Published var usernameInput: String = ""
     @Published var keyInput: String = ""
@@ -229,9 +231,7 @@ class GlobalViewModel: ObservableObject {
             case .topstep:
                 type = topstepFunded.contains(id) ? .funded : topstepPractice.contains(id) ? .practice : .evaluation
             }
-            let positions: [Position] = await XClient.get(firm).getPositions(id)?.positions.map({ Position.fromDto($0) }) ?? []
-            let orders: [Order] = await XClient.get(firm).getOrders(id)?.orders.map({ Order.fromDto($0) }).sorted(by: { $0.id < $1.id }) ?? []
-            let account = Account.fromDto(active, firm, type, tradable, positions, orders)
+            let account = Account.fromDto(active, firm, type, tradable)
             accounts.append(account)
         }
         
@@ -347,6 +347,18 @@ class GlobalViewModel: ObservableObject {
             type == .funded ? topstepFunded.append(id) : topstepFunded.removeAll(where: { $0 == id })
             type == .practice ? topstepPractice.append(id) : topstepPractice.removeAll(where: { $0 == id })
         }
+    }
+    
+    func loadPositions(_ account: Account) async {
+        Helpers.debugLog("loadPositions")
+        let dtos = await XClient.get(account.firm).getPositions(account.accountId)?.positions ?? []
+        accountPositions = dtos.map({ Position.fromDto($0) })
+    }
+
+    func loadOrders(_ account: Account) async {
+        Helpers.debugLog("loadOrders")
+        let dtos = await XClient.get(account.firm).getOrders(account.accountId)?.orders ?? []
+        accountOrders = dtos.map({ Order.fromDto($0) }).sorted(by: { $0.id < $1.id })
     }
     
     func loadDailyStats(_ account: Account) async {

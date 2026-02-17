@@ -24,8 +24,6 @@ struct Account: Identifiable, Equatable {
     var balance: Double
     var realizedDayPnl: Double
     var openPnl: Double
-    var positions: [Position]
-    var orders: [Order]
     var dailyLoss: Double
     var maximumLoss: Double
     var lockoutReason: String?
@@ -44,7 +42,7 @@ struct Account: Identifiable, Equatable {
     
     var accountType: AccountType = .evaluation
     
-    static func fromDto(_ dto: AccountDTO, _ firm: Firm, _ type: AccountType, _ tradable: Bool, _ positions: [Position], _ orders: [Order]) -> Account {
+    static func fromDto(_ dto: AccountDTO, _ firm: Firm, _ type: AccountType, _ tradable: Bool) -> Account {
         return Account(
             firm: firm,
             userId: dto.userId,
@@ -60,8 +58,6 @@ struct Account: Identifiable, Equatable {
             balance: dto.balance,
             realizedDayPnl: dto.realizedDayPnl,
             openPnl: dto.openPnl,
-            positions: positions,
-            orders: orders,
             dailyLoss: dto.dailyLoss,
             maximumLoss: dto.maximumLoss,
             lockoutReason: dto.lockoutReason,

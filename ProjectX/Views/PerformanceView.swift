@@ -5,6 +5,7 @@
 //  Created by Prateek Prakash on 8/23/25.
 //
 
+import Combine
 import SwiftUI
 
 struct PerformanceView: View {
@@ -29,7 +30,7 @@ struct PerformanceView: View {
             ZStack {
                 Color(.xBackground)
                     .edgesIgnoringSafeArea(.all)
-                if globalVM.loadingTrades {
+                if globalVM.loadingPerformance {
                     ProgressView()
                 } else {
                     ScrollView {
@@ -358,10 +359,10 @@ struct PerformanceView: View {
                                         .overlay(Color(.xOutline))
                                     
                                     LazyVStack(spacing: 0) {
-                                        if !account.positions.isEmpty {
-                                            ForEach(account.positions) { position in
+                                        if !globalVM.accountPositions.isEmpty {
+                                            ForEach(globalVM.accountPositions) { position in
                                                 PositionTile(firm: account.firm, position: position)
-                                                if account.positions.last != position {
+                                                if globalVM.accountPositions.last != position {
                                                     Divider()
                                                         .frame(height: 1)
                                                         .overlay(Color(.xOutline))
@@ -395,10 +396,10 @@ struct PerformanceView: View {
                                         .overlay(Color(.xOutline))
                                     
                                     LazyVStack(spacing: 0) {
-                                        if !account.orders.isEmpty {
-                                            ForEach(account.orders) { order in
+                                        if !globalVM.accountOrders.isEmpty {
+                                            ForEach(globalVM.accountOrders) { order in
                                                 OrderTile(account: account, order: order)
-                                                if account.orders.last != order {
+                                                if globalVM.accountOrders.last != order {
                                                     Divider()
                                                         .frame(height: 1)
                                                         .overlay(Color(.xOutline))
@@ -656,7 +657,7 @@ struct PerformanceView: View {
                             .increaseTapArea(by: 12)
                     }
                     .buttonStyle(.plain)
-                    .disabled(globalVM.loadingTrades)
+                    .disabled(globalVM.loadingPerformance)
                 }
                 .sharedBackgroundVisibility(.hidden)
             }
@@ -706,6 +707,8 @@ struct PerformanceView: View {
                 }
             }
             .onChange(of: account) { old, new in
+                Helpers.debugLog("onAccountChange")
+                
                 if isTrailing != new.personalDailyLossLimitTrailing {
                     isTrailing = new.personalDailyLossLimitTrailing
                 }
@@ -719,18 +722,21 @@ struct PerformanceView: View {
                     autoApplyBrackets = new.bracketAutoApply ?? false
                 }
                 
-                if old.realizedDayPnl != new.realizedDayPnl || old.positions.count != new.positions.count {
-                    if globalVM.audioAlerts {
-                        if old.positions.count < new.positions.count {
-                            AudioViewModel.shared.speakText("ENTERED POSITION")
-                        } else if old.positions.count > new.positions.count {
-                            AudioViewModel.shared.speakText("EXITED POSITION")
-                        }
-                    }
-                    
+                if old.realizedDayPnl != new.realizedDayPnl {
                     Task {
+                        await globalVM.loadPositions(account)
                         await globalVM.loadDailyStats(account)
                         await globalVM.loadTrades(account)
+                    }
+                }
+            }
+            .onChange(of: globalVM.accountPositions) { old, new in
+                if globalVM.audioAlerts {
+                    // TODO: Improve Comparison
+                    if old.count < new.count {
+                        AudioViewModel.shared.speakText("ENTERED POSITION")
+                    } else if old.count > new.count {
+                        AudioViewModel.shared.speakText("EXITED POSITION")
                     }
                 }
             }

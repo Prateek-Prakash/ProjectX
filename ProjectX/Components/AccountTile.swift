@@ -19,14 +19,16 @@ struct AccountTile: View {
         Button {
             if tappable {
                 Task {
-                    globalVM.loadingTrades = true
+                    globalVM.loadingPerformance = true
                     if globalVM.delayLoadingTrades {
                         try! await Task.sleep(for: .seconds(3))
                     }
                     globalVM.selectedAccount = account
-                    await globalVM.loadDailyStats(account)
+                    await globalVM.loadPositions(account)
+                    await globalVM.loadOrders(account)
                     await globalVM.loadTrades(account)
-                    globalVM.loadingTrades = false
+                    await globalVM.loadDailyStats(account)
+                    globalVM.loadingPerformance = false
                 }
                 showPerformanceCover.toggle()
             }
@@ -77,6 +79,6 @@ struct AccountTile: View {
     }
     
     var statusColor: Color {
-        return globalVM.isLocked(account) ? .red : !account.positions.isEmpty ? .yellow : .gray
+        return globalVM.isLocked(account) ? .red : !globalVM.accountPositions.isEmpty ? .yellow : .gray
     }
 }
