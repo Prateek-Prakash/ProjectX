@@ -79,6 +79,6 @@ struct AccountTile: View {
     }
     
     var statusColor: Color {
-        return globalVM.isLocked(account) ? .red : !globalVM.accountPositions.isEmpty ? .yellow : .gray
+        return globalVM.isLocked(account) ? .red : .gray
     }
 }
