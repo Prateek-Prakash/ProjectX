@@ -18,8 +18,8 @@ struct AccountTile: View {
     var body: some View {
         Button {
             if tappable {
+                globalVM.loadingPerformance = true
                 Task {
-                    globalVM.loadingPerformance = true
                     if globalVM.delayLoadingTrades {
                         try! await Task.sleep(for: .seconds(3))
                     }

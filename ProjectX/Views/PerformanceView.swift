@@ -650,7 +650,7 @@ struct PerformanceView: View {
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink {
-                        AnalyzerView()
+                        ActiveTraderView()
                     } label: {
                         Image(systemName: "sparkles")
                             .imageScale(.small)

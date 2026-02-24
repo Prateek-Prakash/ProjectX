@@ -1,5 +1,5 @@
 //
-//  AnalyzerView.swift
+//  ActiveTraderView.swift
 //  ProjectX
 //
 //  Created by Prateek Prakash on 1/30/26.
@@ -7,32 +7,26 @@
 
 import SwiftUI
 
-struct AnalyzerView: View {
-    @Environment(\.colorScheme) var colorScheme
-    @Environment(\.dynamicTypeSize) var dynamicTypeSize
-    @Environment(\.displayScale) var displayScale
-    @State private var viewWidth: CGFloat = 0
-    
+struct ActiveTraderView: View {
     @ObservedObject var globalVM = GlobalViewModel.shared
+    
+    @State var showContractsSheet: Bool = false
     
     var body: some View {
         NavigationStack {
             ZStack {
                 Color(.xBackground)
                     .edgesIgnoringSafeArea(.all)
-                ContentUnavailableView {
-                    Label("WORK-IN-PROGRESS", systemImage: "wrench.and.screwdriver")
-                        .imageScale(.small)
-                        .font(.system(size: 8, weight: .semibold, design: .monospaced))
-                        .tracking(2)
-                        .foregroundStyle(.secondary)
+                VStack {
+                    ContentUnavailableView {
+                        Label("WORK-IN-PROGRESS", systemImage: "wrench.and.screwdriver")
+                            .imageScale(.small)
+                            .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                            .tracking(2)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding()
                 }
-                .padding()
-            }
-            .onGeometryChange(for: CGSize.self) {
-                $0.size
-            } action: { size in
-                viewWidth = size.width
             }
             .toolbarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
@@ -43,14 +37,14 @@ struct AnalyzerView: View {
                 .sharedBackgroundVisibility(.hidden)
                 
                 ToolbarItem(placement: .title) {
-                    Text("ANALYZER")
+                    Text("ACTIVE TRADER")
                         .font(.system(size: 12, weight: .semibold, design: .monospaced))
                         .tracking(2)
                 }
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        // TODO: Select
+                        showContractsSheet.toggle()
                     } label: {
                         Image(systemName: "dot.scope")
                             .imageScale(.small)
@@ -58,6 +52,9 @@ struct AnalyzerView: View {
                     }
                 }
                 .sharedBackgroundVisibility(.hidden)
+            }
+            .sheet(isPresented: $showContractsSheet) {
+                ContractsSheet()
             }
         }
     }
