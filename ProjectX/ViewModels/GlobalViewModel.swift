@@ -605,14 +605,14 @@ class GlobalViewModel: ObservableObject {
             
             // Largest Winner
             if statsWinner == nil {
-                statsWinner = trade.pnL
+                trade.pnL >= 0 ? (statsWinner = trade.pnL) :()
             } else {
                 statsWinner! < trade.pnL ? (statsWinner = trade.pnL) : ()
             }
             
             // Largest Loser
             if statsLoser == nil {
-                statsLoser = trade.pnL
+                trade.pnL <= 0 ? (statsLoser = trade.pnL) : ()
             } else {
                 statsLoser! > trade.pnL ? (statsLoser = trade.pnL) : ()
             }
